@@ -1,0 +1,14 @@
+{
+  "extends": "next/core-web-vitals",
+  "plugins": ["react", "local"],
+  "rules": {
+    "local/no-multi-child-aschild": "error"
+  },
+  "settings": {
+    "import/resolver": { 
+      "node": { 
+        "extensions": [".js", ".jsx", ".ts", ".tsx"] 
+      } 
+    }
+  }
+}
