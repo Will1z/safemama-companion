@@ -2,22 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 import { summarizeTranscript } from "@/lib/summary";
 import { triage } from "@/lib/triage";
 import { clinicianEmail } from "@/lib/email";
-import { createClient } from "@supabase/supabase-js";
+import { getSupabaseAdmin } from "@/lib/supabase/server";
 
 export const dynamic = 'force-dynamic';
 
 // Initialize Supabase client (with fallback for development)
 let supabase: any = null;
 try {
-  if (process.env.NEXT_PUBLIC_SUPABASE_URL && 
-      process.env.NEXT_PUBLIC_SUPABASE_URL !== 'https://placeholder.supabase.co' &&
-      process.env.SUPABASE_SERVICE_ROLE_KEY && 
-      process.env.SUPABASE_SERVICE_ROLE_KEY !== 'placeholder_service_role_key') {
-    supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
-    );
-  }
+  supabase = getSupabaseAdmin();
 } catch (error) {
   console.warn('Supabase not configured, using mock mode:', error);
 }
