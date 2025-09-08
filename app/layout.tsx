@@ -1,28 +1,37 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display, Roboto_Mono } from 'next/font/google';
-import { ThemeProvider } from '@/providers/theme-provider';
 import { TopNotice } from '@/components/ui/TopNotice';
 import OfflineBanner from '@/components/OfflineBanner';
 import ElevenLabsGlobalWidget from '@/components/voice/ElevenLabsGlobalWidget';
+
+// TypeScript declaration for global Window interface
+declare global {
+  interface Window {
+    SAFEMAMA_SESSION_ID?: string;
+  }
+}
 
 const inter = Inter({ 
   subsets: ['latin'], 
   variable: '--font-inter',
   display: 'swap',
-  fallback: ['system-ui', 'arial']
+  fallback: ['system-ui', 'arial'],
+  preload: true
 });
 const playfair = Playfair_Display({ 
   subsets: ['latin'], 
   variable: '--font-playfair',
   display: 'swap',
-  fallback: ['serif']
+  fallback: ['serif'],
+  preload: true
 });
 const robotoMono = Roboto_Mono({ 
   subsets: ['latin'], 
   variable: '--font-roboto-mono',
   display: 'swap',
-  fallback: ['monospace']
+  fallback: ['monospace'],
+  preload: true
 });
 
 export const metadata: Metadata = {
@@ -47,26 +56,39 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="light" data-theme="light" suppressHydrationWarning>
-      <body className={`${inter.variable} ${playfair.variable} ${robotoMono.variable} font-inter`}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <TopNotice 
-            message="SafeMama is a medical information platform and does not replace professional medical advice. Always consult healthcare providers for medical emergencies."
-            type="warning"
-          />
-          <OfflineBanner />
-          {children}
-          
-          {/* Global ElevenLabs Widget */}
-          <ElevenLabsGlobalWidget 
-            height={560}
-            width="400px"
-          />
-        </ThemeProvider>
+      <body className={`${inter.variable} ${playfair.variable} ${robotoMono.variable} font-inter`} style={{backgroundColor: 'rgb(255 255 255)', color: 'rgb(15 23 42)'}}>
+        <TopNotice 
+          message="SafeMama is a medical information platform and does not replace professional medical advice. Always consult healthcare providers for medical emergencies."
+          type="warning"
+        />
+        <OfflineBanner />
+        {children}
+        
+        {/* Global ElevenLabs Widget */}
+        <ElevenLabsGlobalWidget 
+          height={560}
+          width="400px"
+        />
+        
+        {/* Session ID Script */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                function getOrCreateSessionId() {
+                  if (typeof window === 'undefined') return '';
+                  const key = 'safemama_session_id';
+                  const existing = window.localStorage.getItem(key);
+                  if (existing) return existing;
+                  const newId = crypto.randomUUID();
+                  window.localStorage.setItem(key, newId);
+                  return newId;
+                }
+                window.SAFEMAMA_SESSION_ID = getOrCreateSessionId();
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   );
