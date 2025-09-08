@@ -3,7 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { currentTrimester } from '@/lib/trimester';
 import { EducationGrid } from '@/components/education/EducationGrid';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, Skeleton } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { LegalNote } from '@/components/LegalNote';
 
 async function getEducationTopics(trimester: number) {

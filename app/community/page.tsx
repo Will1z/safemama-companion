@@ -3,7 +3,8 @@ import { createClient } from '@/lib/supabase/server';
 import { currentTrimester } from '@/lib/trimester';
 import { CommunityGrid } from '@/components/community/CommunityGrid';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Skeleton } from 'lucide-react';
+import { Users } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { LegalNote } from '@/components/LegalNote';
 
 async function getCommunities(trimester: number) {

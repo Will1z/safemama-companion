@@ -2,7 +2,8 @@ import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { ProfileForm } from '@/components/profile/ProfileForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { User, Skeleton } from 'lucide-react';
+import { User } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 import { LegalNote } from '@/components/LegalNote';
 
 async function getUserProfile() {

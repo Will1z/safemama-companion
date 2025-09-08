@@ -327,7 +327,7 @@ export function RiskCards() {
                     >
                       <Button 
                         size="sm" 
-                        variant={savedContacts.includes(contact.name) ? "default" : "outline"}
+                        variant={savedContacts.includes(contact.name) ? "primary" : "outline"}
                         disabled={savedContacts.includes(contact.name)}
                       >
                         {savedContacts.includes(contact.name) ? (
@@ -347,7 +347,7 @@ export function RiskCards() {
               <Button 
                 onClick={() => handleDirections('nearest hospital emergency room')}
                 className="w-full"
-                variant="destructive"
+                variant="danger"
               >
                 <MapPin className="w-4 h-4 mr-2" />
                 Find Nearest Emergency Facility

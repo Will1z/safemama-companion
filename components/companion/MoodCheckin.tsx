@@ -109,7 +109,7 @@ export function MoodCheckin({ userId }: MoodCheckinProps) {
               return (
                 <Button
                   key={mood.id}
-                  variant={selectedMood === mood.id ? "default" : "outline"}
+                  variant={selectedMood === mood.id ? "primary" : "outline"}
                   size="sm"
                   className={`h-16 flex flex-col gap-1 ${
                     selectedMood === mood.id 

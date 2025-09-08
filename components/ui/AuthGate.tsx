@@ -76,7 +76,7 @@ export function AuthGate({ onAuthed, reason, children }: AuthGateProps) {
               <Button 
                 onClick={handleSignIn} 
                 className="w-full justify-start"
-                variant="default"
+                variant="primary"
               >
                 <User className="w-4 h-4 mr-2" />
                 Sign in with email

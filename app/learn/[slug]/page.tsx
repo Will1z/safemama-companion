@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
+import { createClient, getSupabaseAdmin } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -151,7 +151,7 @@ export default async function TopicPage({ params }: TopicPageProps) {
 }
 
 export async function generateStaticParams() {
-  const supabase = createClient();
+  const supabase = getSupabaseAdmin();
   
   const { data: topics } = await supabase
     .from('education_topics')

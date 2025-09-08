@@ -75,26 +75,47 @@ A comprehensive maternal health platform connecting expecting mothers with healt
 
 Create a `.env.local` file with the following:
 
+### Public Variables (Client-Side)
+These variables are exposed to the browser and should be safe to share:
+
 ```env
-# Supabase
+# Supabase (Public)
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+# ElevenLabs (Public)
+NEXT_PUBLIC_ELEVENLABS_AGENT_ID=your_elevenlabs_agent_id
+
+# Mapbox (Public)
+NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_token
+```
+
+### Server-Only Variables (Private)
+These variables are only accessible on the server and should be kept secret:
+
+```env
+# Supabase (Private)
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
 # OpenAI
 OPENAI_API_KEY=your_openai_api_key
 
-# ElevenLabs (for voice features)
+# ElevenLabs (Private)
 ELEVENLABS_API_KEY=your_elevenlabs_api_key
 ELEVENLABS_VOICE_ID=your_elevenlabs_voice_id
 
 # Twilio
 TWILIO_ACCOUNT_SID=your_twilio_sid
 TWILIO_AUTH_TOKEN=your_twilio_token
-TWILIO_PHONE_NUMBER=your_twilio_phone
+TWILIO_WHATSAPP_FROM=whatsapp:+14155238886
 
-# Mapbox
-NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=your_mapbox_token
+# Email
+RESEND_API_KEY=your_resend_api_key
+FROM_EMAIL=your_from_email
+CLINICIAN_EMAIL=your_clinician_email
+
+# App Security
+SAFEMAMA_API_KEY=your_safemama_api_key
 
 # App Settings
 NEXTAUTH_URL=http://localhost:3000
@@ -203,10 +224,64 @@ Test coverage includes:
 
 ## Deployment
 
-### Vercel (Recommended)
-1. Connect repository to Vercel
-2. Configure environment variables
-3. Deploy with automatic builds
+### Netlify (Recommended)
+
+1. **Connect Repository**
+   - Go to [Netlify](https://netlify.com) and sign in
+   - Click "New site from Git"
+   - Connect your GitHub repository
+   - The `netlify.toml` file will automatically configure the build settings
+
+2. **Configure Environment Variables**
+   - Go to Site Settings → Environment Variables
+   - Add all environment variables from the list above
+   - **Important**: Only add `NEXT_PUBLIC_*` variables as public, keep others as private
+
+3. **Deploy**
+   - Netlify will automatically build and deploy on every push to main
+   - Your site will be available at `https://your-site-name.netlify.app`
+
+4. **Post-Deployment Setup**
+   - Update ElevenLabs Agent tool URLs to use your Netlify domain:
+     - Replace `localhost:3000` with `https://your-site-name.netlify.app`
+     - Update webhook URLs in ElevenLabs dashboard
+   - Test all API endpoints to ensure they work correctly
+
+### Environment Variables for Netlify
+
+**Public Variables (Safe to expose):**
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_ELEVENLABS_AGENT_ID`
+- `NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN`
+
+**Private Variables (Server-only):**
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `OPENAI_API_KEY`
+- `ELEVENLABS_API_KEY`
+- `ELEVENLABS_VOICE_ID`
+- `TWILIO_ACCOUNT_SID`
+- `TWILIO_AUTH_TOKEN`
+- `TWILIO_WHATSAPP_FROM`
+- `RESEND_API_KEY`
+- `FROM_EMAIL`
+- `CLINICIAN_EMAIL`
+- `SAFEMAMA_API_KEY`
+- `NEXTAUTH_URL`
+- `NEXTAUTH_SECRET`
+
+### DRY RUN Mode
+
+For testing without sending actual emails or SMS messages, set:
+```env
+SAFE_DRY_RUN=true
+```
+
+When `SAFE_DRY_RUN=true`:
+- Email sending is logged but not executed
+- SMS/WhatsApp messages are logged but not sent
+- All other functionality works normally
+- Useful for testing in staging environments
 
 ### Manual Build
 ```bash

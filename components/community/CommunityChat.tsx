@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Send, AlertCircle } from 'lucide-react';
+import { Send, AlertCircle, MessageCircle } from 'lucide-react';
 import { toast } from 'sonner';
 
 interface CommunityMessage {
