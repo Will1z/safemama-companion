@@ -37,47 +37,48 @@ export default function PregnancySettingsPage() {
   const [pregnancyStatus, setPregnancyStatus] = useState<PregnancyStatus | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-  // Auto-fill userId from session
+  // Auto-fill userId from session or use demo
   useEffect(() => {
     const loadUser = async () => {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       
-      if (user) {
-        setFormData(prev => ({
-          ...prev,
-          userId: user.id
-        }));
-        
-        // Try to load existing pregnancy data
-        try {
-          const response = await fetch(`/api/user/pregnancy?userId=${user.id}`, {
-            headers: {
-              'x-api-key': process.env.NEXT_PUBLIC_SAFEMAMA_API_KEY || ''
-            }
-          });
-          
-          if (response.ok) {
-            const result = await response.json();
-            if (result.ok && result.data) {
-              setFormData(prev => ({
-                ...prev,
-                dueDate: result.data.dueDate || '',
-                lmpDate: result.data.lmpDate || '',
-                timezone: result.data.timezone || 'Africa/Lagos'
-              }));
-              
-              setPregnancyStatus({
-                gaWeeks: result.data.gaWeeks,
-                trimester: result.data.trimester,
-                effectiveDueDate: result.data.effectiveDueDate,
-                daysToDue: result.data.daysToDue
-              });
-            }
+      // Use authenticated user ID or demo user ID
+      const userId = user?.id || 'demo-user-pregnancy';
+      
+      setFormData(prev => ({
+        ...prev,
+        userId: userId
+      }));
+      
+      // Try to load existing pregnancy data
+      try {
+        const response = await fetch(`/api/user/pregnancy?userId=${userId}`, {
+          headers: {
+            'x-api-key': process.env.NEXT_PUBLIC_SAFEMAMA_API_KEY || ''
           }
-        } catch (error) {
-          console.error('Error loading existing pregnancy data:', error);
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          if (result.ok && result.data) {
+            setFormData(prev => ({
+              ...prev,
+              dueDate: result.data.dueDate || '',
+              lmpDate: result.data.lmpDate || '',
+              timezone: result.data.timezone || 'Africa/Lagos'
+            }));
+            
+            setPregnancyStatus({
+              gaWeeks: result.data.gaWeeks,
+              trimester: result.data.trimester,
+              effectiveDueDate: result.data.effectiveDueDate,
+              daysToDue: result.data.daysToDue
+            });
+          }
         }
+      } catch (error) {
+        console.error('Error loading existing pregnancy data:', error);
       }
       
       setIsLoadingUser(false);

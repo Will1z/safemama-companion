@@ -49,18 +49,15 @@ async function getPregnancyData() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
-  if (!user) {
-    return {
-      userId: null,
-      pregnancyStatus: null
-    };
-  }
+  // Demo mode - use test user if no authenticated user
+  const userId = user?.id || 'demo-user-pregnancy';
   
-  const pregnancyStatus = await getPregnancyStatus(user.id);
+  const pregnancyStatus = await getPregnancyStatus(userId);
   
   return {
-    userId: user.id,
-    pregnancyStatus
+    userId,
+    pregnancyStatus,
+    isDemo: !user
   };
 }
 
@@ -78,7 +75,7 @@ function getTopicIcon(topic: string) {
 }
 
 export default async function LearnPage() {
-  const { userId, pregnancyStatus } = await getPregnancyData();
+  const { userId, pregnancyStatus, isDemo } = await getPregnancyData();
   const trimester = pregnancyStatus?.trimester;
   const trimesterContent = trimester ? getTrimesterContent(trimester) : null;
 
@@ -88,6 +85,11 @@ export default async function LearnPage() {
         <div className="flex items-center gap-3 mb-4">
           <BookOpen className="h-8 w-8 text-teal-600" />
           <h1 className="text-3xl font-bold text-gray-900">Learn</h1>
+          {isDemo && (
+            <Badge variant="secondary" className="bg-blue-100 text-blue-800 border-blue-200">
+              Demo Mode
+            </Badge>
+          )}
         </div>
         <p className="text-gray-600 max-w-2xl">
           Evidence-based information tailored to your current trimester. 
@@ -95,37 +97,23 @@ export default async function LearnPage() {
         </p>
       </div>
 
-      {!userId ? (
-        <Card className="bg-blue-50 border-blue-200">
-          <CardContent className="pt-6 text-center">
-            <Calendar className="h-12 w-12 text-blue-500 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-blue-800 mb-2">
-              Please sign in to see your personalized lessons
-            </h3>
-            <p className="text-blue-700 mb-4">
-              Sign in to get trimester-specific content based on your pregnancy progress.
-            </p>
-            <Button asChild>
-              <Link href="/auth/signin">
-                Sign In
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      ) : !trimesterContent ? (
+      {!trimesterContent ? (
         <Card className="bg-amber-50 border-amber-200">
           <CardContent className="pt-6 text-center">
             <Calendar className="h-12 w-12 text-amber-500 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-amber-800 mb-2">
-              Please set your due date to see tailored lessons
+              {isDemo ? 'Demo Mode - Set a due date to see tailored lessons' : 'Please set your due date to see tailored lessons'}
             </h3>
             <p className="text-amber-700 mb-4">
-              Update your profile with your due date or last period date to get personalized trimester-specific content.
+              {isDemo 
+                ? 'This is a demo. Set a due date to see how the system works with trimester-specific content.'
+                : 'Update your profile with your due date or last period date to get personalized trimester-specific content.'
+              }
             </p>
             <Button asChild>
               <Link href="/settings/pregnancy">
                 <Settings className="h-4 w-4 mr-2" />
-                Set / Update Due Date
+                {isDemo ? 'Try Demo - Set Due Date' : 'Set / Update Due Date'}
               </Link>
             </Button>
           </CardContent>
