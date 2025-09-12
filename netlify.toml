@@ -39,3 +39,4 @@
   for = "/api/*"
   [headers.values]
     Cache-Control = "public, max-age=60"
+
