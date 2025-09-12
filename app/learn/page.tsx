@@ -1,4 +1,3 @@
-import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -88,6 +87,8 @@ export default async function LearnPage() {
   
   // For testing - show second trimester content if no user data
   const trimesterContent = trimester ? getTrimesterContent(trimester) : getTrimesterContent(2);
+  
+  console.log('Learn page render - userId:', userId, 'trimester:', trimester, 'trimesterContent:', !!trimesterContent);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
