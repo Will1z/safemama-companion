@@ -37,23 +37,25 @@ export default function PregnancySettingsPage() {
   const [pregnancyStatus, setPregnancyStatus] = useState<PregnancyStatus | null>(null);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
 
-  // Auto-fill userId from session or use demo
+  // Auto-fill userId from session
   useEffect(() => {
     const loadUser = async () => {
       const supabase = createClient();
       const { data: { user } } = await supabase.auth.getUser();
       
-      // Use authenticated user ID or demo user ID
-      const userId = user?.id || 'demo-user-pregnancy';
+      if (!user) {
+        setIsLoadingUser(false);
+        return;
+      }
       
       setFormData(prev => ({
         ...prev,
-        userId: userId
+        userId: user.id
       }));
       
       // Try to load existing pregnancy data
       try {
-        const response = await fetch(`/api/user/pregnancy?userId=${userId}`, {
+        const response = await fetch(`/api/user/pregnancy?userId=${user.id}`, {
           headers: {
             'x-api-key': process.env.NEXT_PUBLIC_SAFEMAMA_API_KEY || ''
           }

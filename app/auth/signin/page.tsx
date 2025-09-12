@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Heart, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
+import { createClient } from '@/lib/supabase/client';
 
 export default function SignInPage() {
   const router = useRouter();
@@ -26,31 +27,48 @@ export default function SignInPage() {
     setError('');
 
     try {
-      // Demo credentials check
-      const demoCredentials = {
-        email: 'mama@mama.com',
-        password: 'mama'
-      };
-
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const supabase = createClient();
       
-      // Check if credentials match demo account
-      if (formData.email === demoCredentials.email && formData.password === demoCredentials.password) {
+      // Try to sign in with Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (error) {
+        // If user doesn't exist, try to create the demo account
+        if (formData.email === 'mama@mama.com' && formData.password === 'mama') {
+          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
+            email: 'mama@mama.com',
+            password: 'mama',
+          });
+
+          if (signUpError) {
+            setError('Failed to create demo account. Please try again.');
+            track('sign_up_error', { error: signUpError.message });
+          } else {
+            // Track successful sign up
+            track('sign_up_success', { email: formData.email, isDemo: true });
+            
+            // Redirect to dashboard
+            router.push('/dashboard');
+          }
+        } else {
+          setError('Invalid email or password. Please try again.');
+          track('sign_in_failed', { email: formData.email });
+        }
+      } else {
         // Track successful sign in
-        track('sign_in_success', { email: formData.email, isDemo: true });
+        track('sign_in_success', { email: formData.email });
         
         // Redirect to dashboard
         router.push('/dashboard');
-      } else {
-        // Track failed sign in attempt
-        track('sign_in_failed', { email: formData.email });
-        setError('Invalid email or password. Please try again.');
       }
       
     } catch (error) {
       console.error('Sign in error:', error);
-      setError('An error occurred. Please try again.');
+      setError('Something went wrong. Please try again.');
+      track('sign_in_error', { error: error instanceof Error ? error.message : 'Unknown error' });
     } finally {
       setIsLoading(false);
     }
