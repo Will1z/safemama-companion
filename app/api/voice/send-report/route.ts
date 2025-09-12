@@ -8,16 +8,39 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
+    console.log('[send-report] API call started');
+    
     if (!checkApiKey(req)) {
+      console.log('[send-report] Unauthorized request - missing or invalid API key');
       return NextResponse.json({ ok:false, error:"unauthorized" }, { status:401 });
     }
 
-    const { recipientEmail, summary, patientName, patientPhone, whatsappNumber, sessionId, userId } = await req.json();
+    const body = await req.json();
+    console.log('[send-report] Request body received:', {
+      recipientEmail: body.recipientEmail ? '***@***.***' : 'MISSING',
+      summary: body.summary ? `${body.summary.length} chars` : 'MISSING',
+      patientName: body.patientName || 'not provided',
+      patientPhone: body.patientPhone || 'not provided',
+      whatsappNumber: body.whatsappNumber || 'not provided',
+      sessionId: body.sessionId || 'not provided',
+      userId: body.userId || 'not provided'
+    });
 
-    // Validate required fields
-    if (!recipientEmail || !summary) {
+    const { recipientEmail, summary, patientName, patientPhone, whatsappNumber, sessionId, userId } = body;
+
+    // Detailed validation with specific field names
+    const missingFields = [];
+    if (!recipientEmail) missingFields.push('recipientEmail');
+    if (!summary) missingFields.push('summary');
+    
+    if (missingFields.length > 0) {
+      console.log('[send-report] Validation failed - missing fields:', missingFields);
       return NextResponse.json(
-        { ok: false, error: 'Missing required fields: recipientEmail, summary' },
+        { 
+          ok: false, 
+          error: `Missing required fields: ${missingFields.join(', ')}`,
+          missingFields 
+        },
         { status: 400 }
       );
     }
@@ -25,19 +48,22 @@ export async function POST(req: NextRequest) {
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(recipientEmail)) {
+      console.log('[send-report] Validation failed - invalid email format:', recipientEmail);
       return NextResponse.json(
         { ok: false, error: 'Invalid email format' },
         { status: 400 }
       );
     }
 
+    // Check for dry run mode
+    const isDryRun = process.env.SAFE_DRY_RUN === 'true';
+    console.log('[send-report] Dry run mode:', isDryRun);
+
     const results = [];
 
     // Send email via Resend
     if (process.env.RESEND_API_KEY) {
       try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        
         const subject = patientName 
           ? `Safemama summary for ${patientName}`
           : 'Safemama summary';
@@ -57,27 +83,40 @@ export async function POST(req: NextRequest) {
           </div>
         `;
 
-        const emailResult = await resend.emails.send({
-          from: 'Safemama <reports@safemama.app>',
+        const emailPayload = {
+          from: 'SafeMama <david@proofvault.xyz>',
           to: [recipientEmail],
           subject,
           html: htmlContent,
-        });
+        };
 
-        results.push({ type: 'email', success: true, id: emailResult.data?.id });
+        if (isDryRun) {
+          console.log('[send-report] DRY RUN - Email payload:', {
+            to: emailPayload.to,
+            subject: emailPayload.subject,
+            htmlLength: emailPayload.html.length
+          });
+          results.push({ type: 'email', success: true, id: 'dry-run-email-id', dryRun: true });
+        } else {
+          const resend = new Resend(process.env.RESEND_API_KEY);
+          const emailResult = await resend.emails.send(emailPayload);
+          console.log('[send-report] Email sent successfully:', emailResult.data?.id);
+          results.push({ type: 'email', success: true, id: emailResult.data?.id });
+        }
       } catch (error) {
-        console.error('Error sending email:', error);
-        results.push({ type: 'email', success: false, error: error instanceof Error ? error.message : 'Unknown error' });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const truncatedError = errorMessage.length > 200 ? errorMessage.substring(0, 200) + '...' : errorMessage;
+        console.error('[send-report] Error sending email:', error);
+        results.push({ type: 'email', success: false, error: truncatedError });
       }
     } else {
+      console.log('[send-report] Email skipped - RESEND_API_KEY not configured');
       results.push({ type: 'email', success: false, error: 'RESEND_API_KEY not configured' });
     }
 
     // Send WhatsApp via Twilio
     if (whatsappNumber && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_WHATSAPP_FROM) {
       try {
-        const twilio = new Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-        
         let messageBody = `🏥 *Safemama Summary*\n\n`;
         if (patientName) {
           messageBody += `👤 *Patient:* ${patientName}\n`;
@@ -88,26 +127,41 @@ export async function POST(req: NextRequest) {
         messageBody += `\n📋 *Summary:*\n${summary}\n\n`;
         messageBody += `_Generated by Safemama - Your Antenatal Companion_`;
 
-        const whatsappResult = await twilio.messages.create({
+        const whatsappPayload = {
           from: process.env.TWILIO_WHATSAPP_FROM,
           to: `whatsapp:${whatsappNumber}`,
           body: messageBody,
-        });
+        };
 
-        results.push({ type: 'whatsapp', success: true, id: whatsappResult.sid });
+        if (isDryRun) {
+          console.log('[send-report] DRY RUN - WhatsApp payload:', {
+            to: whatsappPayload.to,
+            from: whatsappPayload.from,
+            bodyLength: whatsappPayload.body.length
+          });
+          results.push({ type: 'whatsapp', success: true, id: 'dry-run-whatsapp-id', dryRun: true });
+        } else {
+          const twilio = new Twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+          const whatsappResult = await twilio.messages.create(whatsappPayload);
+          console.log('[send-report] WhatsApp sent successfully:', whatsappResult.sid);
+          results.push({ type: 'whatsapp', success: true, id: whatsappResult.sid });
+        }
       } catch (error) {
-        console.error('Error sending WhatsApp:', error);
-        results.push({ type: 'whatsapp', success: false, error: error instanceof Error ? error.message : 'Unknown error' });
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        const truncatedError = errorMessage.length > 200 ? errorMessage.substring(0, 200) + '...' : errorMessage;
+        console.error('[send-report] Error sending WhatsApp:', error);
+        results.push({ type: 'whatsapp', success: false, error: truncatedError });
       }
     } else if (whatsappNumber) {
+      console.log('[send-report] WhatsApp skipped - Twilio not configured');
       results.push({ type: 'whatsapp', success: false, error: 'Twilio not configured' });
     }
 
-    // Check if at least one delivery method succeeded
+    // Check if at least one delivery method succeeded (including dry run)
     const hasSuccess = results.some(result => result.success);
     
     if (hasSuccess) {
-      // Insert record into conversation_summaries table
+      // Insert record into conversation_summaries table (always insert, even in dry run)
       try {
         const supabase = getSupabaseAdmin();
         const { error: insertError } = await supabase
@@ -118,23 +172,34 @@ export async function POST(req: NextRequest) {
             summary: summary,
             sent_email_to: recipientEmail,
             sent_whatsapp_to: whatsappNumber ?? null,
-            sent_at: new Date().toISOString()
+            sent_at: new Date().toISOString(),
+            dry_run: isDryRun
           });
 
         if (insertError) {
-          console.error('Error inserting conversation summary:', insertError);
+          console.error('[send-report] Error inserting conversation summary:', insertError);
           // Don't fail the request if summary insertion fails
+        } else {
+          console.log('[send-report] Conversation summary inserted successfully');
         }
       } catch (error) {
-        console.error('Error inserting conversation summary:', error);
+        console.error('[send-report] Error inserting conversation summary:', error);
         // Don't fail the request if summary insertion fails
       }
 
+      console.log('[send-report] API call completed successfully:', { 
+        resultsCount: results.length, 
+        dryRun: isDryRun,
+        hasSuccess 
+      });
+      
       return NextResponse.json({ 
         ok: true, 
-        results 
+        results,
+        dryRun: isDryRun
       });
     } else {
+      console.log('[send-report] API call failed - no delivery methods succeeded:', results);
       return NextResponse.json(
         { ok: false, error: 'Failed to send report via any method', results },
         { status: 500 }
@@ -142,9 +207,11 @@ export async function POST(req: NextRequest) {
     }
 
   } catch (error) {
-    console.error('Error in send-report API:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+    const truncatedError = errorMessage.length > 200 ? errorMessage.substring(0, 200) + '...' : errorMessage;
+    console.error('[send-report] Unexpected error in API:', error);
     return NextResponse.json(
-      { ok: false, error: 'Internal server error' },
+      { ok: false, error: 'Internal server error', details: truncatedError },
       { status: 500 }
     );
   }
