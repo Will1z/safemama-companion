@@ -1,14 +1,13 @@
 import { createClient } from '@/lib/supabase/server';
-
-export const dynamic = 'force-dynamic';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { BookOpen, Calendar, AlertTriangle, Heart, Utensils, Settings } from 'lucide-react';
-import { Skeleton } from '@/components/ui/skeleton';
 import { LegalNote } from '@/components/LegalNote';
 import learnContent from '@/data/learnContent.json';
 import Link from 'next/link';
+
+export const dynamic = 'force-dynamic';
 
 function getTrimesterContent(trimester: number) {
   return learnContent[trimester as keyof typeof learnContent] || null;
@@ -29,21 +28,6 @@ async function getPregnancyStatus(userId: string) {
   }
 
   return status;
-}
-
-async function getUserProfile() {
-  const supabase = createClient();
-  
-  const { data: { user } } = await supabase.auth.getUser();
-  if (!user) return null;
-
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-
-  return profile;
 }
 
 async function getPregnancyData() {
@@ -70,14 +54,15 @@ async function getPregnancyData() {
   };
 }
 
-
 function getTopicIcon(topic: string) {
   const topicLower = topic.toLowerCase();
   if (topicLower.includes('body') || topicLower.includes('change')) {
     return <Heart className="h-5 w-5 text-pink-500" />;
-  } else if (topicLower.includes('nutrition') || topicLower.includes('food')) {
-    return <Utensils className="h-5 w-5 text-teal-500" />;
-  } else if (topicLower.includes('warning') || topicLower.includes('sign')) {
+  }
+  if (topicLower.includes('nutrition') || topicLower.includes('food')) {
+    return <Utensils className="h-5 w-5 text-green-500" />;
+  }
+  if (topicLower.includes('warning') || topicLower.includes('sign')) {
     return <AlertTriangle className="h-5 w-5 text-amber-500" />;
   }
   return <BookOpen className="h-5 w-5 text-blue-500" />;
