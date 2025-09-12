@@ -17,6 +17,10 @@ const nextConfig = withPWA({
   env: {
     CUSTOM_KEY: 'my-value',
   },
+  // Force fresh build to clear cache
+  generateBuildId: async () => {
+    return `build-${Date.now()}`;
+  },
 });
 
 module.exports = nextConfig;
