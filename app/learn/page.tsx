@@ -9,7 +9,7 @@ export default function LearnPage() {
           <svg className="h-8 w-8 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 7v14M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" />
           </svg>
-          <h1 className="text-3xl font-bold text-gray-900">Learn</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Learn - Updated</h1>
         </div>
         <p className="text-gray-600 max-w-2xl">
           Evidence-based information tailored to your current trimester. 
