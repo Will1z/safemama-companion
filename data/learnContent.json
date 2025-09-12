@@ -1,0 +1,83 @@
+{
+  "1": {
+    "title": "First Trimester (0–12 weeks)",
+    "sections": [
+      {
+        "topic": "Body Changes",
+        "content": [
+          "Nausea, fatigue, mood changes, breast tenderness are common.",
+          "Your body is adjusting to support your pregnancy."
+        ]
+      },
+      {
+        "topic": "Nutrition Focus",
+        "content": [
+          "Take folic acid daily.",
+          "Eat small, frequent meals.",
+          "Stay hydrated."
+        ]
+      },
+      {
+        "topic": "Warning Signs",
+        "content": [
+          "Heavy bleeding",
+          "Severe abdominal pain",
+          "Persistent vomiting"
+        ]
+      }
+    ]
+  },
+  "2": {
+    "title": "Second Trimester (13–27 weeks)",
+    "sections": [
+      {
+        "topic": "Body Changes",
+        "content": [
+          "Growing bump and more energy.",
+          "Nausea usually improves."
+        ]
+      },
+      {
+        "topic": "Nutrition Focus",
+        "content": [
+          "Increase protein, iron, and calcium.",
+          "Track healthy weight gain."
+        ]
+      },
+      {
+        "topic": "Warning Signs",
+        "content": [
+          "Signs of preterm labor",
+          "High blood pressure symptoms"
+        ]
+      }
+    ]
+  },
+  "3": {
+    "title": "Third Trimester (28–40 weeks)",
+    "sections": [
+      {
+        "topic": "Body Changes",
+        "content": [
+          "Back pain, swelling, Braxton Hicks contractions.",
+          "Shortness of breath is common."
+        ]
+      },
+      {
+        "topic": "Nutrition Focus",
+        "content": [
+          "Eat light, fiber-rich meals.",
+          "Stay hydrated to avoid constipation."
+        ]
+      },
+      {
+        "topic": "Warning Signs",
+        "content": [
+          "Reduced fetal movement",
+          "Severe swelling of hands/face",
+          "Headaches with vision changes"
+        ]
+      }
+    ]
+  }
+}

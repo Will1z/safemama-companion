@@ -24,7 +24,13 @@ async function getUserProfile() {
     .eq('user_id', user.id)
     .single();
 
-  return { profile, history, user };
+  const { data: contacts } = await supabase
+    .from('contacts')
+    .select('*')
+    .eq('user_id', user.id)
+    .eq('is_emergency', true);
+
+  return { profile, history, contacts, user };
 }
 
 function ProfileFormSkeleton() {
@@ -80,6 +86,7 @@ export default async function ProfilePage() {
         <ProfileForm 
           initialProfile={userData.profile} 
           initialHistory={userData.history}
+          initialContacts={userData.contacts}
           userId={userData.user.id}
         />
       </Suspense>

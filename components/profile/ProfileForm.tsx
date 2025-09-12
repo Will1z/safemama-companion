@@ -21,6 +21,13 @@ interface Profile {
   default_clinician_email?: string;
 }
 
+interface EmergencyContact {
+  id?: string;
+  name: string;
+  phone: string;
+  is_emergency: boolean;
+}
+
 interface PregnancyHistory {
   id: string;
   parity?: number;
@@ -31,6 +38,7 @@ interface PregnancyHistory {
 interface ProfileFormProps {
   initialProfile?: Profile | null;
   initialHistory?: PregnancyHistory | null;
+  initialContacts?: EmergencyContact[] | null;
   userId: string;
 }
 
@@ -47,7 +55,7 @@ const commonConditions = [
   'anxiety',
 ];
 
-export function ProfileForm({ initialProfile, initialHistory, userId }: ProfileFormProps) {
+export function ProfileForm({ initialProfile, initialHistory, initialContacts, userId }: ProfileFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     full_name: initialProfile?.full_name || '',
@@ -58,6 +66,8 @@ export function ProfileForm({ initialProfile, initialHistory, userId }: ProfileF
     parity: initialHistory?.parity || 0,
     previous_complications: initialHistory?.previous_complications || '',
     conditions: initialHistory?.conditions ? initialHistory.conditions.split(', ') : [],
+    emergency_contact_name: initialContacts?.find(c => c.is_emergency)?.name || '',
+    emergency_contact_phone: initialContacts?.find(c => c.is_emergency)?.phone || '',
   });
 
   const supabase = createClient();
@@ -117,6 +127,32 @@ export function ProfileForm({ initialProfile, initialHistory, userId }: ProfileF
         return;
       }
 
+      // Update emergency contact
+      if (formData.emergency_contact_name && formData.emergency_contact_phone) {
+        // First, remove existing emergency contacts
+        await supabase
+          .from('contacts')
+          .delete()
+          .eq('user_id', userId)
+          .eq('is_emergency', true);
+
+        // Insert new emergency contact
+        const { error: contactError } = await supabase
+          .from('contacts')
+          .insert({
+            user_id: userId,
+            name: formData.emergency_contact_name,
+            phone: formData.emergency_contact_phone,
+            is_emergency: true,
+          });
+
+        if (contactError) {
+          console.error('Error updating emergency contact:', contactError);
+          toast.error('Failed to update emergency contact. Please try again.');
+          return;
+        }
+      }
+
       toast.success('Profile updated successfully!');
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -173,6 +209,42 @@ export function ProfileForm({ initialProfile, initialHistory, userId }: ProfileF
               Set your doctor's email address to make sending health reports easier. You can always override this when sending reports.
             </p>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Emergency Contact */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Heart className="h-5 w-5 text-red-500" />
+            Emergency Contact
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="emergency_contact_name">Emergency Contact Name *</Label>
+              <Input
+                id="emergency_contact_name"
+                value={formData.emergency_contact_name}
+                onChange={(e) => handleInputChange('emergency_contact_name', e.target.value)}
+                placeholder="Enter emergency contact name"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="emergency_contact_phone">Emergency Contact Phone *</Label>
+              <Input
+                id="emergency_contact_phone"
+                value={formData.emergency_contact_phone}
+                onChange={(e) => handleInputChange('emergency_contact_phone', e.target.value)}
+                placeholder="+1234567890"
+              />
+            </div>
+          </div>
+          <p className="text-xs text-gray-500">
+            This contact will be used in emergency situations and can be called from the Help page.
+          </p>
         </CardContent>
       </Card>
 
