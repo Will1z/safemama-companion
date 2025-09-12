@@ -24,7 +24,8 @@ import {
   ChevronUp,
   BookOpen,
   Users,
-  User
+  User,
+  History
 } from 'lucide-react';
 import Link from 'next/link';
 import { DailyTipCard } from '@/components/companion/DailyTipCard';
@@ -472,11 +473,22 @@ export default function DashboardPage() {
           />
           <Tile
             tone="neutral"
+            href="/call-history"
+            title="Call History"
+            subtitle="View conversations"
+            icon={<History className="w-6 h-6 text-[#1C3D3A]" />}
+          />
+          <Tile
+            tone="neutral"
             href="/me"
             title="Profile"
             subtitle="Update settings"
             icon={<User className="w-6 h-6 text-[#1C3D3A]" />}
           />
+        </div>
+        
+        {/* Additional Actions */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
           <Tile
             tone="warn"
             href="/help"

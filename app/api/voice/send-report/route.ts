@@ -235,6 +235,34 @@ export async function POST(req: NextRequest) {
         // Don't fail the request if summary insertion fails
       }
 
+      // Also insert into call_history table for user's call history view
+      if (userId && sessionId) {
+        try {
+          const supabase = getSupabaseAdmin();
+          const { error: callHistoryError } = await supabase
+            .from('call_history')
+            .insert({
+              user_id: userId,
+              session_id: sessionId,
+              summary: summary,
+              patient_name: finalPatientName,
+              patient_phone: patientPhone,
+              recipient_email: finalRecipientEmail,
+              whatsapp_number: whatsappNumber
+            });
+
+          if (callHistoryError) {
+            console.error('[send-report] Error inserting call history:', callHistoryError);
+            // Don't fail the request if call history insertion fails
+          } else {
+            console.log('[send-report] Call history inserted successfully');
+          }
+        } catch (error) {
+          console.error('[send-report] Error inserting call history:', error);
+          // Don't fail the request if call history insertion fails
+        }
+      }
+
       console.log('[send-report] API call completed successfully:', { 
         resultsCount: results.length, 
         dryRun: isDryRun,
