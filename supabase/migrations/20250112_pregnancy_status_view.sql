@@ -4,7 +4,7 @@ returns numeric language sql immutable as $$
   with days_to_due as (
     select (due_date - (as_of at time zone 'UTC')::date) as d
   )
-  select greatest(0, least(42, 40 - (extract(day from d)::numeric / 7.0)))
+  select greatest(0, least(42, 40 - (d::numeric / 7.0)))
   from days_to_due;
 $$;
 
