@@ -49,6 +49,8 @@ async function getPregnancyData() {
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
   
+  console.log('Learn page - User:', user?.id);
+  
   if (!user) {
     return {
       userId: null,
@@ -58,6 +60,7 @@ async function getPregnancyData() {
   }
   
   const pregnancyStatus = await getPregnancyStatus(user.id);
+  console.log('Learn page - Pregnancy status:', pregnancyStatus);
   
   return {
     userId: user.id,
@@ -82,7 +85,9 @@ function getTopicIcon(topic: string) {
 export default async function LearnPage() {
   const { userId, pregnancyStatus, isDemo } = await getPregnancyData();
   const trimester = pregnancyStatus?.trimester;
-  const trimesterContent = trimester ? getTrimesterContent(trimester) : null;
+  
+  // For testing - show second trimester content if no user data
+  const trimesterContent = trimester ? getTrimesterContent(trimester) : getTrimesterContent(2);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -97,24 +102,7 @@ export default async function LearnPage() {
         </p>
       </div>
 
-      {!userId ? (
-        <Card className="bg-blue-50 border-blue-200">
-          <CardContent className="pt-6 text-center">
-            <Calendar className="h-12 w-12 text-blue-500 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-blue-800 mb-2">
-              Please sign in to see your personalized lessons
-            </h3>
-            <p className="text-blue-700 mb-4">
-              Sign in to get trimester-specific content based on your pregnancy progress.
-            </p>
-            <Button asChild>
-              <Link href="/auth/signin">
-                Sign In
-              </Link>
-            </Button>
-          </CardContent>
-        </Card>
-      ) : !trimesterContent ? (
+      {!trimesterContent ? (
         <Card className="bg-amber-50 border-amber-200">
           <CardContent className="pt-6 text-center">
             <Calendar className="h-12 w-12 text-amber-500 mx-auto mb-4" />
