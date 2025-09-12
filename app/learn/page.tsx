@@ -1,14 +1,33 @@
 import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
-import { currentTrimester } from '@/lib/trimester';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BookOpen, Calendar, AlertTriangle, Heart, Utensils } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { BookOpen, Calendar, AlertTriangle, Heart, Utensils, Settings } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { LegalNote } from '@/components/LegalNote';
 import learnContent from '@/data/learnContent.json';
+import Link from 'next/link';
 
 function getTrimesterContent(trimester: number) {
   return learnContent[trimester as keyof typeof learnContent] || null;
+}
+
+async function getPregnancyStatus(userId: string) {
+  const supabase = createClient();
+  
+  const { data: status, error } = await supabase
+    .from('pregnancy_status_v')
+    .select('*')
+    .eq('user_id', userId)
+    .single();
+
+  if (error) {
+    console.error('Error fetching pregnancy status:', error);
+    return null;
+  }
+
+  return status;
 }
 
 async function getUserProfile() {
@@ -26,6 +45,23 @@ async function getUserProfile() {
   return profile;
 }
 
+async function getPregnancyData() {
+  // Use test user ID or get from session
+  const TEST_USER_ID = 'test-user-pregnancy';
+  
+  // Try to get from session first
+  const supabase = createClient();
+  const { data: { user } } = await supabase.auth.getUser();
+  const userId = user?.id || TEST_USER_ID;
+  
+  const pregnancyStatus = await getPregnancyStatus(userId);
+  
+  return {
+    userId,
+    pregnancyStatus
+  };
+}
+
 
 function getTopicIcon(topic: string) {
   const topicLower = topic.toLowerCase();
@@ -40,9 +76,9 @@ function getTopicIcon(topic: string) {
 }
 
 export default async function LearnPage() {
-  const profile = await getUserProfile();
-  const trimester = currentTrimester(profile?.due_date, profile?.last_period_date);
-  const trimesterContent = getTrimesterContent(trimester);
+  const { userId, pregnancyStatus } = await getPregnancyData();
+  const trimester = pregnancyStatus?.trimester;
+  const trimesterContent = trimester ? getTrimesterContent(trimester) : null;
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
@@ -64,9 +100,15 @@ export default async function LearnPage() {
             <h3 className="text-lg font-medium text-amber-800 mb-2">
               Please set your due date to see tailored lessons
             </h3>
-            <p className="text-amber-700">
+            <p className="text-amber-700 mb-4">
               Update your profile with your due date or last period date to get personalized trimester-specific content.
             </p>
+            <Button asChild>
+              <Link href="/settings/pregnancy">
+                <Settings className="h-4 w-4 mr-2" />
+                Set / Update Due Date
+              </Link>
+            </Button>
           </CardContent>
         </Card>
       ) : (
@@ -74,15 +116,35 @@ export default async function LearnPage() {
           <div className="mb-6">
             <Card className="bg-teal-50 border-teal-200">
               <CardContent className="pt-6">
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
-                  <p className="text-teal-800 font-medium">
-                    {trimesterContent.title}
-                  </p>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
+                    <p className="text-teal-800 font-medium">
+                      {trimesterContent.title}
+                    </p>
+                  </div>
+                  <Button asChild variant="outline" size="sm">
+                    <Link href="/settings/pregnancy">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Update
+                    </Link>
+                  </Button>
                 </div>
               </CardContent>
             </Card>
           </div>
+
+          {/* Pregnancy Status Badge */}
+          {pregnancyStatus && (
+            <div className="mb-6">
+              <Badge variant="secondary" className="text-sm px-4 py-2 bg-pink-100 text-pink-800 border-pink-200">
+                You're about {pregnancyStatus.ga_weeks} weeks. 
+                {pregnancyStatus.effective_due_date && (
+                  <span> Estimated due {new Date(pregnancyStatus.effective_due_date).toLocaleDateString()}</span>
+                )}
+              </Badge>
+            </div>
+          )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {trimesterContent.sections.map((section, index) => (
