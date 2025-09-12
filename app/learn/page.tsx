@@ -8,6 +8,7 @@ import learnContent from '@/data/learnContent.json';
 import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
 
 function getTrimesterContent(trimester: number) {
   return learnContent[trimester as keyof typeof learnContent] || null;
@@ -75,7 +76,7 @@ export default async function LearnPage() {
   // For testing - show second trimester content if no user data
   const trimesterContent = trimester ? getTrimesterContent(trimester) : getTrimesterContent(2);
   
-  console.log('Learn page render - userId:', userId, 'trimester:', trimester, 'trimesterContent:', !!trimesterContent);
+  console.log('Learn page render - userId:', userId, 'trimester:', trimester, 'trimesterContent:', !!trimesterContent, 'timestamp:', new Date().toISOString());
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
