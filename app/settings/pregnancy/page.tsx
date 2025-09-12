@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { createClient } from '@/lib/supabase/client';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -34,6 +35,56 @@ export default function PregnancySettingsPage() {
   
   const [isLoading, setIsLoading] = useState(false);
   const [pregnancyStatus, setPregnancyStatus] = useState<PregnancyStatus | null>(null);
+  const [isLoadingUser, setIsLoadingUser] = useState(true);
+
+  // Auto-fill userId from session
+  useEffect(() => {
+    const loadUser = async () => {
+      const supabase = createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        setFormData(prev => ({
+          ...prev,
+          userId: user.id
+        }));
+        
+        // Try to load existing pregnancy data
+        try {
+          const response = await fetch(`/api/user/pregnancy?userId=${user.id}`, {
+            headers: {
+              'x-api-key': process.env.NEXT_PUBLIC_SAFEMAMA_API_KEY || ''
+            }
+          });
+          
+          if (response.ok) {
+            const result = await response.json();
+            if (result.ok && result.data) {
+              setFormData(prev => ({
+                ...prev,
+                dueDate: result.data.dueDate || '',
+                lmpDate: result.data.lmpDate || '',
+                timezone: result.data.timezone || 'Africa/Lagos'
+              }));
+              
+              setPregnancyStatus({
+                gaWeeks: result.data.gaWeeks,
+                trimester: result.data.trimester,
+                effectiveDueDate: result.data.effectiveDueDate,
+                daysToDue: result.data.daysToDue
+              });
+            }
+          }
+        } catch (error) {
+          console.error('Error loading existing pregnancy data:', error);
+        }
+      }
+      
+      setIsLoadingUser(false);
+    };
+    
+    loadUser();
+  }, []);
 
   const handleInputChange = (field: keyof PregnancyData, value: string) => {
     setFormData(prev => ({
@@ -102,6 +153,28 @@ export default function PregnancySettingsPage() {
     }
   };
 
+  if (isLoadingUser) {
+    return (
+      <div className="container mx-auto px-4 py-8 max-w-2xl">
+        <div className="mb-8">
+          <div className="flex items-center gap-3 mb-4">
+            <Heart className="h-8 w-8 text-pink-600" />
+            <h1 className="text-3xl font-bold text-gray-900">Pregnancy Settings</h1>
+          </div>
+          <p className="text-gray-600">
+            Loading your pregnancy information...
+          </p>
+        </div>
+        <Card>
+          <CardContent className="pt-6 text-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-pink-600 mx-auto"></div>
+            <p className="mt-2 text-gray-600">Loading...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-2xl">
       <div className="mb-8">
@@ -130,10 +203,11 @@ export default function PregnancySettingsPage() {
                 value={formData.userId}
                 onChange={(e) => handleInputChange('userId', e.target.value)}
                 placeholder="Enter your user ID"
+                disabled={!!formData.userId}
                 required
               />
               <p className="text-xs text-gray-500">
-                Your unique identifier in the system
+                {formData.userId ? 'Auto-filled from your session' : 'Your unique identifier in the system'}
               </p>
             </div>
 

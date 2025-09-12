@@ -46,18 +46,20 @@ async function getUserProfile() {
 }
 
 async function getPregnancyData() {
-  // Use test user ID or get from session
-  const TEST_USER_ID = 'test-user-pregnancy';
-  
-  // Try to get from session first
   const supabase = createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  const userId = user?.id || TEST_USER_ID;
   
-  const pregnancyStatus = await getPregnancyStatus(userId);
+  if (!user) {
+    return {
+      userId: null,
+      pregnancyStatus: null
+    };
+  }
+  
+  const pregnancyStatus = await getPregnancyStatus(user.id);
   
   return {
-    userId,
+    userId: user.id,
     pregnancyStatus
   };
 }
@@ -93,7 +95,24 @@ export default async function LearnPage() {
         </p>
       </div>
 
-      {!trimesterContent ? (
+      {!userId ? (
+        <Card className="bg-blue-50 border-blue-200">
+          <CardContent className="pt-6 text-center">
+            <Calendar className="h-12 w-12 text-blue-500 mx-auto mb-4" />
+            <h3 className="text-lg font-medium text-blue-800 mb-2">
+              Please sign in to see your personalized lessons
+            </h3>
+            <p className="text-blue-700 mb-4">
+              Sign in to get trimester-specific content based on your pregnancy progress.
+            </p>
+            <Button asChild>
+              <Link href="/auth/signin">
+                Sign In
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      ) : !trimesterContent ? (
         <Card className="bg-amber-50 border-amber-200">
           <CardContent className="pt-6 text-center">
             <Calendar className="h-12 w-12 text-amber-500 mx-auto mb-4" />
