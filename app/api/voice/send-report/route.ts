@@ -30,7 +30,6 @@ export async function POST(req: NextRequest) {
 
     // Detailed validation with specific field names
     const missingFields = [];
-    if (!recipientEmail) missingFields.push('recipientEmail');
     if (!summary) missingFields.push('summary');
     
     if (missingFields.length > 0) {
@@ -45,10 +44,51 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Determine the final recipient email
+    let finalRecipientEmail = recipientEmail;
+    
+    // If no recipientEmail provided, try to get user's default
+    if (!finalRecipientEmail && userId) {
+      console.log('[send-report] No recipientEmail provided, looking up user default for userId:', userId);
+      
+      try {
+        const supabase = getSupabaseAdmin();
+        const { data: userProfile, error } = await supabase
+          .from('profiles')
+          .select('default_clinician_email')
+          .eq('id', userId)
+          .single();
+
+        if (error) {
+          console.error('[send-report] Error looking up user default email:', error);
+        } else if (userProfile?.default_clinician_email) {
+          finalRecipientEmail = userProfile.default_clinician_email;
+          console.log('[send-report] Using user default email:', finalRecipientEmail ? '***@***.***' : 'none');
+        } else {
+          console.log('[send-report] No default email found for user');
+        }
+      } catch (error) {
+        console.error('[send-report] Error in default email lookup:', error);
+      }
+    }
+
+    // Final validation - we need either a provided email or a default email
+    if (!finalRecipientEmail) {
+      console.log('[send-report] Validation failed - no recipientEmail provided and no default email found');
+      return NextResponse.json(
+        { 
+          ok: false, 
+          error: 'No recipient email provided and no default clinician email set for user. Please specify an email address or set a default in your profile.',
+          missingFields: ['recipientEmail']
+        },
+        { status: 400 }
+      );
+    }
+
     // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(recipientEmail)) {
-      console.log('[send-report] Validation failed - invalid email format:', recipientEmail);
+    if (!emailRegex.test(finalRecipientEmail)) {
+      console.log('[send-report] Validation failed - invalid email format:', finalRecipientEmail);
       return NextResponse.json(
         { ok: false, error: 'Invalid email format' },
         { status: 400 }
@@ -85,7 +125,7 @@ export async function POST(req: NextRequest) {
 
         const emailPayload = {
           from: 'SafeMama <david@proofvault.xyz>',
-          to: [recipientEmail],
+          to: [finalRecipientEmail],
           subject,
           html: htmlContent,
         };
@@ -170,7 +210,7 @@ export async function POST(req: NextRequest) {
             session_id: sessionId ?? 'unknown',
             user_id: userId ?? null,
             summary: summary,
-            sent_email_to: recipientEmail,
+            sent_email_to: finalRecipientEmail,
             sent_whatsapp_to: whatsappNumber ?? null,
             sent_at: new Date().toISOString(),
             dry_run: isDryRun

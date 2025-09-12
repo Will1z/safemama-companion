@@ -18,6 +18,7 @@ interface Profile {
   due_date?: string;
   last_period_date?: string;
   language?: string;
+  default_clinician_email?: string;
 }
 
 interface PregnancyHistory {
@@ -53,6 +54,7 @@ export function ProfileForm({ initialProfile, initialHistory, userId }: ProfileF
     due_date: initialProfile?.due_date || '',
     last_period_date: initialProfile?.last_period_date || '',
     language: initialProfile?.language || 'en',
+    default_clinician_email: initialProfile?.default_clinician_email || '',
     parity: initialHistory?.parity || 0,
     previous_complications: initialHistory?.previous_complications || '',
     conditions: initialHistory?.conditions ? initialHistory.conditions.split(', ') : [],
@@ -90,6 +92,7 @@ export function ProfileForm({ initialProfile, initialHistory, userId }: ProfileF
           due_date: formData.due_date || null,
           last_period_date: formData.last_period_date || null,
           language: formData.language,
+          default_clinician_email: formData.default_clinician_email || null,
         });
 
       if (profileError) {
@@ -155,6 +158,20 @@ export function ProfileForm({ initialProfile, initialHistory, userId }: ProfileF
                 <SelectItem value="yo">Yoruba</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="default_clinician_email">Default Clinician Email (Optional)</Label>
+            <Input
+              id="default_clinician_email"
+              type="email"
+              value={formData.default_clinician_email}
+              onChange={(e) => handleInputChange('default_clinician_email', e.target.value)}
+              placeholder="doctor@clinic.com"
+            />
+            <p className="text-xs text-gray-500">
+              Set your doctor's email address to make sending health reports easier. You can always override this when sending reports.
+            </p>
           </div>
         </CardContent>
       </Card>
