@@ -44,31 +44,39 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Determine the final recipient email
+    // Determine the final recipient email and patient name
     let finalRecipientEmail = recipientEmail;
+    let finalPatientName = patientName;
     
-    // If no recipientEmail provided, try to get user's default
-    if (!finalRecipientEmail && userId) {
-      console.log('[send-report] No recipientEmail provided, looking up user default for userId:', userId);
+    // If userId provided, look up user profile for default email and name
+    if (userId) {
+      console.log('[send-report] Looking up user profile for userId:', userId);
       
       try {
         const supabase = getSupabaseAdmin();
         const { data: userProfile, error } = await supabase
           .from('profiles')
-          .select('default_clinician_email')
+          .select('default_clinician_email, full_name')
           .eq('id', userId)
           .single();
 
         if (error) {
-          console.error('[send-report] Error looking up user default email:', error);
-        } else if (userProfile?.default_clinician_email) {
-          finalRecipientEmail = userProfile.default_clinician_email;
-          console.log('[send-report] Using user default email:', finalRecipientEmail ? '***@***.***' : 'none');
-        } else {
-          console.log('[send-report] No default email found for user');
+          console.error('[send-report] Error looking up user profile:', error);
+        } else if (userProfile) {
+          // Use default email if no recipientEmail provided
+          if (!finalRecipientEmail && userProfile.default_clinician_email) {
+            finalRecipientEmail = userProfile.default_clinician_email;
+            console.log('[send-report] Using user default email:', finalRecipientEmail ? '***@***.***' : 'none');
+          }
+          
+          // Use user's registered name if no patientName provided
+          if (!finalPatientName && userProfile.full_name) {
+            finalPatientName = userProfile.full_name;
+            console.log('[send-report] Using user registered name:', finalPatientName);
+          }
         }
       } catch (error) {
-        console.error('[send-report] Error in default email lookup:', error);
+        console.error('[send-report] Error in user profile lookup:', error);
       }
     }
 
@@ -104,14 +112,14 @@ export async function POST(req: NextRequest) {
     // Send email via Resend
     if (process.env.RESEND_API_KEY) {
       try {
-        const subject = patientName 
-          ? `Safemama summary for ${patientName}`
+        const subject = finalPatientName 
+          ? `Safemama summary for ${finalPatientName}`
           : 'Safemama summary';
 
         const htmlContent = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
             <h2 style="color: #1C3D3A;">Safemama Summary</h2>
-            ${patientName ? `<p><strong>Patient:</strong> ${patientName}</p>` : ''}
+            ${finalPatientName ? `<p><strong>Patient:</strong> ${finalPatientName}</p>` : ''}
             ${patientPhone ? `<p><strong>Phone:</strong> ${patientPhone}</p>` : ''}
             <div style="background-color: #f5f5f5; padding: 20px; border-radius: 8px; margin: 20px 0;">
               <h3 style="margin-top: 0; color: #1C3D3A;">Summary</h3>
@@ -158,8 +166,8 @@ export async function POST(req: NextRequest) {
     if (whatsappNumber && process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_WHATSAPP_FROM) {
       try {
         let messageBody = `🏥 *Safemama Summary*\n\n`;
-        if (patientName) {
-          messageBody += `👤 *Patient:* ${patientName}\n`;
+        if (finalPatientName) {
+          messageBody += `👤 *Patient:* ${finalPatientName}\n`;
         }
         if (patientPhone) {
           messageBody += `📞 *Phone:* ${patientPhone}\n`;
