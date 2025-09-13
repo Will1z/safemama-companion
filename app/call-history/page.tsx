@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Calendar, Clock, Mail, MessageSquare, User, Phone } from 'lucide-react';
 import { formatDistanceToNow, format } from 'date-fns';
+import { safeMessage } from '@/lib/http/safeError';
 
 interface CallHistoryItem {
   id: string;
@@ -22,13 +23,15 @@ interface CallHistoryItem {
 
 interface CallHistoryResponse {
   ok: boolean;
-  data: CallHistoryItem[];
-  pagination: {
+  data?: CallHistoryItem[];
+  pagination?: {
     total: number;
     limit: number;
     offset: number;
     hasMore: boolean;
   };
+  message?: string;
+  error?: string;
 }
 
 export default function CallHistoryPage() {
@@ -51,16 +54,18 @@ export default function CallHistoryPage() {
       const data: CallHistoryResponse = await response.json();
 
       if (!data.ok) {
-        throw new Error(data.error || 'Failed to fetch call history');
+        throw new Error(safeMessage(data, 'Failed to fetch call history'));
       }
 
       if (append) {
-        setCallHistory(prev => [...prev, ...data.data]);
+        setCallHistory(prev => [...prev, ...(data.data || [])]);
       } else {
-        setCallHistory(data.data);
+        setCallHistory(data.data || []);
       }
       
-      setPagination(data.pagination);
+      if (data.pagination) {
+        setPagination(data.pagination);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {

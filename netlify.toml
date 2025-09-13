@@ -8,12 +8,6 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Redirect rules for Next.js app router
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
 # API routes
 [[redirects]]
   from = "/api/*"
