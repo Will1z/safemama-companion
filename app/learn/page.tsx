@@ -1,13 +1,37 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { BookOpen, Heart, Utensils, AlertTriangle } from 'lucide-react';
 import { LegalNote } from '@/components/LegalNote';
-import learnContent from '@/data/learnContent.json';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
-// Get content for second trimester (default)
-const trimesterContent = learnContent["2"];
+// Hardcoded content to ensure it works
+const trimesterContent = {
+  title: "Second Trimester (13–27 weeks)",
+  sections: [
+    {
+      topic: "Body Changes",
+      content: [
+        "Growing bump and more energy.",
+        "Nausea usually improves."
+      ]
+    },
+    {
+      topic: "Nutrition Focus", 
+      content: [
+        "Increase protein, iron, and calcium.",
+        "Track healthy weight gain."
+      ]
+    },
+    {
+      topic: "Warning Signs",
+      content: [
+        "Signs of preterm labor",
+        "High blood pressure symptoms"
+      ]
+    }
+  ]
+};
 
 function getTopicIcon(topic: string) {
   const topicLower = topic.toLowerCase();
