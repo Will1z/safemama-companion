@@ -276,12 +276,21 @@ export default function LandingPage() {
               </div>
               <span className="font-playfair font-semibold text-xl">SafeMama</span>
             </div>
-            <p className="text-center text-white/80">
-              © 2024 SafeMama. All rights reserved. 
-              <br className="sm:hidden" />
-              <span className="hidden sm:inline ml-2">|</span>
-              <span className="sm:ml-2">Empowering safer pregnancies worldwide.</span>
-            </p>
+            <div className="text-center text-white/80">
+              <p>
+                © 2024 SafeMama. All rights reserved. 
+                <br className="sm:hidden" />
+                <span className="hidden sm:inline ml-2">|</span>
+                <span className="sm:ml-2">Empowering safer pregnancies worldwide.</span>
+              </p>
+              {process.env.NEXT_PUBLIC_SHOW_DEBUG_LINKS === "true" && (
+                <p className="mt-2">
+                  <Link href="/unregister-sw" className="text-white/60 hover:text-white underline text-sm">
+                    Clear Cache (Dev)
+                  </Link>
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </footer>
