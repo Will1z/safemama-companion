@@ -37,6 +37,41 @@ export async function POST(req: NextRequest) {
       metadata.lang = lang;
     }
 
+    // If userId is provided, fetch user context for better conversation tracking
+    let userContext = null;
+    if (userId) {
+      try {
+        // Get user profile information
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('full_name, display_name, phone')
+          .eq('id', userId)
+          .single();
+
+        // Get pregnancy status if available
+        const { data: pregnancyStatus } = await supabase
+          .from('pregnancy_status_v')
+          .select('weeks_pregnant, days_to_due')
+          .eq('user_id', userId)
+          .single();
+
+        if (profile || pregnancyStatus) {
+          userContext = {
+            name: profile?.full_name || profile?.display_name || 'Patient',
+            phone: profile?.phone,
+            weeks: pregnancyStatus?.weeks_pregnant,
+            daysToDue: pregnancyStatus?.days_to_due
+          };
+          
+          // Add user context to metadata
+          metadata.userContext = userContext;
+        }
+      } catch (error) {
+        console.warn('Could not fetch user context:', error);
+        // Continue without user context rather than failing
+      }
+    }
+
     // Insert into conversation_turns table
     const { error } = await supabase
       .from('conversation_turns')
