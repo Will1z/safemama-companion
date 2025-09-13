@@ -10,9 +10,9 @@ const supabase = createClient(
 export async function GET(req: NextRequest) {
   try {
     // Check API key
-    const apiKeyResult = await checkApiKey(req);
-    if (!apiKeyResult.ok) {
-      return NextResponse.json(apiKeyResult, { status: 401 });
+    const apiKeyResult = checkApiKey(req);
+    if (!apiKeyResult) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Get userId from query params
@@ -84,9 +84,9 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     // Check API key
-    const apiKeyResult = await checkApiKey(req);
-    if (!apiKeyResult.ok) {
-      return NextResponse.json(apiKeyResult, { status: 401 });
+    const apiKeyResult = checkApiKey(req);
+    if (!apiKeyResult) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Parse request body
