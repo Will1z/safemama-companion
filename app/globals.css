@@ -7,7 +7,7 @@
 /* Pastel pregnancy/feminine theme with accessible contrast */
 :root {
   /* neutrals */
-  --background: 250 250 250;        /* near-white */
+  --background: 167 218 220;        /* deeper pastel teal */
   --foreground: 27 39 53;           /* charcoal for readable text */
 
   --card: 255 255 255;
@@ -63,7 +63,7 @@ html, body {
 
 /* Prevent dark mode from swapping variables - force light theme */
 :root.dark, .dark :root, html.dark, [data-theme="dark"] {
-  --background: 250 250 250 !important;
+  --background: 167 218 220 !important;
   --foreground: 27 39 53 !important;
   --card: 255 255 255 !important;
   --card-foreground: 27 39 53 !important;
