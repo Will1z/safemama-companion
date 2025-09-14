@@ -64,7 +64,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden" style={{ backgroundColor: 'rgb(167, 218, 220)' }}>
+      <section className="relative overflow-hidden" style={{ backgroundColor: 'rgb(140, 200, 205)' }}>
         <div className="absolute inset-0 bg-[url('/images/maternal-care-pattern.svg')] opacity-10"></div>
         <div className="relative container mx-auto px-4 py-20 md:py-32">
           <div className="max-w-4xl mx-auto text-center text-white">
@@ -212,7 +212,7 @@ export default function LandingPage() {
 
 
       {/* CTA Section */}
-      <section className="py-20 text-white" style={{ backgroundColor: 'rgb(167, 218, 220)' }}>
+      <section className="py-20 text-white" style={{ backgroundColor: 'rgb(140, 200, 205)' }}>
         <div className="container mx-auto px-4 text-center">
           <div className="max-w-3xl mx-auto">
             <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-6">
