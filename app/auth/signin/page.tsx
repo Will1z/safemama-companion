@@ -29,24 +29,29 @@ export default function SignInPage() {
     try {
       const supabase = createClient();
       
-      // Try to sign in with Supabase
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
+      // Check if this is the demo account
+      if (formData.email === 'mama@mama.com' && formData.password === 'mama') {
+        // First try to sign in
+        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+          email: 'mama@mama.com',
+          password: 'mama',
+        });
 
-      if (error) {
-        // If user doesn't exist, try to create the demo account
-        if (formData.email === 'mama@mama.com' && formData.password === 'mama') {
+        if (signInError) {
+          // If sign in fails, try to create the demo account
+          console.log('Demo account sign in failed, attempting to create account:', signInError.message);
+          
           const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
             email: 'mama@mama.com',
             password: 'mama',
           });
 
           if (signUpError) {
-            setError('Failed to create demo account. Please try again.');
+            console.error('Demo account creation failed:', signUpError);
+            setError('Demo account setup failed. Please try again or contact support.');
             track('sign_up_error', { error: signUpError.message });
           } else {
+            console.log('Demo account created successfully');
             // Track successful sign up
             track('sign_up_success', { email: formData.email, isDemo: true });
             
@@ -54,15 +59,32 @@ export default function SignInPage() {
             router.push('/dashboard');
           }
         } else {
-          setError('Invalid email or password. Please try again.');
-          track('sign_in_failed', { email: formData.email });
+          console.log('Demo account sign in successful');
+          // Track successful sign in
+          track('sign_in_success', { email: formData.email, isDemo: true });
+          
+          // Redirect to dashboard
+          router.push('/dashboard');
         }
       } else {
-        // Track successful sign in
-        track('sign_in_success', { email: formData.email });
-        
-        // Redirect to dashboard
-        router.push('/dashboard');
+        // Regular user sign in
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        });
+
+        if (error) {
+          console.error('Sign in error:', error);
+          setError('Invalid email or password. Please try again.');
+          track('sign_in_failed', { email: formData.email });
+        } else {
+          console.log('User sign in successful');
+          // Track successful sign in
+          track('sign_in_success', { email: formData.email });
+          
+          // Redirect to dashboard
+          router.push('/dashboard');
+        }
       }
       
     } catch (error) {
@@ -117,7 +139,7 @@ export default function SignInPage() {
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {error && (
-                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  <div className="p-3 bg-[rgb(var(--destructive))]/60 border border-[rgb(var(--destructive))] rounded-lg text-[rgb(var(--destructive-foreground))] text-sm">
                     {error}
                   </div>
                 )}
@@ -209,11 +231,11 @@ export default function SignInPage() {
           </Card>
 
           {/* Demo Notice */}
-          <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800 mb-2">
+          <div className="mt-6 p-4 bg-[rgb(var(--info))]/60 border border-[rgb(var(--info))] rounded-lg">
+            <p className="text-sm text-[rgb(var(--info-foreground))] mb-2">
               <strong>Demo Credentials:</strong>
             </p>
-            <div className="text-sm text-blue-700 font-mono bg-blue-100 p-2 rounded">
+            <div className="text-sm text-[rgb(var(--info-foreground))] font-mono bg-[rgb(var(--info))]/40 p-2 rounded">
               <div>Email: <strong>mama@mama.com</strong></div>
               <div>Password: <strong>mama</strong></div>
             </div>

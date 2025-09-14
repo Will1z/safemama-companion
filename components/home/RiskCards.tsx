@@ -109,10 +109,7 @@ export function RiskCards() {
           onClick={() => setShowLowRiskModal(true)}
         >
           <CardContent className="p-0">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">
-                1
-              </div>
+            <div className="mb-4">
               <h3 className="font-semibold text-slate-800">Low Risk - Monitor</h3>
             </div>
             <p className="text-sm text-slate-700">
@@ -127,10 +124,7 @@ export function RiskCards() {
           onClick={handleModerateRisk}
         >
           <CardContent className="p-0">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-[rgb(var(--warning))] text-white rounded-full flex items-center justify-center font-bold text-lg">
-                2
-              </div>
+            <div className="mb-4">
               <h3 className="font-semibold text-slate-900">Moderate Risk - Visit clinic within 24 hours</h3>
             </div>
             <p className="text-sm text-slate-800">
@@ -145,10 +139,7 @@ export function RiskCards() {
           onClick={() => setShowHighRiskModal(true)}
         >
           <CardContent className="p-0">
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-[rgb(var(--destructive))] text-white rounded-full flex items-center justify-center font-bold text-lg">
-                3
-              </div>
+            <div className="mb-4">
               <h3 className="font-semibold text-[rgb(var(--destructive-foreground))]">High Risk - Seek immediate care</h3>
             </div>
             <p className="text-sm text-[rgb(var(--destructive-foreground))]">
