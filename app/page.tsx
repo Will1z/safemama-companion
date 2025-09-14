@@ -140,15 +140,15 @@ export default function LandingPage() {
             {/* Emergency Response - Clickable to help */}
             <Link
               href="/help"
-              className="group block rounded-2xl border p-4 shadow-soft bg-white border-gray-200 transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="group block rounded-2xl border p-4 shadow-soft bg-[#FFF3CD] border-[#FFE7A2] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
-                  <ShieldCheck className="w-6 h-6 text-primary" />
+                  <ShieldCheck className="w-6 h-6 text-[#4A3A00]" />
                 </div>
                 <div>
-                  <div className="font-heading text-xl text-foreground">Emergency Response</div>
-                  <div className="text-sm mt-1 text-muted-foreground">Instant access to emergency contacts and facilities</div>
+                  <div className="font-heading text-xl text-[#4A3A00]">Emergency Response</div>
+                  <div className="text-sm mt-1 text-[#4A3A00]/80">Instant access to emergency contacts and facilities</div>
                 </div>
               </div>
             </Link>
