@@ -579,7 +579,7 @@ export default function ChatPage() {
                     Risk Level: 
                     <span className={`ml-1 px-2 py-1 rounded text-xs font-medium ${
                       conversationSummary.riskLevel === 1 ? 'bg-green-100 text-green-800' :
-                      conversationSummary.riskLevel === 2 ? 'bg-yellow-100 text-yellow-800' :
+                      conversationSummary.riskLevel === 2 ? 'bg-orange-100 text-orange-800' :
                       'bg-red-100 text-red-800'
                     }`}>
                       {conversationSummary.riskLevel === 1 ? 'Low' : 

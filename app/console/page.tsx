@@ -151,7 +151,7 @@ export default function ConsolePage() {
                     <div className="flex items-center space-x-2">
                       <span className={`px-2 py-1 rounded text-xs ${
                         patient.risk === 'Low' ? 'bg-green-100 text-green-800' :
-                        patient.risk === 'Moderate' ? 'bg-yellow-100 text-yellow-800' :
+                        patient.risk === 'Moderate' ? 'bg-orange-100 text-orange-800' :
                         'bg-red-100 text-red-800'
                       }`}>
                         {patient.risk} Risk
@@ -185,7 +185,7 @@ export default function ConsolePage() {
                     <div className="flex items-center space-x-2">
                       <span className={`px-2 py-1 rounded text-xs ${
                         alert.priority === 'High' ? 'bg-red-100 text-red-800' :
-                        alert.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        alert.priority === 'Medium' ? 'bg-orange-100 text-orange-800' :
                         'bg-green-100 text-green-800'
                       }`}>
                         {alert.priority} Priority

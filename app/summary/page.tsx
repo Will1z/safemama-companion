@@ -172,9 +172,9 @@ export default function SummaryPage() {
                 <div className="text-2xl font-bold text-blue-600">3</div>
                 <div className="text-sm text-blue-700">Vitals Recorded</div>
               </div>
-              <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                <div className="text-2xl font-bold text-yellow-600">2</div>
-                <div className="text-sm text-yellow-700">Symptoms Reported</div>
+              <div className="text-center p-4 bg-orange-50 rounded-lg">
+                <div className="text-2xl font-bold text-orange-600">2</div>
+                <div className="text-sm text-orange-700">Symptoms Reported</div>
               </div>
               <div className="text-center p-4 bg-purple-50 rounded-lg">
                 <div className="text-2xl font-bold text-purple-600">1</div>
@@ -248,7 +248,7 @@ export default function SummaryPage() {
                       <div className="font-medium">AI Health Consultation</div>
                       <span className={`px-2 py-1 rounded text-xs font-medium ${
                         conversation.riskLevel === 1 ? 'bg-green-100 text-green-800' :
-                        conversation.riskLevel === 2 ? 'bg-yellow-100 text-yellow-800' :
+                        conversation.riskLevel === 2 ? 'bg-orange-100 text-orange-800' :
                         'bg-red-100 text-red-800'
                       }`}>
                         {conversation.riskLevel === 1 ? 'Low Risk' : 

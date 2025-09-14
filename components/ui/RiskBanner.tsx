@@ -3,7 +3,7 @@ type Tier = 1|2|3;
 export function RiskBanner({ tier, reason }: { tier: Tier; reason?: string }) {
   const cfg = {
     1: { wrap: "bg-[#EAF7EF] text-[#0E5F2D] border border-[#CFEBDC]", title: "Low risk — monitor" },
-    2: { wrap: "bg-[#FFF3CD] text-[#4A3A00] border border-[#FFE7A2]", title: "Visit a clinic within 24 hours" },
+    2: { wrap: "bg-orange-50 text-orange-800 border border-orange-200", title: "Visit a clinic within 24 hours" },
     3: { wrap: "bg-[#FDE2E0] text-[#7A1E16] border-2 border-[#E74C3C]", title: "Emergency — go now" },
   }[tier];
 

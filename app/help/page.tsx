@@ -181,9 +181,9 @@ export default function HelpPage() {
         </Card>
 
         {/* Important Notice */}
-        <Card className="border-amber-200 bg-amber-50">
+        <Card className="border-gray-200 bg-gray-50">
           <CardContent className="pt-6">
-            <div className="text-sm text-amber-800">
+            <div className="text-sm text-gray-700">
               <p className="font-medium mb-2">Important Notice:</p>
               <p>SafeMama is a health monitoring platform and does not replace emergency medical services. In case of a medical emergency, please call your local emergency number immediately.</p>
             </div>
