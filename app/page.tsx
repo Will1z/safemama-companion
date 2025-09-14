@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { ThemeToggle } from '@/components/theme-toggle';
 import { RiskCards } from '@/components/home/RiskCards';
+import { AuthAwareCard } from '@/components/ui/AuthAwareCard';
 
 export default function LandingPage() {
   return (
@@ -122,20 +123,14 @@ export default function LandingPage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
             {/* AI Health Monitoring - Clickable to vitals */}
-            <Link
+            <AuthAwareCard
               href="/vitals"
-              className="group block rounded-2xl border p-4 shadow-soft bg-[rgb(var(--primary))]/20 border-[rgb(var(--primary))]/30 transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            >
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5">
-                  <Brain className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
-                </div>
-                <div>
-                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">AI Health Monitoring</div>
-                  <div className="text-sm mt-1 text-muted-foreground">Intelligent symptom tracking and risk assessment</div>
-                </div>
-              </div>
-            </Link>
+              feature="ai-health-monitoring"
+              icon={<Brain className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="AI Health Monitoring"
+              description="Intelligent symptom tracking and risk assessment"
+              className="bg-[rgb(var(--primary))]/20 border-[rgb(var(--primary))]/30"
+            />
 
             {/* Emergency Response - Clickable to help */}
             <Link
@@ -154,36 +149,22 @@ export default function LandingPage() {
             </Link>
 
             {/* Expert Network - Clickable to community */}
-            <Link
+            <AuthAwareCard
               href="/community"
-              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            >
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5">
-                  <Users className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
-                </div>
-                <div>
-                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">Expert Network</div>
-                  <div className="text-sm mt-1 text-muted-foreground">Connect with qualified healthcare professionals</div>
-                </div>
-              </div>
-            </Link>
+              feature="community"
+              icon={<Users className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="Expert Network"
+              description="Connect with qualified healthcare professionals"
+            />
 
             {/* Smart Reminders - Clickable to dashboard */}
-            <Link
+            <AuthAwareCard
               href="/dashboard"
-              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            >
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5">
-                  <Calendar className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
-                </div>
-                <div>
-                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">Smart Reminders</div>
-                  <div className="text-sm mt-1 text-muted-foreground">Never miss important appointments or medication</div>
-                </div>
-              </div>
-            </Link>
+              feature="dashboard"
+              icon={<Calendar className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="Smart Reminders"
+              description="Never miss important appointments or medication"
+            />
 
             {/* Facility Locator - Clickable to facilities page */}
             <Link
@@ -202,20 +183,13 @@ export default function LandingPage() {
             </Link>
 
             {/* 24/7 Communication - Clickable to chat */}
-            <Link
+            <AuthAwareCard
               href="/chat"
-              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            >
-              <div className="flex items-start gap-3">
-                <div className="mt-0.5">
-                  <Phone className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
-                </div>
-                <div>
-                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">24/7 Communication</div>
-                  <div className="text-sm mt-1 text-muted-foreground">Stay connected with your healthcare team</div>
-                </div>
-              </div>
-            </Link>
+              feature="chat"
+              icon={<Phone className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="24/7 Communication"
+              description="Stay connected with your healthcare team"
+            />
           </div>
         </div>
       </section>

@@ -1,7 +1,7 @@
 "use client"
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -13,6 +13,7 @@ import { createClient } from '@/lib/supabase/client';
 
 export default function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -20,6 +21,14 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [redirectUrl, setRedirectUrl] = useState('/dashboard');
+
+  useEffect(() => {
+    const redirect = searchParams.get('redirect');
+    if (redirect) {
+      setRedirectUrl(decodeURIComponent(redirect));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,16 +64,16 @@ export default function SignInPage() {
             // Track successful sign up
             track('sign_up_success', { email: formData.email, isDemo: true });
             
-            // Redirect to dashboard
-            router.push('/dashboard');
+            // Redirect to intended page or dashboard
+            router.push(redirectUrl);
           }
         } else {
           console.log('Demo account sign in successful');
           // Track successful sign in
           track('sign_in_success', { email: formData.email, isDemo: true });
           
-          // Redirect to dashboard
-          router.push('/dashboard');
+          // Redirect to intended page or dashboard
+          router.push(redirectUrl);
         }
       } else {
         // Regular user sign in
@@ -82,8 +91,8 @@ export default function SignInPage() {
           // Track successful sign in
           track('sign_in_success', { email: formData.email });
           
-          // Redirect to dashboard
-          router.push('/dashboard');
+          // Redirect to intended page or dashboard
+          router.push(redirectUrl);
         }
       }
       
