@@ -28,7 +28,7 @@ function getTopicIcon(topic: string) {
     return <Utensils className="h-5 w-5 text-green-500" />;
   }
   if (topicLower.includes('warning') || topicLower.includes('sign')) {
-    return <AlertTriangle className="h-5 w-5 text-amber-500" />;
+    return <AlertTriangle className="h-5 w-5 text-orange-500" />;
   }
   return <BookOpen className="h-5 w-5 text-blue-500" />;
 }

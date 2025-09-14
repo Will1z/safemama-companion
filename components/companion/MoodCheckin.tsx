@@ -13,7 +13,7 @@ interface MoodCheckinProps {
 }
 
 const moodOptions = [
-  { id: 'happy', label: 'Happy', icon: Smile, color: 'text-yellow-500' },
+  { id: 'happy', label: 'Happy', icon: Smile, color: 'text-orange-500' },
   { id: 'calm', label: 'Calm', icon: Heart, color: 'text-green-500' },
   { id: 'tired', label: 'Tired', icon: Coffee, color: 'text-blue-500' },
   { id: 'stressed', label: 'Stressed', icon: Zap, color: 'text-orange-500' },

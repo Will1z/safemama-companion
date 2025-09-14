@@ -128,12 +128,12 @@ export function RiskCards() {
         >
           <CardContent className="p-0">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-[#F59E0B] text-white rounded-full flex items-center justify-center font-bold text-lg">
+              <div className="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-lg">
                 2
               </div>
-              <h3 className="font-semibold text-[#4A3A00]">Moderate Risk - Visit clinic within 24 hours</h3>
+              <h3 className="font-semibold text-orange-800">Moderate Risk - Visit clinic within 24 hours</h3>
             </div>
-            <p className="text-sm text-[#4A3A00]/80">
+            <p className="text-sm text-orange-700">
               Enhanced monitoring recommended. Schedule an appointment with your healthcare provider soon.
             </p>
           </CardContent>
@@ -225,7 +225,7 @@ export function RiskCards() {
         <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-[#F59E0B]" />
+              <MapPin className="w-5 h-5 text-orange-500" />
               Nearby Healthcare Facilities
             </DialogTitle>
             <DialogDescription>

@@ -78,7 +78,7 @@ export default function ConsolePage() {
           <Card>
             <CardContent className="pt-6">
               <div className="flex items-center space-x-2">
-                <AlertTriangle className="w-5 h-5 text-yellow-600" />
+                <AlertTriangle className="w-5 h-5 text-orange-600" />
                 <div>
                   <div className="text-2xl font-bold">3</div>
                   <div className="text-sm text-muted-foreground">Active Alerts</div>
