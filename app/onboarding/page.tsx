@@ -84,7 +84,7 @@ export default function OnboardingPage() {
       <div className="w-full bg-secondary/20 px-4 py-2">
         <ul className="flex justify-between text-xs text-gray-600 mb-2">
           {["Info","Pregnancy","Contacts","Consent"].map((l,i)=>(
-            <li key={l} className={i<=currentStep ? "font-medium text-[#1C3D3A]" : ""}>{l}</li>
+            <li key={l} className={i<=currentStep ? "font-medium text-[rgb(var(--primary-foreground))]" : ""}>{l}</li>
           ))}
         </ul>
         <div 

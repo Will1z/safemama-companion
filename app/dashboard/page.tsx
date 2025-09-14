@@ -462,28 +462,28 @@ export default function DashboardPage() {
             href="/learn"
             title="Learn"
             subtitle="Education topics"
-            icon={<BookOpen className="w-6 h-6 text-[#1C3D3A]" />}
+            icon={<BookOpen className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
           />
           <Tile
             tone="accent"
             href="/community"
             title="Community"
             subtitle="Connect with others"
-            icon={<Users className="w-6 h-6 text-[#1C3D3A]" />}
+            icon={<Users className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
           />
           <Tile
             tone="neutral"
             href="/call-history"
             title="Call History"
             subtitle="View conversations"
-            icon={<History className="w-6 h-6 text-[#1C3D3A]" />}
+            icon={<History className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
           />
           <Tile
             tone="neutral"
             href="/me"
             title="Profile"
             subtitle="Update settings"
-            icon={<User className="w-6 h-6 text-[#1C3D3A]" />}
+            icon={<User className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
           />
         </div>
         
@@ -494,7 +494,7 @@ export default function DashboardPage() {
             href="/help"
             title="Help"
             subtitle="Get support"
-            icon={<Phone className="w-6 h-6 text-[#4A3A00]" />}
+            icon={<Phone className="w-6 h-6 text-[rgb(var(--accent-foreground))]" />}
           />
         </div>
       </div>

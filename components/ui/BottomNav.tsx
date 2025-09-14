@@ -23,7 +23,7 @@ export default function BottomNav() {
                 href={it.href}
                 className={clsx(
                   "flex flex-col items-center justify-center py-2 text-[13px] font-medium",
-                  active ? "text-[#1C3D3A]" : "text-[#1B2735]/70"
+                  active ? "text-[rgb(var(--primary-foreground))]" : "text-[rgb(var(--foreground))]/70"
                 )}
                 aria-current={active ? "page" : undefined}
               >

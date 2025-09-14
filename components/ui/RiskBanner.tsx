@@ -4,7 +4,7 @@ export function RiskBanner({ tier, reason }: { tier: Tier; reason?: string }) {
   const cfg = {
     1: { wrap: "bg-[rgb(var(--success))]/60 text-slate-800 border border-[rgb(var(--success))]", title: "Low risk — monitor" },
     2: { wrap: "bg-[rgb(var(--warning))]/60 text-slate-900 border border-[rgb(var(--warning))]", title: "Visit a clinic within 24 hours" },
-    3: { wrap: "bg-[rgb(var(--destructive))]/60 text-[#7A0C0C] border-2 border-[rgb(var(--destructive))]", title: "Emergency — go now" },
+    3: { wrap: "bg-[rgb(var(--destructive))]/60 text-[rgb(var(--destructive-foreground))] border-2 border-[rgb(var(--destructive))]", title: "Emergency — go now" },
   }[tier];
 
   return (

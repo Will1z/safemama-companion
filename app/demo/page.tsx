@@ -228,7 +228,7 @@ export default function DemoPage() {
                   value={formData.message}
                   onChange={(e) => handleInputChange('message', e.target.value)}
                   placeholder="Tell us about your organization's needs, current challenges, or specific features you'd like to see..."
-                  className="w-full h-24 px-3 py-2 border border-input rounded-xl bg-background resize-none focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2"
+                  className="w-full h-24 px-3 py-2 border border-input rounded-xl bg-background resize-none focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))] focus:ring-offset-2"
                 />
               </div>
 

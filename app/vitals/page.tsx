@@ -160,7 +160,7 @@ export default function VitalsPage() {
                   placeholder="Any symptoms, concerns, or additional information..."
                   value={vitals.notes}
                   onChange={(e) => handleInputChange('notes', e.target.value)}
-                  className="w-full h-24 px-3 py-2 border border-input rounded-xl bg-background resize-none focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2"
+                  className="w-full h-24 px-3 py-2 border border-input rounded-xl bg-background resize-none focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))] focus:ring-offset-2"
                 />
               </div>
 

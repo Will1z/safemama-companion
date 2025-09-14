@@ -55,6 +55,15 @@ const config: Config = {
         chart3: "rgb(var(--chart-3) / <alpha-value>)",
         chart4: "rgb(var(--chart-4) / <alpha-value>)",
         chart5: "rgb(var(--chart-5) / <alpha-value>)",
+
+        // Named pastel colors for easier use
+        pastelMint: "rgb(var(--primary) / <alpha-value>)",
+        pastelBlue: "rgb(var(--secondary) / <alpha-value>)",
+        pastelPink: "rgb(var(--accent) / <alpha-value>)",
+        pastelGreen: "rgb(var(--success) / <alpha-value>)",
+        pastelYellow: "rgb(var(--warning) / <alpha-value>)",
+        pastelLavender: "rgb(var(--info) / <alpha-value>)",
+        pastelRed: "rgb(var(--destructive) / <alpha-value>)",
       },
       borderRadius: {
         lg: 'var(--radius)',

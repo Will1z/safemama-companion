@@ -16,7 +16,7 @@ export default function HelpFab() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-5 z-50 rounded-full bg-[#E74C3C] text-white px-5 py-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37]"
+        className="fixed bottom-5 right-5 z-50 rounded-full bg-[rgb(var(--destructive))] text-[rgb(var(--destructive-foreground))] px-5 py-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]"
         aria-haspopup="dialog"
         aria-label="I need help"
       >
@@ -26,18 +26,18 @@ export default function HelpFab() {
       {open && (
         <div className="fixed inset-0 z-50" role="dialog" aria-modal="true">
           <div className="absolute inset-0 bg-black/30" onClick={() => setOpen(false)} />
-          <div className="absolute bottom-0 left-0 right-0 rounded-t-2xl bg-white p-4 dark:bg-[#121B21]">
+          <div className="absolute bottom-0 left-0 right-0 rounded-t-2xl bg-white p-4 dark:bg-slate-900">
             <div className="mx-auto max-w-md">
               <div className="h-1 w-12 mx-auto rounded bg-gray-300/70 mb-3" />
               <h3 className="font-playfair text-xl mb-3">Get support</h3>
               <div className="grid grid-cols-1 gap-2">
-                <button className="px-4 py-3 rounded-xl bg-[#1C3D3A] text-white focus:outline-none focus:ring-2 focus:ring-[#D4AF37]">
+                <button className="px-4 py-3 rounded-xl bg-[rgb(var(--primary))] text-[rgb(var(--primary-foreground))] focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]">
                   Call emergency contact
                 </button>
-                <button className="px-4 py-3 rounded-xl border border-[#1C3D3A] text-[#1C3D3A] hover:bg-[#EAF4F3]">
+                <button className="px-4 py-3 rounded-xl border border-[rgb(var(--primary))] text-[rgb(var(--primary-foreground))] hover:bg-[rgb(var(--primary))]/10">
                   Send my location
                 </button>
-                <button className="px-4 py-3 rounded-xl border border-[#1C3D3A] text-[#1C3D3A] hover:bg-[#EAF4F3]">
+                <button className="px-4 py-3 rounded-xl border border-[rgb(var(--primary))] text-[rgb(var(--primary-foreground))] hover:bg-[rgb(var(--primary))]/10">
                   Nearest facility
                 </button>
               </div>

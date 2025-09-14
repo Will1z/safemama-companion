@@ -54,10 +54,10 @@ export default function ElevenLabsWidget({ agentId, height = 440 }: Props) {
       style={{
         width: "100%",
         height,
-        border: "1px solid #eee",
+        border: "1px solid rgb(223, 227, 235)",
         borderRadius: 12,
         overflow: "hidden",
-        background: "#fafafa",
+        background: "rgb(250, 250, 250)",
       }}
     >
       {!ready && (

@@ -137,7 +137,7 @@ html, body {
   /* Pastel risk tiers with readable text */
   .risk-tier-1 { @apply border-l-4 border-[rgb(var(--success))]  bg-[rgb(var(--success))]/60  text-slate-800; }
   .risk-tier-2 { @apply border-l-4 border-[rgb(var(--warning))]  bg-[rgb(var(--warning))]/60  text-slate-900; }
-  .risk-tier-3 { @apply border-l-4 border-[rgb(var(--destructive))] bg-[rgb(var(--destructive))]/60 text-[#7A0C0C]; }
+  .risk-tier-3 { @apply border-l-4 border-[rgb(var(--destructive))] bg-[rgb(var(--destructive))]/60 text-[rgb(var(--destructive-foreground))]; }
 
   .input-visible { @apply border-2 border-[rgb(var(--border))] focus:border-[rgb(var(--primary))] focus:ring-2 focus:ring-[rgb(var(--primary))]/30; }
 }
@@ -171,8 +171,8 @@ html, body {
 }
 
 /* Readable text helpers on light surfaces */
-.text-title { color: #1B2735; }
-.text-muted { color: #6C757D; }
+.text-title { color: rgb(var(--foreground)); }
+.text-muted { color: rgb(var(--muted-foreground)); }
 
-/* Amber contrast helper */
-.text-amber-strong { color: #4A3A00; }
+/* Accent contrast helper */
+.text-accent-strong { color: rgb(var(--accent-foreground)); }

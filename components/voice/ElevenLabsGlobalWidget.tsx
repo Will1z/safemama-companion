@@ -69,7 +69,7 @@ export default function ElevenLabsGlobalWidget({
     width: "60px",
     height: "60px",
     borderRadius: "50%",
-    background: "#1C3D3A",
+    background: "rgb(194, 227, 226)",
     border: "none",
     cursor: "pointer",
     zIndex: 1000,
@@ -88,8 +88,8 @@ export default function ElevenLabsGlobalWidget({
     transform: "translate(-50%, -50%)",
     width: width,
     height: height,
-    background: "#fafafa",
-    border: "1px solid #e5e7eb",
+    background: "rgb(250, 250, 250)",
+    border: "1px solid rgb(223, 227, 235)",
     borderRadius: "12px",
     overflow: "hidden",
     zIndex: 1001,
@@ -102,7 +102,7 @@ export default function ElevenLabsGlobalWidget({
     position: "absolute" as const,
     top: "10px",
     right: "10px",
-    background: "#1C3D3A",
+    background: "rgb(194, 227, 226)",
     color: "white",
     border: "none",
     borderRadius: "50%",
@@ -136,11 +136,11 @@ export default function ElevenLabsGlobalWidget({
         onClick={toggleOpen}
         style={floatingButtonStyle}
         onMouseEnter={(e) => {
-          e.currentTarget.style.background = "#2A4F4C";
+          e.currentTarget.style.background = "rgb(181, 229, 247)";
           e.currentTarget.style.transform = "scale(1.1)";
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.background = "#1C3D3A";
+          e.currentTarget.style.background = "rgb(194, 227, 226)";
           e.currentTarget.style.transform = "scale(1)";
         }}
         title="Voice Assistant"
@@ -161,10 +161,10 @@ export default function ElevenLabsGlobalWidget({
           onClick={closeWidget}
           style={closeButtonStyle}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#2A4F4C";
+            e.currentTarget.style.background = "rgb(181, 229, 247)";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#1C3D3A";
+            e.currentTarget.style.background = "rgb(194, 227, 226)";
           }}
         >
           ×
@@ -183,7 +183,7 @@ export default function ElevenLabsGlobalWidget({
               padding: "20px", 
               fontSize: "14px", 
               textAlign: "center",
-              color: "#6b7280",
+              color: "rgb(71, 85, 105)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

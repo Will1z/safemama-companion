@@ -149,9 +149,9 @@ export function RiskCards() {
               <div className="w-10 h-10 bg-[rgb(var(--destructive))] text-white rounded-full flex items-center justify-center font-bold text-lg">
                 3
               </div>
-              <h3 className="font-semibold text-[#7A0C0C]">High Risk - Seek immediate care</h3>
+              <h3 className="font-semibold text-[rgb(var(--destructive-foreground))]">High Risk - Seek immediate care</h3>
             </div>
-            <p className="text-sm text-[#7A0C0C]">
+            <p className="text-sm text-[rgb(var(--destructive-foreground))]">
               Go to the nearest equipped facility now. Immediate medical attention required.
             </p>
           </CardContent>

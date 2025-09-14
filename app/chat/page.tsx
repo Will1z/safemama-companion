@@ -578,9 +578,9 @@ export default function ChatPage() {
                   <div className="text-sm text-gray-600">
                     Risk Level: 
                     <span className={`ml-1 px-2 py-1 rounded text-xs font-medium ${
-                      conversationSummary.riskLevel === 1 ? 'bg-green-100 text-green-800' :
-                      conversationSummary.riskLevel === 2 ? 'bg-orange-100 text-orange-800' :
-                      'bg-red-100 text-red-800'
+                      conversationSummary.riskLevel === 1 ? 'bg-[rgb(var(--success))]/60 text-slate-800' :
+                      conversationSummary.riskLevel === 2 ? 'bg-[rgb(var(--warning))]/60 text-slate-900' :
+                      'bg-[rgb(var(--destructive))]/60 text-[rgb(var(--destructive-foreground))]'
                     }`}>
                       {conversationSummary.riskLevel === 1 ? 'Low' : 
                        conversationSummary.riskLevel === 2 ? 'Moderate' : 'High'}
@@ -588,7 +588,7 @@ export default function ChatPage() {
                   </div>
                 </div>
                 {conversationSummary.sent && (
-                  <div className="flex items-center space-x-1 text-green-600">
+                  <div className="flex items-center space-x-1 text-[rgb(var(--success-foreground))]">
                     <CheckCircle className="w-4 h-4" />
                     <span className="text-sm font-medium">Sent</span>
                   </div>
@@ -680,7 +680,7 @@ export default function ChatPage() {
               size="icon"
               className={`h-12 w-12 ${
                 isRecording 
-                  ? 'bg-red-500 hover:bg-red-600 text-white' 
+                  ? 'bg-[rgb(var(--destructive))] hover:brightness-95 text-[rgb(var(--destructive-foreground))]' 
                   : 'bg-accent hover:bg-accent/90 text-accent-foreground'
               }`}
             >
@@ -704,8 +704,8 @@ export default function ChatPage() {
           {/* Recording Status */}
           {isRecording && (
             <div className="mt-2 text-center">
-              <div className="inline-flex items-center space-x-2 text-red-600">
-                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              <div className="inline-flex items-center space-x-2 text-[rgb(var(--destructive-foreground))]">
+                <div className="w-2 h-2 bg-[rgb(var(--destructive))] rounded-full animate-pulse"></div>
                 <span className="text-sm font-medium">
                   Recording... {formatRecordingTime(recordingTime)}
                 </span>

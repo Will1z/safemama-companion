@@ -25,10 +25,10 @@ function getTopicIcon(topic: string) {
     return <Heart className="h-5 w-5 text-pink-500" />;
   }
   if (topicLower.includes('nutrition') || topicLower.includes('food')) {
-    return <Utensils className="h-5 w-5 text-green-500" />;
+    return <Utensils className="h-5 w-5 text-[rgb(var(--success-foreground))]" />;
   }
   if (topicLower.includes('warning') || topicLower.includes('sign')) {
-    return <AlertTriangle className="h-5 w-5 text-orange-500" />;
+    return <AlertTriangle className="h-5 w-5 text-[rgb(var(--warning-foreground))]" />;
   }
   return <BookOpen className="h-5 w-5 text-blue-500" />;
 }
@@ -51,7 +51,7 @@ export default function LearnPage() {
           </p>
         </div>
 
-        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
+        <div className="bg-[rgb(var(--destructive))]/60 border border-[rgb(var(--destructive))] text-[rgb(var(--destructive-foreground))] px-4 py-3 rounded mb-6">
           <div className="flex items-center">
             <span className="text-2xl mr-2">❌</span>
             <div>
