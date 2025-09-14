@@ -27,8 +27,8 @@ export default function HelpPage() {
 
   const handleFindFacility = () => {
     track('help_facility_search');
-    // TODO: Implement facility finder
-    alert('Finding nearest healthcare facilities... In a real app, this would show a map with nearby facilities.');
+    // Navigate to facilities page
+    window.location.href = '/facilities';
   };
 
   return (
