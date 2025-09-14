@@ -9,9 +9,9 @@ interface TopNoticeProps {
 }
 
 const typeStyles = {
-  info: 'bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-950/20 dark:text-blue-200 dark:border-blue-800',
-  warning: 'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-950/20 dark:text-gray-200 dark:border-gray-800',
-  error: 'bg-red-50 text-red-800 border-red-200 dark:bg-red-950/20 dark:text-red-200 dark:border-red-800'
+  info: 'bg-[rgb(var(--info))]/60 text-[rgb(var(--info-foreground))] border-[rgb(var(--info))]',
+  warning: 'bg-[rgb(var(--warning))]/60 text-[rgb(var(--warning-foreground))] border-[rgb(var(--warning))]',
+  error: 'bg-[rgb(var(--destructive))]/60 text-[rgb(var(--destructive-foreground))] border-[rgb(var(--destructive))]'
 };
 
 export function TopNotice({ message, type = 'warning', onDismiss, className }: TopNoticeProps) {

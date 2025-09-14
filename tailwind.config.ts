@@ -15,50 +15,53 @@ const config: Config = {
         'roboto-mono': ['Roboto Mono', 'monospace'],
       },
       colors: {
-        primary: {
-          DEFAULT: '#1C3D3A',
-          foreground: '#FFFFFF',
-        },
-        secondary: {
-          DEFAULT: '#F8FAFC',
-          foreground: '#0F172A',
-        },
-        accent: {
-          DEFAULT: '#D4AF37',
-          foreground: '#1B2735',
-        },
-        background: 'hsl(var(--background))',
-        foreground: 'hsl(var(--foreground))',
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        muted: {
-          DEFAULT: '#6C757D',
-          foreground: '#FAFAFA',
-        },
-        success: '#2ECC71',
-        warning: '#FFC107',
-        danger: '#E74C3C',
-        tier1: '#2ECC71',
-        tier2: '#FFC107',
-        tier3: '#E74C3C',
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
-        chart: {
-          '1': 'hsl(var(--chart-1))',
-          '2': 'hsl(var(--chart-2))',
-          '3': 'hsl(var(--chart-3))',
-          '4': 'hsl(var(--chart-4))',
-          '5': 'hsl(var(--chart-5))',
-        },
+        background: "rgb(var(--background) / <alpha-value>)",
+        foreground: "rgb(var(--foreground) / <alpha-value>)",
+
+        card: "rgb(var(--card) / <alpha-value>)",
+        "card-foreground": "rgb(var(--card-foreground) / <alpha-value>)",
+
+        popover: "rgb(var(--popover) / <alpha-value>)",
+        "popover-foreground": "rgb(var(--popover-foreground) / <alpha-value>)",
+
+        primary: "rgb(var(--primary) / <alpha-value>)",
+        "primary-foreground": "rgb(var(--primary-foreground) / <alpha-value>)",
+
+        secondary: "rgb(var(--secondary) / <alpha-value>)",
+        "secondary-foreground": "rgb(var(--secondary-foreground) / <alpha-value>)",
+
+        accent: "rgb(var(--accent) / <alpha-value>)",
+        "accent-foreground": "rgb(var(--accent-foreground) / <alpha-value>)",
+
+        success: "rgb(var(--success) / <alpha-value>)",
+        "success-foreground": "rgb(var(--success-foreground) / <alpha-value>)",
+
+        warning: "rgb(var(--warning) / <alpha-value>)",
+        "warning-foreground": "rgb(var(--warning-foreground) / <alpha-value>)",
+
+        info: "rgb(var(--info) / <alpha-value>)",
+        "info-foreground": "rgb(var(--info-foreground) / <alpha-value>)",
+
+        destructive: "rgb(var(--destructive) / <alpha-value>)",
+        "destructive-foreground": "rgb(var(--destructive-foreground) / <alpha-value>)",
+
+        border: "rgb(var(--border) / <alpha-value>)",
+        input: "rgb(var(--input) / <alpha-value>)",
+        muted: "rgb(var(--muted) / <alpha-value>)",
+        "muted-foreground": "rgb(var(--muted-foreground) / <alpha-value>)",
+
+        chart1: "rgb(var(--chart-1) / <alpha-value>)",
+        chart2: "rgb(var(--chart-2) / <alpha-value>)",
+        chart3: "rgb(var(--chart-3) / <alpha-value>)",
+        chart4: "rgb(var(--chart-4) / <alpha-value>)",
+        chart5: "rgb(var(--chart-5) / <alpha-value>)",
       },
       borderRadius: {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
         xl: '1rem',
+        '2xl': '1.25rem',
       },
       keyframes: {
         'accordion-down': {

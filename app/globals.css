@@ -4,67 +4,94 @@
 
 /* Font imports moved to layout.tsx for better loading */
 
-/* Force Safemama light palette with visible colors */
+/* Pastel pregnancy/feminine theme with accessible contrast */
 :root {
-  --background: 255 255 255;
-  --foreground: 15 23 42;
+  /* neutrals */
+  --background: 250 250 250;        /* near-white */
+  --foreground: 27 39 53;           /* charcoal for readable text */
+
   --card: 255 255 255;
-  --card-foreground: 15 23 42;
+  --card-foreground: 27 39 53;
+
   --popover: 255 255 255;
-  --popover-foreground: 15 23 42;
-  --primary: 28 61 58;       /* your original dark teal */
-  --primary-foreground: 255 255 255;
-  --secondary: 248 250 252;  /* light gray */
-  --secondary-foreground: 15 23 42;
-  --muted: 100 116 139;
+  --popover-foreground: 27 39 53;
+
+  /* brand pastels */
+  --primary: 194 227 226;           /* soft mint / teal pastel */
+  --primary-foreground: 20 59 58;   /* deep teal text on mint */
+
+  --secondary: 181 229 247;         /* baby blue */
+  --secondary-foreground: 18 58 74; /* deep blue-green */
+
+  --accent: 248 200 220;            /* blush pink */
+  --accent-foreground: 74 11 24;    /* plum/brown */
+
+  /* feedback */
+  --success: 200 247 197;           /* pastel green */
+  --success-foreground: 27 39 53;
+
+  --warning: 255 246 183;           /* butter yellow */
+  --warning-foreground: 27 39 53;
+
+  --info: 230 215 255;              /* lavender */
+  --info-foreground: 27 39 53;
+
+  --destructive: 251 208 208;       /* soft red */
+  --destructive-foreground: 74 12 12;
+
+  /* ui chrome */
+  --border: 223 227 235;            /* light gray border */
+  --input: 160 166 178;
+  --muted: 236 239 244;
   --muted-foreground: 71 85 105;
-  --accent: 212 175 55;      /* your gold color */
-  --accent-foreground: 15 23 42;
-  --destructive: 220 38 38;
-  --destructive-foreground: 255 255 255;
-  --border: 226 232 240;
-  --input: 156 163 175;
-  --ring: 28 61 58;
-  --chart-1: 34 197 94;
-  --chart-2: 234 179 8;
-  --chart-3: 220 38 38;
-  --chart-4: 212 175 55;
-  --chart-5: 248 250 252;
-  --radius: 0.5rem;
+
+  /* charts (pastel set) */
+  --chart-1: 200 247 197;
+  --chart-2: 181 229 247;
+  --chart-3: 248 200 220;
+  --chart-4: 230 215 255;
+  --chart-5: 255 246 183;
+
+  --radius: 0.75rem;
 }
 
 /* Ensure colors are always visible - override any theme switching */
 html, body {
-  background-color: rgb(255 255 255) !important;
-  color: rgb(15 23 42) !important;
+  background-color: rgb(var(--background)) !important;
+  color: rgb(var(--foreground)) !important;
 }
 
 /* Prevent dark mode from swapping variables - force light theme */
 :root.dark, .dark :root, html.dark, [data-theme="dark"] {
-  --background: 255 255 255 !important;
-  --foreground: 15 23 42 !important;
+  --background: 250 250 250 !important;
+  --foreground: 27 39 53 !important;
   --card: 255 255 255 !important;
-  --card-foreground: 15 23 42 !important;
+  --card-foreground: 27 39 53 !important;
   --popover: 255 255 255 !important;
-  --popover-foreground: 15 23 42 !important;
-  --primary: 28 61 58 !important;
-  --primary-foreground: 255 255 255 !important;
-  --secondary: 248 250 252 !important;
-  --secondary-foreground: 15 23 42 !important;
-  --muted: 100 116 139 !important;
+  --popover-foreground: 27 39 53 !important;
+  --primary: 194 227 226 !important;
+  --primary-foreground: 20 59 58 !important;
+  --secondary: 181 229 247 !important;
+  --secondary-foreground: 18 58 74 !important;
+  --accent: 248 200 220 !important;
+  --accent-foreground: 74 11 24 !important;
+  --success: 200 247 197 !important;
+  --success-foreground: 27 39 53 !important;
+  --warning: 255 246 183 !important;
+  --warning-foreground: 27 39 53 !important;
+  --info: 230 215 255 !important;
+  --info-foreground: 27 39 53 !important;
+  --destructive: 251 208 208 !important;
+  --destructive-foreground: 74 12 12 !important;
+  --border: 223 227 235 !important;
+  --input: 160 166 178 !important;
+  --muted: 236 239 244 !important;
   --muted-foreground: 71 85 105 !important;
-  --accent: 212 175 55 !important;
-  --accent-foreground: 15 23 42 !important;
-  --destructive: 220 38 38 !important;
-  --destructive-foreground: 255 255 255 !important;
-  --border: 226 232 240 !important;
-  --input: 156 163 175 !important;
-  --ring: 28 61 58 !important;
-  --chart-1: 34 197 94 !important;
-  --chart-2: 234 179 8 !important;
-  --chart-3: 220 38 38 !important;
-  --chart-4: 212 175 55 !important;
-  --chart-5: 248 250 252 !important;
+  --chart-1: 200 247 197 !important;
+  --chart-2: 181 229 247 !important;
+  --chart-3: 248 200 220 !important;
+  --chart-4: 230 215 255 !important;
+  --chart-5: 255 246 183 !important;
 }
 
 @layer base {
@@ -73,8 +100,6 @@ html, body {
   }
   body {
     @apply bg-background text-foreground font-inter;
-    background: rgb(255 255 255) !important;
-    color: rgb(15 23 42) !important;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-playfair font-bold;
@@ -100,46 +125,21 @@ html, body {
 }
 
 @layer components {
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 dark:focus:ring-offset-slate-800;
-  }
-  
-  .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 focus-ring rounded-xl px-6 py-3 font-semibold transition-all duration-200 shadow-md;
-  }
-  
-  .btn-secondary {
-    @apply bg-secondary text-secondary-foreground hover:bg-secondary/80 focus-ring rounded-xl px-6 py-3 font-semibold transition-all duration-200 shadow-sm border border-secondary/20;
-  }
-  
-  .btn-accent {
-    @apply bg-accent text-accent-foreground hover:bg-accent/90 focus-ring rounded-xl px-6 py-3 font-semibold transition-all duration-200 shadow-md;
-  }
-  
-  .btn-danger {
-    @apply bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-ring rounded-xl px-6 py-3 font-semibold transition-all duration-200 shadow-md;
-  }
+  .focus-ring { @apply focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))] focus:ring-offset-2; }
 
-  .card {
-    @apply bg-card text-card-foreground rounded-xl shadow-md border border-border/50;
-  }
+  .btn-primary   { @apply rounded-xl px-6 py-3 font-semibold transition shadow-md text-[rgb(var(--primary-foreground))] bg-[rgb(var(--primary))] hover:brightness-95 focus-ring; }
+  .btn-secondary { @apply rounded-xl px-6 py-3 font-semibold transition shadow-sm border text-[rgb(var(--secondary-foreground))] bg-[rgb(var(--secondary))] border-[rgb(var(--border))] hover:brightness-95 focus-ring; }
+  .btn-accent    { @apply rounded-xl px-6 py-3 font-semibold transition shadow-md text-[rgb(var(--accent-foreground))] bg-[rgb(var(--accent))] hover:brightness-95 focus-ring; }
+  .btn-danger    { @apply rounded-xl px-6 py-3 font-semibold transition shadow-md text-[rgb(var(--destructive-foreground))] bg-[rgb(var(--destructive))] hover:brightness-95 focus-ring; }
 
-  .risk-tier-1 {
-    @apply border-l-4 border-green-600 bg-green-50 dark:bg-green-950/30 text-green-900 dark:text-green-100;
-  }
+  .card { @apply bg-card text-card-foreground rounded-2xl shadow-md border border-border/60; }
 
-  .risk-tier-2 {
-    @apply border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-950/30 text-orange-900 dark:text-orange-100;
-  }
+  /* Pastel risk tiers with readable text */
+  .risk-tier-1 { @apply border-l-4 border-[rgb(var(--success))]  bg-[rgb(var(--success))]/60  text-slate-800; }
+  .risk-tier-2 { @apply border-l-4 border-[rgb(var(--warning))]  bg-[rgb(var(--warning))]/60  text-slate-900; }
+  .risk-tier-3 { @apply border-l-4 border-[rgb(var(--destructive))] bg-[rgb(var(--destructive))]/60 text-[#7A0C0C]; }
 
-  .risk-tier-3 {
-    @apply border-l-4 border-red-600 bg-red-50 dark:bg-red-950/30 text-red-900 dark:text-red-100;
-  }
-
-  /* Enhanced input visibility */
-  .input-visible {
-    @apply border-2 border-gray-400 dark:border-gray-500 focus:border-primary focus:ring-2 focus:ring-primary/20;
-  }
+  .input-visible { @apply border-2 border-[rgb(var(--border))] focus:border-[rgb(var(--primary))] focus:ring-2 focus:ring-[rgb(var(--primary))]/30; }
 }
 
 /* PWA styles */

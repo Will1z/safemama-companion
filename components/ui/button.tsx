@@ -39,15 +39,15 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(({
     }
   }
 
-  const base = "inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold text-base tracking-wide transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37]";
+  const base = "inline-flex items-center justify-center rounded-xl font-semibold text-base tracking-wide transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--accent))]";
   
   const variants = {
-    primary: "bg-[#1C3D3A] text-white hover:brightness-95 shadow-soft",
-    secondary: "border border-[#1C3D3A] text-[#1C3D3A] bg-white hover:bg-[#EAF4F3]",
-    danger: "bg-[#E74C3C] text-white hover:brightness-95 shadow-lg",
-    outline: "border-2 border-[#1C3D3A] text-[#1C3D3A] bg-white hover:bg-[#EAF4F3]",
-    ghost: "text-[#1B2735] hover:bg-[#EAF4F3] hover:text-[#1C3D3A]",
-    accent: "bg-[#D4AF37] text-[#4A3A00] hover:brightness-95 shadow-lg"
+    primary: "bg-[rgb(var(--primary))] text-[rgb(var(--primary-foreground))] hover:brightness-95 shadow-md",
+    secondary: "bg-[rgb(var(--secondary))] text-[rgb(var(--secondary-foreground))] border border-[rgb(var(--border))] hover:brightness-95 shadow-sm",
+    danger: "bg-[rgb(var(--destructive))] text-[rgb(var(--destructive-foreground))] hover:brightness-95 shadow-md",
+    outline: "bg-white text-[rgb(var(--primary-foreground))] border-2 border-[rgb(var(--primary-foreground))]/30 hover:bg-[rgb(var(--muted))]",
+    ghost: "text-slate-800 hover:bg-[rgb(var(--muted))] hover:text-[rgb(var(--primary-foreground))]",
+    accent: "bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))] hover:brightness-95 shadow-md"
   } as const;
 
   const sizes = {
@@ -82,15 +82,15 @@ export default Button;
 
 // Export buttonVariants for backward compatibility
 export const buttonVariants = (options: { variant?: string; size?: string } = {}) => {
-  const base = "inline-flex items-center justify-center px-4 py-2 rounded-xl font-semibold text-base tracking-wide transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#D4AF37]";
+  const base = "inline-flex items-center justify-center rounded-xl font-semibold text-base tracking-wide transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[rgb(var(--accent))]";
   
   const variants = {
-    primary: "bg-[#1C3D3A] text-white hover:brightness-95 shadow-soft",
-    secondary: "border border-[#1C3D3A] text-[#1C3D3A] bg-white hover:bg-[#EAF4F3]",
-    danger: "bg-[#E74C3C] text-white hover:brightness-95 shadow-lg",
-    outline: "border-2 border-[#1C3D3A] text-[#1C3D3A] bg-white hover:bg-[#EAF4F3]",
-    ghost: "text-[#1B2735] hover:bg-[#EAF4F3] hover:text-[#1C3D3A]",
-    accent: "bg-[#D4AF37] text-[#4A3A00] hover:brightness-95 shadow-lg"
+    primary: "bg-[rgb(var(--primary))] text-[rgb(var(--primary-foreground))] hover:brightness-95 shadow-md",
+    secondary: "bg-[rgb(var(--secondary))] text-[rgb(var(--secondary-foreground))] border border-[rgb(var(--border))] hover:brightness-95 shadow-sm",
+    danger: "bg-[rgb(var(--destructive))] text-[rgb(var(--destructive-foreground))] hover:brightness-95 shadow-md",
+    outline: "bg-white text-[rgb(var(--primary-foreground))] border-2 border-[rgb(var(--primary-foreground))]/30 hover:bg-[rgb(var(--muted))]",
+    ghost: "text-slate-800 hover:bg-[rgb(var(--muted))] hover:text-[rgb(var(--primary-foreground))]",
+    accent: "bg-[rgb(var(--accent))] text-[rgb(var(--accent-foreground))] hover:brightness-95 shadow-md"
   };
 
   const sizes = {

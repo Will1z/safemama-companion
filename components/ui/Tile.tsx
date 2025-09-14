@@ -15,19 +15,19 @@ type Props = {
 export default function Tile({ href = "#", icon, title, subtitle, tone = "neutral", disabled, className }: Props) {
   const wrap = clsx(
     "block rounded-2xl border p-4 shadow-soft",
-    tone === "neutral" && "bg-white border-[#E7ECEF]",
-    tone === "accent" && "bg-[#EAF4F3] border-[#CFEBDC]",
-    tone === "warn" && "bg-orange-50 border-orange-200",
+    tone === "neutral" && "bg-white border-[rgb(var(--border))]",
+    tone === "accent" && "bg-[rgb(var(--primary))]/20 border-[rgb(var(--primary))]/30",
+    tone === "warn" && "bg-[rgb(var(--warning))]/60 border-[rgb(var(--warning))]",
     disabled && "opacity-60 pointer-events-none",
     className
   );
   const TitleClass = clsx(
     "font-heading text-xl",
-    tone === "warn" ? "text-orange-800" : "text-[#1B2735]"
+    tone === "warn" ? "text-slate-900" : "text-[rgb(var(--primary-foreground))]"
   );
   const SubClass = clsx(
     "text-sm mt-1",
-    tone === "warn" ? "text-orange-700" : "text-[#6C757D]"
+    tone === "warn" ? "text-slate-800" : "text-muted-foreground"
   );
 
   const Inner = (

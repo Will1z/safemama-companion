@@ -2,9 +2,9 @@ type Tier = 1|2|3;
 
 export function RiskBanner({ tier, reason }: { tier: Tier; reason?: string }) {
   const cfg = {
-    1: { wrap: "bg-[#EAF7EF] text-[#0E5F2D] border border-[#CFEBDC]", title: "Low risk — monitor" },
-    2: { wrap: "bg-orange-50 text-orange-800 border border-orange-200", title: "Visit a clinic within 24 hours" },
-    3: { wrap: "bg-[#FDE2E0] text-[#7A1E16] border-2 border-[#E74C3C]", title: "Emergency — go now" },
+    1: { wrap: "bg-[rgb(var(--success))]/60 text-slate-800 border border-[rgb(var(--success))]", title: "Low risk — monitor" },
+    2: { wrap: "bg-[rgb(var(--warning))]/60 text-slate-900 border border-[rgb(var(--warning))]", title: "Visit a clinic within 24 hours" },
+    3: { wrap: "bg-[rgb(var(--destructive))]/60 text-[#7A0C0C] border-2 border-[rgb(var(--destructive))]", title: "Emergency — go now" },
   }[tier];
 
   return (

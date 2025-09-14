@@ -113,9 +113,9 @@ export function RiskCards() {
               <div className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg">
                 1
               </div>
-              <h3 className="font-semibold text-green-900 dark:text-green-100">Low Risk - Monitor</h3>
+              <h3 className="font-semibold text-slate-800">Low Risk - Monitor</h3>
             </div>
-            <p className="text-sm text-green-800 dark:text-green-200">
+            <p className="text-sm text-slate-700">
               Self care and monitor. Continue with regular check-ups and maintain healthy habits.
             </p>
           </CardContent>
@@ -128,12 +128,12 @@ export function RiskCards() {
         >
           <CardContent className="p-0">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-orange-500 text-white rounded-full flex items-center justify-center font-bold text-lg">
+              <div className="w-10 h-10 bg-[rgb(var(--warning))] text-white rounded-full flex items-center justify-center font-bold text-lg">
                 2
               </div>
-              <h3 className="font-semibold text-orange-800">Moderate Risk - Visit clinic within 24 hours</h3>
+              <h3 className="font-semibold text-slate-900">Moderate Risk - Visit clinic within 24 hours</h3>
             </div>
-            <p className="text-sm text-orange-700">
+            <p className="text-sm text-slate-800">
               Enhanced monitoring recommended. Schedule an appointment with your healthcare provider soon.
             </p>
           </CardContent>
@@ -146,12 +146,12 @@ export function RiskCards() {
         >
           <CardContent className="p-0">
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-10 h-10 bg-red-600 text-white rounded-full flex items-center justify-center font-bold text-lg">
+              <div className="w-10 h-10 bg-[rgb(var(--destructive))] text-white rounded-full flex items-center justify-center font-bold text-lg">
                 3
               </div>
-              <h3 className="font-semibold text-red-900 dark:text-red-100">High Risk - Seek immediate care</h3>
+              <h3 className="font-semibold text-[#7A0C0C]">High Risk - Seek immediate care</h3>
             </div>
-            <p className="text-sm text-red-800 dark:text-red-200">
+            <p className="text-sm text-[#7A0C0C]">
               Go to the nearest equipped facility now. Immediate medical attention required.
             </p>
           </CardContent>
@@ -173,27 +173,27 @@ export function RiskCards() {
           
           <div className="space-y-4">
             <div className="space-y-3">
-              <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
-                <CheckCircle className="w-5 h-5 text-green-600 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 bg-[rgb(var(--success))]/60 rounded-lg">
+                <CheckCircle className="w-5 h-5 text-[rgb(var(--success-foreground))] mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-green-800">Continue regular check-ups</h4>
-                  <p className="text-sm text-green-700">Keep your scheduled prenatal appointments</p>
+                  <h4 className="font-medium text-[rgb(var(--success-foreground))]">Continue regular check-ups</h4>
+                  <p className="text-sm text-[rgb(var(--success-foreground))]/80">Keep your scheduled prenatal appointments</p>
                 </div>
               </div>
               
-              <div className="flex items-start gap-3 p-3 bg-blue-50 rounded-lg">
-                <Clock className="w-5 h-5 text-blue-600 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 bg-[rgb(var(--info))]/60 rounded-lg">
+                <Clock className="w-5 h-5 text-[rgb(var(--info-foreground))] mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-blue-800">Monitor symptoms</h4>
-                  <p className="text-sm text-blue-700">Track any changes in your condition daily</p>
+                  <h4 className="font-medium text-[rgb(var(--info-foreground))]">Monitor symptoms</h4>
+                  <p className="text-sm text-[rgb(var(--info-foreground))]/80">Track any changes in your condition daily</p>
                 </div>
               </div>
               
-              <div className="flex items-start gap-3 p-3 bg-purple-50 rounded-lg">
-                <Heart className="w-5 h-5 text-purple-600 mt-0.5" />
+              <div className="flex items-start gap-3 p-3 bg-[rgb(var(--accent))]/60 rounded-lg">
+                <Heart className="w-5 h-5 text-[rgb(var(--accent-foreground))] mt-0.5" />
                 <div>
-                  <h4 className="font-medium text-purple-800">Maintain healthy habits</h4>
-                  <p className="text-sm text-purple-700">Eat well, stay hydrated, and get adequate rest</p>
+                  <h4 className="font-medium text-[rgb(var(--accent-foreground))]">Maintain healthy habits</h4>
+                  <p className="text-sm text-[rgb(var(--accent-foreground))]/80">Eat well, stay hydrated, and get adequate rest</p>
                 </div>
               </div>
             </div>
@@ -225,7 +225,7 @@ export function RiskCards() {
         <DialogContent className="sm:max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <MapPin className="w-5 h-5 text-orange-500" />
+              <MapPin className="w-5 h-5 text-[rgb(var(--warning-foreground))]" />
               Nearby Healthcare Facilities
             </DialogTitle>
             <DialogDescription>
@@ -296,7 +296,7 @@ export function RiskCards() {
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-red-600" />
+              <AlertTriangle className="w-5 h-5 text-[rgb(var(--destructive-foreground))]" />
               Emergency Response
             </DialogTitle>
             <DialogDescription>

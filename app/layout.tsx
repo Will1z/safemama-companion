@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   keywords: 'maternal health, pregnancy, healthcare, AI monitoring, emergency response',
   authors: [{ name: 'SafeMama Team' }],
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
-  themeColor: '#1C3D3A',
+  themeColor: 'rgb(194, 227, 226)',
   manifest: '/manifest.json',
   icons: {
     icon: '/favicon.ico',

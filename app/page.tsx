@@ -124,15 +124,15 @@ export default function LandingPage() {
             {/* AI Health Monitoring - Clickable to chat */}
             <Link
               href="/chat"
-              className="group block rounded-2xl border p-4 shadow-soft bg-[#EAF4F3] border-[#CFEBDC] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="group block rounded-2xl border p-4 shadow-soft bg-[rgb(var(--primary))]/20 border-[rgb(var(--primary))]/30 transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
-                  <Brain className="w-6 h-6 text-[#1C3D3A]" />
+                  <Brain className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
                 </div>
                 <div>
-                  <div className="font-heading text-xl text-[#1B2735]">AI Health Monitoring</div>
-                  <div className="text-sm mt-1 text-[#6C757D]">Intelligent symptom tracking and risk assessment</div>
+                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">AI Health Monitoring</div>
+                  <div className="text-sm mt-1 text-muted-foreground">Intelligent symptom tracking and risk assessment</div>
                 </div>
               </div>
             </Link>
@@ -140,41 +140,41 @@ export default function LandingPage() {
             {/* Emergency Response - Clickable to help */}
             <Link
               href="/help"
-              className="group block rounded-2xl border p-4 shadow-soft bg-red-50 border-red-200 transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="group block rounded-2xl border p-4 shadow-soft bg-[rgb(var(--destructive))]/20 border-[rgb(var(--destructive))]/30 transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
-                  <ShieldCheck className="w-6 h-6 text-red-600" />
+                  <ShieldCheck className="w-6 h-6 text-[rgb(var(--destructive-foreground))]" />
                 </div>
                 <div>
-                  <div className="font-heading text-xl text-red-800">Emergency Response</div>
-                  <div className="text-sm mt-1 text-red-700">Instant access to emergency contacts and facilities</div>
+                  <div className="font-heading text-xl text-[rgb(var(--destructive-foreground))]">Emergency Response</div>
+                  <div className="text-sm mt-1 text-[rgb(var(--destructive-foreground))]/80">Instant access to emergency contacts and facilities</div>
                 </div>
               </div>
             </Link>
 
             {/* Expert Network - Info card (not implemented yet) */}
-            <div className="group block rounded-2xl border p-4 shadow-soft bg-white border-[#E7ECEF] cursor-default transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <div className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] cursor-default transition-all duration-300 hover:shadow-lg hover:scale-105">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
-                  <Users className="w-6 h-6 text-[#1C3D3A]" />
+                  <Users className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
                 </div>
                 <div>
-                  <div className="font-heading text-xl text-[#1B2735]">Expert Network</div>
-                  <div className="text-sm mt-1 text-[#6C757D]">Connect with qualified healthcare professionals</div>
+                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">Expert Network</div>
+                  <div className="text-sm mt-1 text-muted-foreground">Connect with qualified healthcare professionals</div>
                 </div>
               </div>
             </div>
 
             {/* Smart Reminders - Info card (not implemented yet) */}
-            <div className="group block rounded-2xl border p-4 shadow-soft bg-white border-[#E7ECEF] cursor-default transition-all duration-300 hover:shadow-lg hover:scale-105">
+            <div className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] cursor-default transition-all duration-300 hover:shadow-lg hover:scale-105">
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
-                  <Calendar className="w-6 h-6 text-[#1C3D3A]" />
+                  <Calendar className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
                 </div>
                 <div>
-                  <div className="font-heading text-xl text-[#1B2735]">Smart Reminders</div>
-                  <div className="text-sm mt-1 text-[#6C757D]">Never miss important appointments or medication</div>
+                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">Smart Reminders</div>
+                  <div className="text-sm mt-1 text-muted-foreground">Never miss important appointments or medication</div>
                 </div>
               </div>
             </div>
@@ -182,15 +182,15 @@ export default function LandingPage() {
             {/* Facility Locator - Clickable to vitals (has facility features) */}
             <Link
               href="/vitals"
-              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[#E7ECEF] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
-                  <MapPin className="w-6 h-6 text-[#1C3D3A]" />
+                  <MapPin className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
                 </div>
                 <div>
-                  <div className="font-heading text-xl text-[#1B2735]">Facility Locator</div>
-                  <div className="text-sm mt-1 text-[#6C757D]">Find the nearest healthcare facilities</div>
+                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">Facility Locator</div>
+                  <div className="text-sm mt-1 text-muted-foreground">Find the nearest healthcare facilities</div>
                 </div>
               </div>
             </Link>
@@ -198,15 +198,15 @@ export default function LandingPage() {
             {/* 24/7 Communication - Clickable to chat */}
             <Link
               href="/chat"
-              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[#E7ECEF] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
-                  <Phone className="w-6 h-6 text-[#1C3D3A]" />
+                  <Phone className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
                 </div>
                 <div>
-                  <div className="font-heading text-xl text-[#1B2735]">24/7 Communication</div>
-                  <div className="text-sm mt-1 text-[#6C757D]">Stay connected with your healthcare team</div>
+                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">24/7 Communication</div>
+                  <div className="text-sm mt-1 text-muted-foreground">Stay connected with your healthcare team</div>
                 </div>
               </div>
             </Link>
