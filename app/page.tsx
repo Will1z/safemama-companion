@@ -121,9 +121,9 @@ export default function LandingPage() {
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {/* AI Health Monitoring - Clickable to chat */}
+            {/* AI Health Monitoring - Clickable to vitals */}
             <Link
-              href="/chat"
+              href="/vitals"
               className="group block rounded-2xl border p-4 shadow-soft bg-[rgb(var(--primary))]/20 border-[rgb(var(--primary))]/30 transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <div className="flex items-start gap-3">
