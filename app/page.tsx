@@ -153,8 +153,11 @@ export default function LandingPage() {
               </div>
             </Link>
 
-            {/* Expert Network - Info card (not implemented yet) */}
-            <div className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] cursor-default transition-all duration-300 hover:shadow-lg hover:scale-105">
+            {/* Expert Network - Clickable to community */}
+            <Link
+              href="/community"
+              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
                   <Users className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
@@ -164,10 +167,13 @@ export default function LandingPage() {
                   <div className="text-sm mt-1 text-muted-foreground">Connect with qualified healthcare professionals</div>
                 </div>
               </div>
-            </div>
+            </Link>
 
-            {/* Smart Reminders - Info card (not implemented yet) */}
-            <div className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] cursor-default transition-all duration-300 hover:shadow-lg hover:scale-105">
+            {/* Smart Reminders - Clickable to dashboard */}
+            <Link
+              href="/dashboard"
+              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
               <div className="flex items-start gap-3">
                 <div className="mt-0.5">
                   <Calendar className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
@@ -177,11 +183,11 @@ export default function LandingPage() {
                   <div className="text-sm mt-1 text-muted-foreground">Never miss important appointments or medication</div>
                 </div>
               </div>
-            </div>
+            </Link>
 
-            {/* Facility Locator - Clickable to vitals (has facility features) */}
+            {/* Facility Locator - Clickable to help (has facility finder) */}
             <Link
-              href="/vitals"
+              href="/help"
               className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
             >
               <div className="flex items-start gap-3">
