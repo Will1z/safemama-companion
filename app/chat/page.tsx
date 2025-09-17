@@ -9,6 +9,7 @@ import BottomNav from '@/components/ui/BottomNav';
 import { Send, ArrowLeft, Bot, User, FileText, Download, Share2, CheckCircle, Mic, MicOff, Square, Volume2, VolumeX } from 'lucide-react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
+import BackToHomeButton from '@/components/ui/BackToHomeButton';
 
 interface Message {
   id: string;
@@ -442,6 +443,7 @@ export default function ChatPage() {
               </div>
             </div>
             <div className="flex items-center space-x-2">
+              <BackToHomeButton />
               {/* Voice Response Toggle */}
               <Button
                 variant="ghost"

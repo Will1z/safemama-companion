@@ -19,6 +19,7 @@ import {
 import { ThemeToggle } from '@/components/theme-toggle';
 import { RiskCards } from '@/components/home/RiskCards';
 import { AuthAwareCard } from '@/components/ui/AuthAwareCard';
+import BackToHomeButton from '@/components/ui/BackToHomeButton';
 
 export default function DashboardPage() {
   return (
@@ -36,6 +37,7 @@ export default function DashboardPage() {
           </div>
           
           <nav className="hidden md:flex items-center space-x-6">
+            <BackToHomeButton />
             <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
               Features
             </Link>
@@ -55,6 +57,7 @@ export default function DashboardPage() {
           </nav>
 
           <div className="md:hidden flex items-center space-x-2">
+            <BackToHomeButton />
             <ThemeToggle />
             <Button size="sm" asChild>
               <Link href="/onboarding">Get Started</Link>

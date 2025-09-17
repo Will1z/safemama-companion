@@ -9,6 +9,7 @@ import BottomNav from '@/components/ui/BottomNav';
 import { ArrowLeft, Activity, Heart, Thermometer, Weight } from 'lucide-react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
+import BackToHomeButton from '@/components/ui/BackToHomeButton';
 
 export default function VitalsPage() {
   const [vitals, setVitals] = useState({
@@ -63,21 +64,24 @@ export default function VitalsPage() {
       {/* Header */}
       <header className="bg-primary text-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center space-x-3">
-            <Button variant="ghost" size="icon" asChild className="text-white hover:bg-white/10">
-              <Link href="/dashboard">
-                <ArrowLeft className="w-5 h-5" />
-              </Link>
-            </Button>
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
-                <Activity className="w-5 h-5 text-white" />
-              </div>
-              <div>
-                <h1 className="font-semibold">Record Vitals</h1>
-                <p className="text-xs text-white/80">Track your health measurements</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <Button variant="ghost" size="icon" asChild className="text-white hover:bg-white/10">
+                <Link href="/dashboard">
+                  <ArrowLeft className="w-5 h-5" />
+                </Link>
+              </Button>
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                  <Activity className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h1 className="font-semibold">Record Vitals</h1>
+                  <p className="text-xs text-white/80">Track your health measurements</p>
+                </div>
               </div>
             </div>
+            <BackToHomeButton />
           </div>
         </div>
       </header>
