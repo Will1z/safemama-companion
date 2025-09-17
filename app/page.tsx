@@ -56,7 +56,7 @@ export default function MarketingPage() {
               FAQ
             </Link>
             <Button asChild>
-              <Link href="/dashboard">Open the App</Link>
+              <Link href="/dashboard" aria-label="Open SafeMama App">Open the App</Link>
             </Button>
           </nav>
 
@@ -106,7 +106,7 @@ export default function MarketingPage() {
                 FAQ
               </Link>
               <Button asChild className="w-full">
-                <Link href="/dashboard">Open the App</Link>
+                <Link href="/dashboard" aria-label="Open SafeMama App">Open the App</Link>
               </Button>
             </div>
           </div>
@@ -538,6 +538,13 @@ export default function MarketingPage() {
                 <Link href="/console" className="block text-white/80 hover:text-white text-sm transition-colors">
                   Provider Console
                 </Link>
+                <Link 
+                  href="/dashboard" 
+                  className="inline-block mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-white/50"
+                  aria-label="Open SafeMama App"
+                >
+                  Open the App
+                </Link>
               </div>
             </div>
           </div>
@@ -549,6 +556,15 @@ export default function MarketingPage() {
           </div>
         </div>
       </footer>
+
+      {/* Sticky Mobile CTA */}
+      <Link 
+        href="/dashboard" 
+        className="fixed bottom-4 right-4 z-50 shadow-lg rounded-full px-5 py-3 bg-[rgb(var(--primary))] text-[rgb(var(--primary-foreground))] md:hidden hover:bg-[rgb(var(--primary))]/90 transition-colors focus:outline-none focus:ring-2 focus:ring-[rgb(var(--primary))]/50 focus:ring-offset-2"
+        aria-label="Open SafeMama App"
+      >
+        Open the App
+      </Link>
     </div>
   );
 }
