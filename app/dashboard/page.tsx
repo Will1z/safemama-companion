@@ -1,505 +1,279 @@
-"use client"
+'use client';
 
-import { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Image from 'next/image';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import Tile from '@/components/ui/Tile';
-import { RiskBanner } from '@/components/ui/RiskBanner';
-import { track } from '@/lib/analytics';
-import BottomNav from '@/components/ui/BottomNav';
 import { 
   Heart, 
-  MessageCircle, 
-  Activity, 
+  Clock, 
+  Brain, 
+  Users, 
   Calendar,
   MapPin,
-  FileText,
   Phone,
-  Plus,
-  Pill,
-  Clock,
-  CheckCircle,
-  X,
-  ChevronDown,
-  ChevronUp,
-  BookOpen,
-  Users,
-  User,
-  History
+  ShieldCheck,
+  ArrowRight
 } from 'lucide-react';
-import Link from 'next/link';
-import { DailyTipCard } from '@/components/companion/DailyTipCard';
-import { MoodCheckin } from '@/components/companion/MoodCheckin';
-import { BreathingExercise } from '@/components/companion/BreathingExercise';
-import { PersonalizedPlan } from '@/components/companion/PersonalizedPlan';
-
-// Mock data - replace with real data from Supabase
-const mockData = {
-  profile: {
-    displayName: 'Sarah Johnson',
-    weeks: 24,
-    nextAppointment: '2024-01-15'
-  },
-  recentVitals: {
-    bp: '120/80',
-    weight: '65kg',
-    temp: '36.8°C',
-    date: '2024-01-10'
-  },
-  lastSymptom: {
-    tier: 1 as 1 | 2 | 3,
-    reason: 'Mild headache reported',
-    date: '2024-01-10'
-  },
-  medications: [
-    {
-      id: 1,
-      name: 'Folic Acid',
-      dosage: '400mcg',
-      frequency: 'Once daily',
-      time: '8:00 AM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
-    },
-    {
-      id: 2,
-      name: 'Iron Supplement',
-      dosage: '65mg',
-      frequency: 'Once daily',
-      time: '2:00 PM',
-      taken: true,
-      prescribedBy: 'Dr. Smith'
-    },
-    {
-      id: 3,
-      name: 'Prenatal Vitamins',
-      dosage: '1 tablet',
-      frequency: 'Once daily',
-      time: '9:00 AM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
-    },
-    {
-      id: 4,
-      name: 'Calcium',
-      dosage: '1000mg',
-      frequency: 'Twice daily',
-      time: '10:00 AM, 6:00 PM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
-    },
-    {
-      id: 5,
-      name: 'DHA Omega-3',
-      dosage: '200mg',
-      frequency: 'Once daily',
-      time: '7:00 PM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
-    }
-  ]
-};
+import { ThemeToggle } from '@/components/theme-toggle';
+import { RiskCards } from '@/components/home/RiskCards';
+import { AuthAwareCard } from '@/components/ui/AuthAwareCard';
 
 export default function DashboardPage() {
-  const [data, setData] = useState(mockData);
-  const [currentWeek, setCurrentWeek] = useState(24);
-  const [showAddMedication, setShowAddMedication] = useState(false);
-  const [isMedicationsExpanded, setIsMedicationsExpanded] = useState(true);
-  const [newMedication, setNewMedication] = useState({
-    name: '',
-    dosage: '',
-    frequency: '',
-    time: '',
-    prescribedBy: ''
-  });
-
-  const getWeekMessage = (week: number) => {
-    if (week < 12) return "First trimester - Your baby is developing rapidly";
-    if (week < 28) return "Second trimester - You might feel your baby's first movements";
-    return "Third trimester - Your baby is preparing for birth";
-  };
-
-  const toggleMedicationTaken = (medicationId: number) => {
-    setData(prev => ({
-      ...prev,
-      medications: prev.medications.map(med => 
-        med.id === medicationId ? { ...med, taken: !med.taken } : med
-      )
-    }));
-    track('medication_taken', { medicationId });
-  };
-
-  const addMedication = () => {
-    if (newMedication.name && newMedication.dosage && newMedication.frequency && newMedication.time) {
-      const medication = {
-        id: Date.now(),
-        name: newMedication.name,
-        dosage: newMedication.dosage,
-        frequency: newMedication.frequency,
-        time: newMedication.time,
-        taken: false,
-        prescribedBy: newMedication.prescribedBy || 'Dr. Smith'
-      };
-      
-      setData(prev => ({
-        ...prev,
-        medications: [...prev.medications, medication]
-      }));
-      
-      setNewMedication({
-        name: '',
-        dosage: '',
-        frequency: '',
-        time: '',
-        prescribedBy: ''
-      });
-      setShowAddMedication(false);
-      track('medication_added', { medicationName: medication.name });
-    }
-  };
-
-  const removeMedication = (medicationId: number) => {
-    setData(prev => ({
-      ...prev,
-      medications: prev.medications.filter(med => med.id !== medicationId)
-    }));
-    track('medication_removed', { medicationId });
-  };
-
   return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="bg-primary text-white">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-playfair text-2xl font-bold">
-                Welcome back, {data.profile.displayName}
-              </h1>
-              <p className="text-white/80">
-                Week {currentWeek} • {getWeekMessage(currentWeek)}
-              </p>
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
+                <Heart className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-playfair font-semibold text-xl text-primary">SafeMama</span>
             </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold">{currentWeek}</div>
-              <div className="text-sm text-white/80">weeks</div>
-            </div>
+          </div>
+          
+          <nav className="hidden md:flex items-center space-x-6">
+            <Link href="#features" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Features
+            </Link>
+            <Link href="#about" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              About
+            </Link>
+            <Link href="#contact" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Contact
+            </Link>
+            <ThemeToggle />
+            <Button variant="outline" asChild>
+              <Link href="/auth/signin">Sign In</Link>
+            </Button>
+            <Button asChild>
+              <Link href="/onboarding">Get Started</Link>
+            </Button>
+          </nav>
+
+          <div className="md:hidden flex items-center space-x-2">
+            <ThemeToggle />
+            <Button size="sm" asChild>
+              <Link href="/onboarding">Get Started</Link>
+            </Button>
           </div>
         </div>
       </header>
 
-      <div className="container mx-auto px-4 py-6 space-y-6">
-        {/* Risk Banner - First Priority */}
-        {data.lastSymptom && (
-          <RiskBanner
-            tier={data.lastSymptom.tier}
-            reason={data.lastSymptom.reason}
-          />
-        )}
-
-
-        {/* Upcoming - Second Priority */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Calendar className="w-5 h-5 text-primary" />
-              <span>Upcoming</span>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              <div className="flex items-center justify-between p-3 bg-accent/10 rounded-lg">
-                <div>
-                  <div className="font-medium">Next ANC Visit</div>
-                  <div className="text-sm text-gray-700 font-medium">{data.profile.nextAppointment}</div>
-                </div>
-                <Button variant="outline" size="sm">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  Directions
+      {/* Hero Section */}
+      <section className="relative overflow-hidden" style={{ backgroundColor: 'rgb(140, 200, 205)' }}>
+        <div className="absolute inset-0 bg-[url('/images/maternal-care-pattern.svg')] opacity-10"></div>
+        <div className="relative container mx-auto px-4 py-20 md:py-32">
+          <div className="max-w-4xl mx-auto text-center text-white">
+            <h1 className="h1-clamp font-playfair font-bold mb-6">
+              Your Journey to{' '}
+              <span className="text-accent">Safe Motherhood</span>
+            </h1>
+            <p className="text-lg md:text-xl mb-8 text-white/90 leading-relaxed max-w-3xl mx-auto">
+              Comprehensive maternal health platform connecting expecting mothers with healthcare professionals for safer, healthier pregnancies.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+              <div className="text-center">
+                <Button size="lg" variant="accent" asChild>
+                  <Link href="/onboarding" className="flex items-center">
+                    Get Started Free
+                    <ArrowRight className="ml-2 w-5 h-5" />
+                  </Link>
                 </Button>
+                <p className="text-sm text-white/80 mt-2">Takes 2–3 minutes</p>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Medications - New Priority */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <button
-                onClick={() => setIsMedicationsExpanded(!isMedicationsExpanded)}
-                className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
-              >
-                <Pill className="w-5 h-5 text-primary" />
-                <span>My Medications</span>
-                {isMedicationsExpanded ? (
-                  <ChevronUp className="w-4 h-4 text-gray-500" />
-                ) : (
-                  <ChevronDown className="w-4 h-4 text-gray-500" />
-                )}
-              </button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowAddMedication(!showAddMedication)}
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Add Medication
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          {isMedicationsExpanded ? (
-            <CardContent>
-            <div className="space-y-3">
-              {/* Add Medication Form */}
-              {showAddMedication && (
-                <div className="p-4 bg-muted/30 rounded-lg space-y-3">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                    <input
-                      type="text"
-                      placeholder="Medication name"
-                      value={newMedication.name}
-                      onChange={(e) => setNewMedication(prev => ({ ...prev, name: e.target.value }))}
-                      className="px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Dosage (e.g., 400mcg)"
-                      value={newMedication.dosage}
-                      onChange={(e) => setNewMedication(prev => ({ ...prev, dosage: e.target.value }))}
-                      className="px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Frequency (e.g., Once daily)"
-                      value={newMedication.frequency}
-                      onChange={(e) => setNewMedication(prev => ({ ...prev, frequency: e.target.value }))}
-                      className="px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                    <input
-                      type="text"
-                      placeholder="Time (e.g., 8:00 AM)"
-                      value={newMedication.time}
-                      onChange={(e) => setNewMedication(prev => ({ ...prev, time: e.target.value }))}
-                      className="px-3 py-2 border border-gray-300 rounded-md text-sm"
-                    />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Prescribed by (optional)"
-                    value={newMedication.prescribedBy}
-                    onChange={(e) => setNewMedication(prev => ({ ...prev, prescribedBy: e.target.value }))}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                  />
-                  <div className="flex space-x-2">
-                    <Button onClick={addMedication} size="sm">
-                      Add Medication
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => setShowAddMedication(false)}
-                    >
-                      Cancel
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Medication List */}
-              {data.medications.map((medication) => (
-                <div 
-                  key={medication.id}
-                  className={`flex items-center justify-between p-3 rounded-lg ${
-                    medication.taken 
-                      ? 'bg-green-50 border border-green-200' 
-                      : 'bg-secondary/30'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      medication.taken ? 'bg-green-500' : 'bg-primary'
-                    }`}>
-                      {medication.taken ? (
-                        <CheckCircle className="w-5 h-5 text-white" />
-                      ) : (
-                        <Pill className="w-5 h-5 text-white" />
-                      )}
-                    </div>
-                    <div>
-                      <div className="font-medium">{medication.name}</div>
-                      <div className="text-sm text-gray-600">
-                        {medication.dosage} • {medication.frequency}
-                      </div>
-                      <div className="text-xs text-gray-500 flex items-center">
-                        <Clock className="w-3 h-3 mr-1" />
-                        {medication.time} • {medication.prescribedBy}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant={medication.taken ? "outline" : "primary"}
-                      size="sm"
-                      onClick={() => toggleMedicationTaken(medication.id)}
-                    >
-                      {medication.taken ? 'Taken' : 'Mark Taken'}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeMedication(medication.id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-              ))}
-            </div>
-            </CardContent>
-          ) : (
-            <CardContent>
-              <div className="text-center py-4">
-                <div className="text-sm text-gray-600">
-                  {data.medications.length} medication{data.medications.length !== 1 ? 's' : ''} • {data.medications.filter(med => med.taken).length} taken today
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  Click to expand and manage medications
-                </div>
-              </div>
-            </CardContent>
-          )}
-        </Card>
-
-        {/* Recent Vitals - Third Priority */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center justify-between">
-              <span>Recent Vitals</span>
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/vitals" className="flex items-center">
-                  <Plus className="w-4 h-4 mr-1" />
-                  Add New
-                </Link>
-              </Button>
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <button 
-                className="text-center p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors"
-                onClick={() => track('vitals_logged', { type: 'bp' })}
-              >
-                <div className="font-vitals text-lg font-semibold text-primary">
-                  {data.recentVitals.bp}
-                </div>
-                <div className="text-xs text-gray-600 font-medium">Blood Pressure</div>
-              </button>
-              <button 
-                className="text-center p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors"
-                onClick={() => track('vitals_logged', { type: 'weight' })}
-              >
-                <div className="font-vitals text-lg font-semibold text-primary">
-                  {data.recentVitals.weight}
-                </div>
-                <div className="text-xs text-gray-600 font-medium">Weight</div>
-              </button>
-              <button 
-                className="text-center p-3 bg-muted/30 rounded-lg hover:bg-muted/50 transition-colors"
-                onClick={() => track('vitals_logged', { type: 'temp' })}
-              >
-                <div className="font-vitals text-lg font-semibold text-primary">
-                  {data.recentVitals.temp}
-                </div>
-                <div className="text-xs text-gray-600 font-medium">Temperature</div>
-              </button>
-              <div className="text-center p-3 bg-muted/30 rounded-lg">
-                <div className="font-vitals text-lg font-semibold text-primary">
-                  {data.recentVitals.date.slice(-5)}
-                </div>
-                <div className="text-xs text-gray-600 font-medium">Last Updated</div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Companion Section */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-semibold text-gray-900">Your Companion</h2>
-          
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <DailyTipCard 
-              userProfile={{
-                due_date: '2024-07-15', // Mock data - replace with real profile data
-                last_period_date: '2023-10-01'
-              }}
-              userConditions={['anemia']} // Mock data - replace with real conditions
-            />
             
-            <MoodCheckin userId="mock-user-id" />
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto">
+              <div className="text-center">
+                <Clock className="w-6 h-6 mx-auto mb-2 text-accent" />
+                <div className="text-lg font-semibold">24/7</div>
+                <div className="text-sm text-white/80">Support Available</div>
+              </div>
+              <div className="text-center">
+                <Brain className="w-6 h-6 mx-auto mb-2 text-accent" />
+                <div className="text-lg font-semibold">AI-Powered</div>
+                <div className="text-sm text-white/80">Health Monitoring</div>
+              </div>
+              <div className="text-center">
+                <Users className="w-6 h-6 mx-auto mb-2 text-accent" />
+                <div className="text-lg font-semibold">Expert</div>
+                <div className="text-sm text-white/80">Medical Network</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section id="features" className="py-20 bg-secondary/10">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-6">
+              Comprehensive Care Platform
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Innovative features designed to support you throughout your pregnancy journey
+            </p>
           </div>
           
-          <BreathingExercise />
-          
-          <PersonalizedPlan 
-            userProfile={{
-              due_date: '2024-07-15',
-              last_period_date: '2023-10-01'
-            }}
-            userConditions={['anemia']}
-            userHistory={{
-              parity: 0,
-              previous_complications: 'None'
-            }}
-          />
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {/* AI Health Monitoring - Clickable to vitals */}
+            <AuthAwareCard
+              href="/vitals"
+              feature="ai-health-monitoring"
+              icon={<Brain className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="AI Health Monitoring"
+              description="Intelligent symptom tracking and risk assessment"
+              className="bg-[rgb(var(--primary))]/20 border-[rgb(var(--primary))]/30"
+            />
 
-        {/* Quick Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <Tile
-            tone="neutral"
-            href="/learn"
-            title="Learn"
-            subtitle="Education topics"
-            icon={<BookOpen className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
-          />
-          <Tile
-            tone="accent"
-            href="/community"
-            title="Community"
-            subtitle="Connect with others"
-            icon={<Users className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
-          />
-          <Tile
-            tone="neutral"
-            href="/call-history"
-            title="Call History"
-            subtitle="View conversations"
-            icon={<History className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
-          />
-          <Tile
-            tone="neutral"
-            href="/me"
-            title="Profile"
-            subtitle="Update settings"
-            icon={<User className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
-          />
-        </div>
-        
-        {/* Additional Actions */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4">
-          <Tile
-            tone="warn"
-            href="/help"
-            title="Help"
-            subtitle="Get support"
-            icon={<Phone className="w-6 h-6 text-[rgb(var(--accent-foreground))]" />}
-          />
-        </div>
-      </div>
+            {/* Emergency Response - Clickable to help */}
+            <Link
+              href="/help"
+              className="group block rounded-2xl border p-4 shadow-soft bg-[rgb(var(--destructive))]/20 border-[rgb(var(--destructive))]/30 transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5">
+                  <ShieldCheck className="w-6 h-6 text-[rgb(var(--destructive-foreground))]" />
+                </div>
+                <div>
+                  <div className="font-heading text-xl text-[rgb(var(--destructive-foreground))]">Emergency Response</div>
+                  <div className="text-sm mt-1 text-[rgb(var(--destructive-foreground))]/80">Instant access to emergency contacts and facilities</div>
+                </div>
+              </div>
+            </Link>
 
-      <BottomNav />
+            {/* Expert Network - Clickable to community */}
+            <AuthAwareCard
+              href="/community"
+              feature="community"
+              icon={<Users className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="Expert Network"
+              description="Connect with qualified healthcare professionals"
+            />
+
+            {/* Smart Reminders - Clickable to dashboard */}
+            <AuthAwareCard
+              href="/dashboard"
+              feature="dashboard"
+              icon={<Calendar className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="Smart Reminders"
+              description="Never miss important appointments or medication"
+            />
+
+            {/* Facility Locator - Clickable to facilities page */}
+            <Link
+              href="/facilities"
+              className="group block rounded-2xl border p-4 shadow-soft bg-white border-[rgb(var(--border))] transition-all duration-300 hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            >
+              <div className="flex items-start gap-3">
+                <div className="mt-0.5">
+                  <MapPin className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />
+                </div>
+                <div>
+                  <div className="font-heading text-xl text-[rgb(var(--primary-foreground))]">Facility Locator</div>
+                  <div className="text-sm mt-1 text-muted-foreground">Find the nearest healthcare facilities</div>
+                </div>
+              </div>
+            </Link>
+
+            {/* 24/7 Communication - Clickable to chat */}
+            <AuthAwareCard
+              href="/chat"
+              feature="chat"
+              icon={<Phone className="w-6 h-6 text-[rgb(var(--primary-foreground))]" />}
+              title="24/7 Communication"
+              description="Stay connected with your healthcare team"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Risk Assessment Section */}
+      <section className="py-20 bg-background">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center mb-16">
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-6">
+              Intelligent Risk Assessment
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              Our advanced triage system provides personalized care recommendations
+            </p>
+          </div>
+
+          <RiskCards />
+        </div>
+      </section>
+
+
+      {/* CTA Section */}
+      <section className="py-20 text-white" style={{ backgroundColor: 'rgb(140, 200, 205)' }}>
+        <div className="container mx-auto px-4 text-center">
+          <div className="max-w-3xl mx-auto">
+            <h2 className="font-playfair text-3xl md:text-4xl font-bold mb-6">
+              Ready to Begin Your Safe Journey?
+            </h2>
+            <p className="text-lg mb-8 text-white/90">
+              Join thousands of expecting mothers who trust SafeMama for their maternal health needs.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+              <Button size="lg" variant="accent" asChild>
+                <Link href="/onboarding">Get Started Free</Link>
+              </Button>
+            </div>
+            
+            {/* Trust badges */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-sm text-white/80">
+              <div className="flex items-center space-x-2">
+                <ShieldCheck className="w-4 h-4" />
+                <span>HIPAA Compliant</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Clock className="w-4 h-4" />
+                <span>24/7 Support</span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <Heart className="w-4 h-4" />
+                <span>No Setup Fees</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-primary text-white py-12">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="flex items-center space-x-2 mb-4 md:mb-0">
+              <div className="w-8 h-8 bg-accent rounded-full flex items-center justify-center">
+                <Heart className="w-5 h-5 text-white" />
+              </div>
+              <span className="font-playfair font-semibold text-xl">SafeMama</span>
+            </div>
+            <div className="text-center text-white/80">
+              <p>
+                © 2024 SafeMama. All rights reserved. 
+                <br className="sm:hidden" />
+                <span className="hidden sm:inline ml-2">|</span>
+                <span className="sm:ml-2">Empowering safer pregnancies worldwide.</span>
+              </p>
+              {process.env.NEXT_PUBLIC_SHOW_DEBUG_LINKS === "true" && (
+                <p className="mt-2">
+                  <Link href="/unregister-sw" className="text-white/60 hover:text-white underline text-sm">
+                    Clear Cache (Dev)
+                  </Link>
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

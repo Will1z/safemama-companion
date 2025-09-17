@@ -46,7 +46,7 @@ export default function DemoPage() {
                 <span className="font-playfair font-semibold text-xl text-primary">SafeMama</span>
               </div>
               <Button variant="outline" asChild>
-                <Link href="/">
+                <Link href="/dashboard">
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   Back to Home
                 </Link>
@@ -73,7 +73,7 @@ export default function DemoPage() {
                   </p>
                   <div className="space-y-3">
                     <Button asChild className="w-full">
-                      <Link href="/">Back to Home</Link>
+                      <Link href="/dashboard">Back to Home</Link>
                     </Button>
                     <Button variant="outline" asChild className="w-full">
                       <Link href="/console">View Provider Console</Link>
@@ -101,7 +101,7 @@ export default function DemoPage() {
               <span className="font-playfair font-semibold text-xl text-primary">SafeMama</span>
             </div>
             <Button variant="outline" asChild>
-              <Link href="/">
+              <Link href="/dashboard">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Home
               </Link>

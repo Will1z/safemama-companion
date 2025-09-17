@@ -30,7 +30,7 @@ export default function ConsolePage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <Button variant="ghost" size="icon" asChild className="text-white hover:bg-white/10">
-                <Link href="/">
+                <Link href="/dashboard">
                   <ArrowLeft className="w-5 h-5" />
                 </Link>
               </Button>

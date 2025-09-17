@@ -81,7 +81,7 @@ export default function SignUpPage() {
               <span className="font-playfair font-semibold text-xl text-primary">SafeMama</span>
             </div>
             <Button variant="outline" asChild>
-              <Link href="/">
+              <Link href="/dashboard">
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Back to Home
               </Link>

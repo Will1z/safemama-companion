@@ -35,9 +35,10 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'SafeMama - Your Journey to Safe Motherhood',
-  description: 'Comprehensive maternal health platform connecting expecting mothers with healthcare professionals for safer, healthier pregnancies.',
-  keywords: 'maternal health, pregnancy, healthcare, AI monitoring, emergency response',
+  metadataBase: new URL('https://safemama.app'),
+  title: 'SafeMama — A gentle antenatal voice companion',
+  description: 'Calm, supportive guidance for pregnancy. Voice check-ins, trimester learn content, and simple summaries for your clinician.',
+  keywords: 'pregnancy, antenatal care, voice companion, maternal health, pregnancy support, healthcare, AI assistant',
   authors: [{ name: 'SafeMama Team' }],
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1',
   themeColor: 'rgb(194, 227, 226)',
@@ -46,6 +47,39 @@ export const metadata: Metadata = {
     icon: '/favicon.ico',
     shortcut: '/favicon.ico',
     apple: '/icon-192x192.png',
+  },
+  openGraph: {
+    title: 'SafeMama — A gentle antenatal voice companion',
+    description: 'Calm, supportive guidance for pregnancy. Voice check-ins, trimester learn content, and simple summaries for your clinician.',
+    url: 'https://safemama.app',
+    siteName: 'SafeMama',
+    images: [
+      {
+        url: '/og.png',
+        width: 1200,
+        height: 630,
+        alt: 'SafeMama - A gentle antenatal voice companion',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'SafeMama — A gentle antenatal voice companion',
+    description: 'Calm, supportive guidance for pregnancy. Voice check-ins, trimester learn content, and simple summaries for your clinician.',
+    images: ['/og.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 

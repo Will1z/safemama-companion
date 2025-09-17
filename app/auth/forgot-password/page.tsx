@@ -85,7 +85,7 @@ export default function ForgotPasswordPage() {
                       <Link href="/auth/signin">Back to Sign In</Link>
                     </Button>
                     <Button variant="outline" asChild className="w-full">
-                      <Link href="/">Back to Home</Link>
+                      <Link href="/dashboard">Back to Home</Link>
                     </Button>
                   </div>
                 </div>
