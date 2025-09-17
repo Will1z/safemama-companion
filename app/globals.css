@@ -176,3 +176,47 @@ html, body {
 
 /* Accent contrast helper */
 .text-accent-strong { color: rgb(var(--accent-foreground)); }
+
+/* Marketing theme - Cal AI inspired with SafeMama pastels */
+.marketing-theme {
+  --background: 238 248 247;  /* soft mint #EEF8F7 */
+  --surface:    247 250 252;  /* near-white #F7FAFC */
+  --primary:    28 61 58;     /* deep teal #1C3D3A */
+  --accent:     248 191 211;  /* blossom pink #F8BFD3 */
+  --accent-2:   212 175 55;   /* warm gold #D4AF37 */
+  --ink:        17 24 39;     /* almost-black #111827 */
+}
+
+.marketing-theme {
+  background-color: rgb(var(--background)) !important;
+  color: rgb(var(--ink)) !important;
+}
+
+/* Marketing button variant */
+.btn-pastel {
+  @apply rounded-xl px-6 py-3 font-semibold transition-all duration-200 shadow-sm;
+  background-color: rgb(var(--accent));
+  color: rgb(var(--ink));
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.btn-pastel:hover {
+  @apply -translate-y-0.5 shadow-md;
+  background-color: rgb(var(--accent));
+  filter: brightness(0.95);
+}
+
+.btn-pastel:focus {
+  @apply outline-none ring-2 ring-offset-2;
+  ring-color: rgb(var(--accent));
+}
+
+/* Marketing card styles */
+.marketing-card {
+  @apply rounded-2xl border border-black/5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.2)] transition-all duration-300;
+  background-color: rgb(var(--surface));
+}
+
+.marketing-card:hover {
+  @apply -translate-y-0.5 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)];
+}
