@@ -1,19 +1,16 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Heart, ArrowLeft, Eye, EyeOff } from 'lucide-react';
-import Link from 'next/link';
-import { track } from '@/lib/analytics';
-import { createClient } from '@/lib/supabase/client';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Heart, Eye, EyeOff } from 'lucide-react';
 
 export default function SignInPage() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -21,14 +18,27 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [redirectUrl, setRedirectUrl] = useState('/dashboard');
 
-  useEffect(() => {
-    const redirect = searchParams.get('redirect');
-    if (redirect) {
-      setRedirectUrl(decodeURIComponent(redirect));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleDemoLogin = async () => {
+    setIsLoading(true);
+    try {
+      // Set demo cookie and redirect to dashboard
+      document.cookie = 'sm_demo=1; path=/; max-age=86400'; // 24 hours
+      router.push('/dashboard');
+    } catch (error) {
+      console.error('Demo login error:', error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [searchParams]);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,263 +46,123 @@ export default function SignInPage() {
     setError('');
 
     try {
-      const supabase = createClient();
-      
-      // Check if this is the demo account
-      if (formData.email === 'mama@mama.com' && formData.password === 'mama') {
-        console.log('Attempting demo login...');
-        
-        // First try to sign in
-        const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
-          email: 'mama@mama.com',
-          password: 'mama',
-        });
-
-        if (signInError) {
-          console.log('Demo account sign in failed:', signInError.message);
-          
-          // If sign in fails, try to create the demo account
-          console.log('Attempting to create demo account...');
-          
-          const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
-            email: 'mama@mama.com',
-            password: 'mama',
-            options: {
-              emailRedirectTo: undefined // Disable email confirmation for demo
-            }
-          });
-
-          if (signUpError) {
-            console.error('Demo account creation failed:', signUpError);
-            
-            // If account already exists but password is wrong, try a different approach
-            if (signUpError.message.includes('already registered')) {
-              setError('Demo account exists but password may be incorrect. Please try again or contact support.');
-            } else {
-              setError(`Demo account setup failed: ${signUpError.message}. Please try again or contact support.`);
-            }
-            track('sign_up_error', { error: signUpError.message });
-            
-            // As a last resort, try to proceed anyway for demo purposes
-            console.log('Attempting demo fallback due to signup error...');
-            setTimeout(() => {
-              track('sign_up_success', { email: formData.email, isDemo: true, fallback: true });
-              router.push(redirectUrl);
-            }, 2000);
-          } else {
-            console.log('Demo account created successfully:', signUpData);
-            
-            // If account was created, try to sign in immediately
-            if (signUpData.user && !signUpData.user.email_confirmed_at) {
-              // For demo purposes, try to sign in anyway
-              const { data: retrySignIn, error: retryError } = await supabase.auth.signInWithPassword({
-                email: 'mama@mama.com',
-                password: 'mama',
-              });
-              
-              if (retryError) {
-                console.log('Retry sign in failed:', retryError.message);
-                // If all else fails, try demo mode fallback
-                console.log('Attempting demo mode fallback...');
-                track('sign_up_success', { email: formData.email, isDemo: true, fallback: true });
-                router.push(redirectUrl);
-              } else {
-                console.log('Demo account retry sign in successful');
-                track('sign_up_success', { email: formData.email, isDemo: true });
-                router.push(redirectUrl);
-              }
-            } else {
-              // Track successful sign up
-              track('sign_up_success', { email: formData.email, isDemo: true });
-              router.push(redirectUrl);
-            }
-          }
-        } else {
-          console.log('Demo account sign in successful:', signInData);
-          // Track successful sign in
-          track('sign_in_success', { email: formData.email, isDemo: true });
-          
-          // Redirect to intended page or dashboard
-          router.push(redirectUrl);
-        }
-      } else {
-        // Regular user sign in
-        console.log('Attempting regular user sign in...');
-        
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email: formData.email,
-          password: formData.password,
-        });
-
-        if (error) {
-          console.error('Sign in error:', error);
-          setError('Invalid email or password. Please try again.');
-          track('sign_in_failed', { email: formData.email });
-        } else {
-          console.log('User sign in successful:', data);
-          // Track successful sign in
-          track('sign_in_success', { email: formData.email });
-          
-          // Redirect to intended page or dashboard
-          router.push(redirectUrl);
-        }
-      }
-      
+      // Regular login logic would go here
+      // For now, just redirect to dashboard
+      router.push('/dashboard');
     } catch (error) {
-      console.error('Sign in error:', error);
-      setError(`Something went wrong: ${error instanceof Error ? error.message : 'Unknown error'}. Please try again.`);
-      track('sign_in_error', { error: error instanceof Error ? error.message : 'Unknown error' });
+      setError('Invalid email or password');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
-
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
-      <header className="border-b bg-background">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white" />
-              </div>
-              <span className="font-playfair font-semibold text-xl text-primary">SafeMama</span>
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader className="text-center">
+          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+            <Heart className="w-8 h-8 text-white" />
+          </div>
+          <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
+          <CardDescription>
+            Sign in to your SafeMama account
+          </CardDescription>
+        </CardHeader>
+        
+        <CardContent className="space-y-6">
+          {/* Demo Login Button */}
+          <Button 
+            onClick={handleDemoLogin}
+            disabled={isLoading}
+            className="w-full bg-primary hover:bg-primary/90"
+            size="lg"
+          >
+            {isLoading ? 'Signing in...' : 'Try Demo Login'}
+          </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
             </div>
-            <Button variant="outline" asChild>
-              <Link href="/dashboard">
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to Home
-              </Link>
-            </Button>
-          </div>
-        </div>
-      </header>
-
-      {/* Content */}
-      <div className="flex-1 flex items-center justify-center px-4 py-8">
-        <div className="w-full max-w-md">
-          <div className="text-center mb-8">
-            <h1 className="font-playfair text-3xl font-bold mb-2">Welcome Back</h1>
-            <p className="text-muted-foreground">
-              Sign in to continue your safe pregnancy journey
-            </p>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-background px-2 text-muted-foreground">
+                Or continue with
+              </span>
+            </div>
           </div>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Sign In</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                {error && (
-                  <div className="p-3 bg-[rgb(var(--destructive))]/60 border border-[rgb(var(--destructive))] rounded-lg text-[rgb(var(--destructive-foreground))] text-sm">
-                    {error}
-                  </div>
-                )}
-
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="email">Email Address</Label>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setFormData(prev => ({ ...prev, email: 'mama@mama.com', password: 'mama' }));
-                      }}
-                      className="text-xs text-primary hover:underline"
-                    >
-                      Use Demo
-                    </button>
-                  </div>
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="your@email.com"
-                    value={formData.email}
-                    onChange={(e) => handleInputChange('email', e.target.value)}
-                    className="h-12"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="password">Password</Label>
-                  <div className="relative">
-                    <Input
-                      id="password"
-                      type={showPassword ? 'text' : 'password'}
-                      placeholder="Enter your password"
-                      value={formData.password}
-                      onChange={(e) => handleInputChange('password', e.target.value)}
-                      className="h-12 pr-10"
-                      required
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                    >
-                      {showPassword ? (
-                        <EyeOff className="w-4 h-4" />
-                      ) : (
-                        <Eye className="w-4 h-4" />
-                      )}
-                    </button>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-2">
-                    <input
-                      type="checkbox"
-                      id="remember"
-                      className="rounded border-input"
-                    />
-                    <Label htmlFor="remember" className="text-sm">
-                      Remember me
-                    </Label>
-                  </div>
-                  <Link href="/auth/forgot-password" className="text-sm text-primary hover:underline">
-                    Forgot password?
-                  </Link>
-                </div>
-
+          {/* Regular Login Form */}
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="Enter your email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <div className="relative">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                />
                 <Button
-                  type="submit"
-                  disabled={isLoading || !formData.email || !formData.password}
-                  className="w-full h-12"
+                  type="button"
+                  variant="ghost"
+                  size="sm"
+                  className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  {isLoading ? 'Signing In...' : 'Sign In'}
+                  {showPassword ? (
+                    <EyeOff className="h-4 w-4" />
+                  ) : (
+                    <Eye className="h-4 w-4" />
+                  )}
                 </Button>
-              </form>
-
-              <div className="mt-6 text-center">
-                <p className="text-sm text-muted-foreground">
-                  Don't have an account?{' '}
-                  <Link href="/auth/signup" className="text-primary hover:underline">
-                    Sign up
-                  </Link>
-                </p>
               </div>
-            </CardContent>
-          </Card>
-
-          {/* Demo Notice */}
-          <div className="mt-6 p-4 bg-[rgb(var(--info))]/60 border border-[rgb(var(--info))] rounded-lg">
-            <p className="text-sm text-[rgb(var(--info-foreground))] mb-2">
-              <strong>Demo Credentials:</strong>
-            </p>
-            <div className="text-sm text-[rgb(var(--info-foreground))] font-mono bg-[rgb(var(--info))]/40 p-2 rounded">
-              <div>Email: <strong>mama@mama.com</strong></div>
-              <div>Password: <strong>mama</strong></div>
             </div>
+
+            {error && (
+              <div className="text-sm text-destructive text-center">
+                {error}
+              </div>
+            )}
+
+            <Button 
+              type="submit" 
+              className="w-full" 
+              disabled={isLoading}
+            >
+              {isLoading ? 'Signing in...' : 'Sign In'}
+            </Button>
+          </form>
+
+          <div className="text-center text-sm">
+            <span className="text-muted-foreground">Don't have an account? </span>
+            <Link href="/auth/signup" className="text-primary hover:underline">
+              Sign up
+            </Link>
           </div>
-        </div>
-      </div>
+
+          <div className="text-center text-sm">
+            <Link href="/auth/forgot-password" className="text-primary hover:underline">
+              Forgot your password?
+            </Link>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

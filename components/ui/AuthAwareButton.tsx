@@ -4,8 +4,9 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { checkAuthStatus, getAuthRedirectUrl, getFeatureAuthStatus } from '@/lib/auth-utils';
+import { checkAuthStatus, checkAuthStatusSync, getAuthRedirectUrl, getFeatureAuthStatus } from '@/lib/auth-utils';
 import { LogIn, User } from 'lucide-react';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 interface AuthAwareButtonProps {
   href: string;
@@ -28,12 +29,26 @@ export function AuthAwareButton({
   asChild = false,
   onClick
 }: AuthAwareButtonProps) {
+  const { authed, isDemo } = useAuth();
   const [authStatus, setAuthStatus] = useState({ isAuthenticated: false, isLoading: true });
   const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
+    // If demo user, immediately set as authenticated
+    if (isDemo) {
+      setAuthStatus({ isAuthenticated: true, isLoading: false });
+      return;
+    }
+    
+    // If already authenticated from context, use that
+    if (authed) {
+      setAuthStatus({ isAuthenticated: true, isLoading: false });
+      return;
+    }
+    
+    // Fallback to async check for regular users
     checkAuthStatus().then(setAuthStatus);
-  }, []);
+  }, [authed, isDemo]);
 
   const featureAuth = getFeatureAuthStatus(feature);
   const isProtected = featureAuth.requiresAuth && !authStatus.isAuthenticated;

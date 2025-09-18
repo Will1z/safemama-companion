@@ -145,7 +145,7 @@ export function MoodCheckin({ userId }: MoodCheckinProps) {
           <Button 
             onClick={handleSubmit}
             disabled={!selectedMood || isSubmitting}
-            className="w-full"
+            className="w-full bg-[rgb(120,180,178)] hover:bg-[rgb(100,160,158)] text-white"
           >
             {isSubmitting ? 'Saving...' : 'Save my check-in'}
           </Button>

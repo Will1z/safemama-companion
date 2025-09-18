@@ -4,6 +4,7 @@ import { Inter, Playfair_Display, Roboto_Mono } from 'next/font/google';
 import { TopNotice } from '@/components/ui/TopNotice';
 import OfflineBanner from '@/components/OfflineBanner';
 import ElevenLabsGlobalWidget from '@/components/voice/ElevenLabsGlobalWidget';
+import { AuthProvider } from '@/components/auth/AuthProvider';
 
 // TypeScript declaration for global Window interface
 declare global {
@@ -91,12 +92,14 @@ export default function RootLayout({
   return (
     <html lang="en" className="light" data-theme="light" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} ${robotoMono.variable} font-inter`} style={{backgroundColor: 'rgb(255 255 255)', color: 'rgb(15 23 42)'}}>
-        <TopNotice 
-          message="SafeMama is a medical information platform and does not replace professional medical advice. Always consult healthcare providers for medical emergencies."
-          type="warning"
-        />
-        <OfflineBanner />
-        {children}
+        <AuthProvider>
+          <TopNotice 
+            message="SafeMama is a medical information platform and does not replace professional medical advice. Always consult healthcare providers for medical emergencies."
+            type="warning"
+          />
+          <OfflineBanner />
+          {children}
+        </AuthProvider>
         
         {/* Global ElevenLabs Widget */}
         <ElevenLabsGlobalWidget 

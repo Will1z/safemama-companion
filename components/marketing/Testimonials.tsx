@@ -2,35 +2,35 @@ import { Star, Quote } from 'lucide-react';
 
 const testimonials = [
   {
-    name: "Sarah M.",
+    name: "Chioma A.",
     role: "First-time mother, 28 weeks",
     content: "SafeMama has been a lifesaver during my pregnancy. The voice check-ins make it so easy to track how I'm feeling, and my doctor loves the summaries.",
     rating: 5,
     background: "linear-gradient(135deg, rgb(var(--accent)), rgb(var(--accent-2)))"
   },
   {
-    name: "Maria L.",
+    name: "Fatima Y.",
     role: "Second pregnancy, 32 weeks",
     content: "I love how SafeMama helps me stay organized with my appointments and medications. The trimester-specific content is incredibly helpful.",
     rating: 5,
     background: "linear-gradient(135deg, rgb(var(--accent-2)), rgb(var(--accent)))"
   },
   {
-    name: "Jennifer K.",
+    name: "Teni O.",
     role: "High-risk pregnancy, 24 weeks",
     content: "The peace of mind SafeMama provides is priceless. Knowing I can easily share updates with my doctor gives me confidence in my pregnancy journey.",
     rating: 5,
     background: "linear-gradient(135deg, rgb(var(--primary)), rgb(var(--accent)))"
   },
   {
-    name: "Amanda R.",
+    name: "Aisha B.",
     role: "Third pregnancy, 18 weeks",
     content: "As a busy mom of two, SafeMama helps me stay on top of my health without adding stress. The voice features are perfect for multitasking.",
     rating: 5,
     background: "linear-gradient(135deg, rgb(var(--accent)), rgb(var(--primary)))"
   },
   {
-    name: "Lisa T.",
+    name: "Ngozi E.",
     role: "First pregnancy, 35 weeks",
     content: "The community features and educational content have been amazing. I feel so much more prepared for labor and delivery thanks to SafeMama.",
     rating: 5,
@@ -43,10 +43,10 @@ export default function Testimonials() {
     <section id="testimonials" className="py-20 md:py-28">
       <div className="container mx-auto px-4">
         <div className="max-w-3xl mx-auto text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-[rgb(var(--ink))] mb-6">
-            What mothers are <span className="text-[rgb(var(--accent))]">saying</span>
+          <h2 className="marketing-heading text-3xl md:text-4xl mb-6">
+            What mothers are <span className="marketing-accent">saying</span>
           </h2>
-          <p className="text-lg text-[rgb(var(--ink))]/70">
+          <p className="marketing-text text-lg">
             Real stories from mothers who trust SafeMama for their pregnancy journey
           </p>
         </div>

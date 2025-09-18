@@ -8,6 +8,25 @@ export interface AuthStatus {
 
 export async function checkAuthStatus(): Promise<AuthStatus> {
   try {
+    // First check for demo user in localStorage (synchronous)
+    if (typeof window !== 'undefined') {
+      const isDemoUser = localStorage.getItem('demo_user') === 'true';
+      const isAuthed = localStorage.getItem('authed') === 'true';
+      
+      if (isDemoUser || isAuthed) {
+        return {
+          isAuthenticated: true,
+          isLoading: false,
+          user: { 
+            id: 'demo-user', 
+            email: 'mama@mama.com',
+            isDemo: isDemoUser 
+          }
+        };
+      }
+    }
+    
+    // Fallback to Supabase authentication
     const supabase = createClient();
     const { data: { user }, error } = await supabase.auth.getUser();
     
@@ -24,6 +43,38 @@ export async function checkAuthStatus(): Promise<AuthStatus> {
       user: null
     };
   }
+}
+
+// Synchronous version for immediate demo user checks
+export function checkAuthStatusSync(): AuthStatus {
+  if (typeof window === 'undefined') {
+    return {
+      isAuthenticated: false,
+      isLoading: false,
+      user: null
+    };
+  }
+  
+  const isDemoUser = localStorage.getItem('demo_user') === 'true';
+  const isAuthed = localStorage.getItem('authed') === 'true';
+  
+  if (isDemoUser || isAuthed) {
+    return {
+      isAuthenticated: true,
+      isLoading: false,
+      user: { 
+        id: 'demo-user', 
+        email: 'mama@mama.com',
+        isDemo: isDemoUser 
+      }
+    };
+  }
+  
+  return {
+    isAuthenticated: false,
+    isLoading: false,
+    user: null
+  };
 }
 
 export function getAuthRedirectUrl(originalPath: string): string {

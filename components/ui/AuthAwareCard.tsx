@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { checkAuthStatus, getAuthRedirectUrl, getFeatureAuthStatus } from '@/lib/auth-utils';
+import { checkAuthStatus, checkAuthStatusSync, getAuthRedirectUrl, getFeatureAuthStatus } from '@/lib/auth-utils';
 import { User, Lock } from 'lucide-react';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 interface AuthAwareCardProps {
   href: string;
@@ -24,11 +25,25 @@ export function AuthAwareCard({
   title,
   description
 }: AuthAwareCardProps) {
+  const { authed, isDemo } = useAuth();
   const [authStatus, setAuthStatus] = useState({ isAuthenticated: false, isLoading: true });
 
   useEffect(() => {
+    // If demo user, immediately set as authenticated
+    if (isDemo) {
+      setAuthStatus({ isAuthenticated: true, isLoading: false });
+      return;
+    }
+    
+    // If already authenticated from context, use that
+    if (authed) {
+      setAuthStatus({ isAuthenticated: true, isLoading: false });
+      return;
+    }
+    
+    // Fallback to async check for regular users
     checkAuthStatus().then(setAuthStatus);
-  }, []);
+  }, [authed, isDemo]);
 
   const featureAuth = getFeatureAuthStatus(feature);
   const isProtected = featureAuth.requiresAuth && !authStatus.isAuthenticated;

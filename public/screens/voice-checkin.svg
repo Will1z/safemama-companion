@@ -1,0 +1,49 @@
+<svg width="300" height="660" viewBox="0 0 300 660" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="660" fill="#F7FAFC"/>
+  
+  <!-- Status Bar -->
+  <rect x="0" y="0" width="300" height="44" fill="#1B2735"/>
+  <text x="20" y="28" fill="white" font-family="Arial" font-size="14" font-weight="bold">9:41</text>
+  <text x="250" y="28" fill="white" font-family="Arial" font-size="14">100%</text>
+  
+  <!-- Header -->
+  <rect x="0" y="44" width="300" height="60" fill="#1B2735"/>
+  <circle cx="150" cy="74" r="20" fill="#f78fb3"/>
+  <text x="150" y="80" text-anchor="middle" fill="white" font-family="Arial" font-size="16">🎤</text>
+  <text x="150" y="95" text-anchor="middle" fill="white" font-family="Arial" font-size="12">SafeMama Voice</text>
+  
+  <!-- Chat Area -->
+  <div x="0" y="104" width="300" height="400" fill="#F7FAFC">
+    <!-- User message -->
+    <rect x="20" y="120" width="200" height="50" rx="25" fill="#d6f2ef"/>
+    <text x="30" y="140" fill="#1B2735" font-family="Arial" font-size="13">I've been having some</text>
+    <text x="30" y="155" fill="#1B2735" font-family="Arial" font-size="13">mild headaches lately</text>
+    
+    <!-- SafeMama response -->
+    <rect x="80" y="190" width="200" height="70" rx="25" fill="#f78fb3"/>
+    <text x="90" y="210" fill="#1B2735" font-family="Arial" font-size="13">I understand. Headaches</text>
+    <text x="90" y="225" fill="#1B2735" font-family="Arial" font-size="13">can be common during</text>
+    <text x="90" y="240" fill="#1B2735" font-family="Arial" font-size="13">pregnancy. Are you</text>
+    <text x="90" y="255" fill="#1B2735" font-family="Arial" font-size="13">staying hydrated? 💧</text>
+    
+    <!-- User follow-up -->
+    <rect x="20" y="280" width="180" height="40" rx="20" fill="#d6f2ef"/>
+    <text x="30" y="300" fill="#1B2735" font-family="Arial" font-size="13">Yes, I'm drinking lots of water</text>
+    
+    <!-- SafeMama response -->
+    <rect x="80" y="340" width="200" height="60" rx="25" fill="#f78fb3"/>
+    <text x="90" y="360" fill="#1B2735" font-family="Arial" font-size="13">That's great! If headaches</text>
+    <text x="90" y="375" fill="#1B2735" font-family="Arial" font-size="13">persist, consider rest and</text>
+    <text x="90" y="390" fill="#1B2735" font-family="Arial" font-size="13">gentle neck stretches</text>
+  </div>
+  
+  <!-- Voice Input Area -->
+  <rect x="20" y="520" width="260" height="60" rx="30" fill="#f78fb3" stroke="#1B2735" stroke-width="2"/>
+  <circle cx="150" cy="550" r="20" fill="#1B2735"/>
+  <text x="150" y="556" text-anchor="middle" fill="white" font-family="Arial" font-size="16">🎤</text>
+  <text x="150" y="580" text-anchor="middle" fill="#1B2735" font-family="Arial" font-size="11">Tap to speak</text>
+  
+  <!-- Home Indicator -->
+  <rect x="120" y="640" width="60" height="4" rx="2" fill="#1B2735" opacity="0.3"/>
+</svg>

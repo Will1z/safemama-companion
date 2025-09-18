@@ -683,7 +683,7 @@ export default function ChatPage() {
               className={`h-12 w-12 ${
                 isRecording 
                   ? 'bg-[rgb(var(--destructive))] hover:brightness-95 text-[rgb(var(--destructive-foreground))]' 
-                  : 'bg-accent hover:bg-accent/90 text-accent-foreground'
+                  : 'bg-[rgb(120,180,178)] hover:bg-[rgb(100,160,158)] text-white'
               }`}
             >
               {isRecording ? (

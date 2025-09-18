@@ -17,7 +17,7 @@
   --popover-foreground: 27 39 53;
 
   /* brand pastels */
-  --primary: 194 227 226;           /* soft mint / teal pastel */
+  --primary: 148 197 195;           /* deeper mint / teal */
   --primary-foreground: 20 59 58;   /* deep teal text on mint */
 
   --secondary: 181 229 247;         /* baby blue */
@@ -69,7 +69,7 @@ html, body {
   --card-foreground: 27 39 53 !important;
   --popover: 255 255 255 !important;
   --popover-foreground: 27 39 53 !important;
-  --primary: 194 227 226 !important;
+  --primary: 148 197 195 !important;
   --primary-foreground: 20 59 58 !important;
   --secondary: 181 229 247 !important;
   --secondary-foreground: 18 58 74 !important;
@@ -140,6 +140,36 @@ html, body {
   .risk-tier-3 { @apply border-l-4 border-[rgb(var(--destructive))] bg-[rgb(var(--destructive))]/60 text-[rgb(var(--destructive-foreground))]; }
 
   .input-visible { @apply border-2 border-[rgb(var(--border))] focus:border-[rgb(var(--primary))] focus:ring-2 focus:ring-[rgb(var(--primary))]/30; }
+
+  /* Phone mockup utilities */
+  .mask-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0, black 32px, black calc(100% - 32px), transparent 100%);
+  }
+
+  /* Gradient backgrounds for feature sections */
+  .bg-mint-soft { 
+    background: linear-gradient(180deg, #d6f2ef 0%, #f3fcfb 100%); 
+  }
+  .bg-blush-soft { 
+    background: linear-gradient(180deg, #fde2ec 0%, #fff6fa 100%); 
+  }
+  
+  /* Typography classes for marketing theme */
+  .marketing-heading {
+    font-family: 'Playfair Display', serif;
+    font-weight: bold;
+    color: rgb(var(--primary));
+  }
+  
+  .marketing-text {
+    font-family: 'Inter', sans-serif;
+    color: rgb(var(--text-muted));
+  }
+  
+  .marketing-accent {
+    color: rgb(var(--accent));
+  }
 }
 
 /* PWA styles */
@@ -181,10 +211,11 @@ html, body {
 .marketing-theme {
   --background: 238 248 247;  /* soft mint #EEF8F7 */
   --surface:    247 250 252;  /* near-white #F7FAFC */
-  --primary:    28 61 58;     /* deep teal #1C3D3A */
-  --accent:     248 191 211;  /* blossom pink #F8BFD3 */
+  --primary:    27 39 53;     /* dark navy #1B2735 */
+  --accent:     247 143 179;  /* SafeMama pink #f78fb3 */
   --accent-2:   212 175 55;   /* warm gold #D4AF37 */
-  --ink:        17 24 39;     /* almost-black #111827 */
+  --ink:        27 39 53;     /* dark navy #1B2735 */
+  --text-muted: 71 85 105;    /* medium gray #475569 */
 }
 
 .marketing-theme {
@@ -219,4 +250,44 @@ html, body {
 
 .marketing-card:hover {
   @apply -translate-y-0.5 shadow-[0_20px_40px_-15px_rgba(0,0,0,0.3)];
+}
+
+/* Modal-specific card styles (no hover effects) */
+.marketing-modal-card {
+  @apply rounded-2xl border border-black/5 shadow-[0_10px_30px_-15px_rgba(0,0,0,0.2)];
+  background-color: rgb(var(--surface));
+}
+
+/* Lock background scroll when a modal is open */
+body.modal-open {
+  overflow: hidden;
+  overscroll-behavior: contain;
+  height: 100vh;
+}
+
+/* iOS Safari: stop rubber-band & layout jump while fixed modal is open */
+@supports (-webkit-touch-callout: none) {
+  body.modal-open {
+    position: fixed;
+    width: 100%;
+  }
+}
+
+/* Ensure dialog overlay and content don't inherit transparency */
+[data-radix-dialog-content], .ModalContent {
+  background-color: #ffffff !important;
+}
+
+[data-radix-dialog-overlay], .ModalOverlay {
+  background-color: rgba(15,23,42,0.6) !important; /* slate-900/60 */
+  backdrop-filter: blur(6px);
+}
+
+/* Avoid scale/translate animations that can flicker on mobile; keep it simple */
+@media (prefers-reduced-motion: no-preference) {
+  [data-radix-dialog-content] {
+    transition: opacity 120ms ease, transform 120ms ease;
+    transform: translate(-50%, -50%);
+    will-change: opacity, transform;
+  }
 }

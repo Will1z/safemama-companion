@@ -1,0 +1,47 @@
+<svg width="300" height="660" viewBox="0 0 300 660" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="660" fill="#F7FAFC"/>
+  
+  <!-- Status Bar -->
+  <rect x="0" y="0" width="300" height="44" fill="#1B2735"/>
+  <text x="20" y="28" fill="white" font-family="Arial" font-size="14" font-weight="bold">9:41</text>
+  <text x="250" y="28" fill="white" font-family="Arial" font-size="14">100%</text>
+  
+  <!-- Header -->
+  <rect x="0" y="44" width="300" height="60" fill="#1B2735"/>
+  <text x="150" y="80" text-anchor="middle" fill="white" font-family="Arial" font-size="16" font-weight="bold">Share with Doctor</text>
+  
+  <!-- Success Message -->
+  <rect x="20" y="120" width="260" height="200" rx="20" fill="#d6f2ef" stroke="#D4AF37" stroke-width="2"/>
+  <circle cx="150" cy="180" r="30" fill="#D4AF37"/>
+  <text x="150" y="190" text-anchor="middle" fill="white" font-family="Arial" font-size="24">✓</text>
+  <text x="150" y="240" text-anchor="middle" fill="#1B2735" font-family="Arial" font-size="16" font-weight="bold">Summary Sent!</text>
+  <text x="150" y="260" text-anchor="middle" fill="#475569" font-family="Arial" font-size="12">Dr. Johnson will receive your</text>
+  <text x="150" y="275" text-anchor="middle" fill="#475569" font-family="Arial" font-size="12">update within 24 hours</text>
+  
+  <!-- Delivery Options -->
+  <rect x="20" y="340" width="260" height="120" rx="15" fill="white" stroke="#d6f2ef" stroke-width="1"/>
+  <text x="30" y="360" fill="#1B2735" font-family="Arial" font-size="13" font-weight="bold">Delivery Methods:</text>
+  
+  <rect x="30" y="370" width="20" height="20" rx="10" fill="#f78fb3"/>
+  <text x="35" y="383" text-anchor="middle" fill="white" font-family="Arial" font-size="10">✓</text>
+  <text x="60" y="383" fill="#475569" font-family="Arial" font-size="11">Email to clinic</text>
+  
+  <rect x="30" y="395" width="20" height="20" rx="10" fill="#f78fb3"/>
+  <text x="35" y="408" text-anchor="middle" fill="white" font-family="Arial" font-size="10">✓</text>
+  <text x="60" y="408" fill="#475569" font-family="Arial" font-size="11">WhatsApp message</text>
+  
+  <rect x="30" y="420" width="20" height="20" rx="10" fill="#f78fb3"/>
+  <text x="35" y="433" text-anchor="middle" fill="white" font-family="Arial" font-size="10">✓</text>
+  <text x="60" y="433" fill="#475569" font-family="Arial" font-size="11">Saved to your records</text>
+  
+  <!-- Next Steps -->
+  <rect x="20" y="480" width="260" height="80" rx="15" fill="#fff6fa" stroke="#fde2ec" stroke-width="1"/>
+  <text x="30" y="500" fill="#1B2735" font-family="Arial" font-size="12" font-weight="bold">Next Steps:</text>
+  <text x="30" y="520" fill="#475569" font-family="Arial" font-size="11">• Doctor will review your summary</text>
+  <text x="30" y="535" fill="#475569" font-family="Arial" font-size="11">• You'll receive a response if needed</text>
+  <text x="30" y="550" fill="#475569" font-family="Arial" font-size="11">• Continue regular check-ins</text>
+  
+  <!-- Home Indicator -->
+  <rect x="120" y="640" width="60" height="4" rx="2" fill="#1B2735" opacity="0.3"/>
+</svg>

@@ -9,10 +9,10 @@ export default function CTA() {
         <div className="max-w-4xl mx-auto text-center">
           <div className="space-y-8">
             <div className="space-y-6">
-              <h2 className="text-3xl md:text-4xl font-bold text-[rgb(var(--ink))]">
-                Ready to feel <span className="text-[rgb(var(--accent))]">supported</span>?
+              <h2 className="marketing-heading text-3xl md:text-4xl">
+                Ready to feel <span className="marketing-accent">supported</span>?
               </h2>
-              <p className="text-lg text-[rgb(var(--ink))]/70 max-w-2xl mx-auto">
+              <p className="marketing-text text-lg max-w-2xl mx-auto">
                 Join thousands of mothers who trust SafeMama for their pregnancy journey. 
                 Get started in minutes and experience the difference.
               </p>
@@ -21,7 +21,7 @@ export default function CTA() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="btn-pastel text-lg px-8 py-4">
-                <Link href="/dashboard" className="flex items-center">
+                <Link href="/chat" className="flex items-center">
                   Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>

@@ -13,11 +13,11 @@ export default function Hero() {
           {/* Left content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <h1 className="text-5xl md:text-6xl font-extrabold tracking-tight text-[rgb(var(--ink))]">
+              <h1 className="marketing-heading text-5xl md:text-6xl tracking-tight">
                 A gentle antenatal companion for{' '}
-                <span className="text-[rgb(var(--accent))]">every mother</span>
+                <span className="marketing-accent">every mother</span>
               </h1>
-              <p className="text-xl text-[rgb(var(--ink))]/70 leading-relaxed max-w-2xl">
+              <p className="marketing-text text-xl leading-relaxed max-w-2xl">
                 SafeMama listens, supports, and helps you share updates with your clinician. 
                 Experience pregnancy with confidence and peace of mind.
               </p>
@@ -26,7 +26,7 @@ export default function Hero() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Button asChild size="lg" className="btn-pastel text-lg px-8 py-4">
-                <Link href="/dashboard" className="flex items-center">
+                <Link href="/chat" className="flex items-center">
                   Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>

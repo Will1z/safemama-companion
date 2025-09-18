@@ -41,7 +41,7 @@ export default function MarketingLayout({
               Testimonials
             </Link>
             <Button asChild className="btn-pastel">
-              <Link href="/dashboard">Open the App</Link>
+              <Link href="/chat">Open the App</Link>
             </Button>
           </nav>
 
@@ -91,7 +91,7 @@ export default function MarketingLayout({
                 Testimonials
               </Link>
               <Button asChild className="btn-pastel w-full">
-                <Link href="/dashboard">Open the App</Link>
+                <Link href="/chat">Open the App</Link>
               </Button>
             </div>
           </div>
@@ -124,7 +124,7 @@ export default function MarketingLayout({
             <div className="space-y-4">
               <h3 className="font-semibold">Product</h3>
               <div className="space-y-2">
-                <Link href="/dashboard" className="block text-white/80 hover:text-white text-sm transition-colors">
+                <Link href="/chat" className="block text-white/80 hover:text-white text-sm transition-colors">
                   Dashboard
                 </Link>
                 <Link href="/learn" className="block text-white/80 hover:text-white text-sm transition-colors">
@@ -166,7 +166,7 @@ export default function MarketingLayout({
                   Provider Console
                 </Link>
                 <Button asChild className="btn-pastel mt-4">
-                  <Link href="/dashboard">Open the App</Link>
+                  <Link href="/chat">Open the App</Link>
                 </Button>
               </div>
             </div>

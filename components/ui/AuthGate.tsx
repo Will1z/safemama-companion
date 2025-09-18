@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { X, User, Mail, Smartphone } from 'lucide-react';
+import { useAuth } from '@/components/auth/AuthProvider';
 
 interface AuthGateProps {
   onAuthed: () => void;
@@ -12,17 +13,11 @@ interface AuthGateProps {
 }
 
 export function AuthGate({ onAuthed, reason, children }: AuthGateProps) {
-  const [isAuthed, setIsAuthed] = useState(false);
+  const { authed, isDemo } = useAuth();
   const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    // Check localStorage for auth status
-    const authed = localStorage.getItem('authed') === 'true';
-    setIsAuthed(authed);
-  }, []);
-
   const handleClick = () => {
-    if (isAuthed) {
+    if (authed || isDemo) {
       onAuthed();
     } else {
       setShowModal(true);
@@ -46,7 +41,9 @@ export function AuthGate({ onAuthed, reason, children }: AuthGateProps) {
 
   const handleSignOut = () => {
     localStorage.setItem('authed', 'false');
-    setIsAuthed(false);
+    localStorage.removeItem('demo_user');
+    localStorage.removeItem('user_email');
+    // Note: AuthProvider will handle state updates automatically
   };
 
   return (
@@ -106,34 +103,3 @@ export function AuthGate({ onAuthed, reason, children }: AuthGateProps) {
   );
 }
 
-// Hook for auth state management
-export function useAuth() {
-  const [isAuthed, setIsAuthed] = useState(false);
-
-  useEffect(() => {
-    const authed = localStorage.getItem('authed') === 'true';
-    setIsAuthed(authed);
-  }, []);
-
-  const signIn = (url?: string) => {
-    const returnUrl = url || window.location.pathname + window.location.search;
-    window.location.href = `/auth/signin?next=${encodeURIComponent(returnUrl)}`;
-  };
-
-  const signOut = () => {
-    localStorage.setItem('authed', 'false');
-    setIsAuthed(false);
-  };
-
-  const setAuthed = (authed: boolean) => {
-    localStorage.setItem('authed', authed.toString());
-    setIsAuthed(authed);
-  };
-
-  return {
-    isAuthed,
-    signIn,
-    signOut,
-    setAuthed
-  };
-}
