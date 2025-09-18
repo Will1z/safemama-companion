@@ -21,7 +21,7 @@ export default function CTA() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg" className="btn-pastel text-lg px-8 py-4">
-                <Link href="/chat" className="flex items-center">
+                <Link href="/auth/signin" className="flex items-center">
                   Get Started Free
                   <ArrowRight className="ml-2 w-5 h-5" />
                 </Link>

@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { Inter, Playfair_Display, Roboto_Mono } from 'next/font/google';
 import { TopNotice } from '@/components/ui/TopNotice';
 import OfflineBanner from '@/components/OfflineBanner';
-import ElevenLabsGlobalWidget from '@/components/voice/ElevenLabsGlobalWidget';
+// ElevenLabs widget removed from global layout - only available in authenticated areas
 import { AuthProvider } from '@/components/auth/AuthProvider';
 
 // TypeScript declaration for global Window interface
@@ -101,11 +101,7 @@ export default function RootLayout({
           {children}
         </AuthProvider>
         
-        {/* Global ElevenLabs Widget */}
-        <ElevenLabsGlobalWidget 
-          height={560}
-          width="400px"
-        />
+        {/* ElevenLabs Widget removed from global layout - only available in authenticated app areas */}
         
         {/* Session ID Script */}
         <script

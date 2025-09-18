@@ -62,11 +62,11 @@ export default function NewsletterModal() {
       setIsOpen(true);
     };
 
-    const t = setTimeout(tryOpen, 8000);
+    const t = setTimeout(tryOpen, 3000); // Reduced from 8000ms to 3000ms for faster testing
     const onScroll = () => {
       const h = document.documentElement;
       const scrolled = (window.scrollY + window.innerHeight) / h.scrollHeight;
-      if (!openedRef.current && scrolled >= 0.4) {
+      if (!openedRef.current && scrolled >= 0.3) { // Reduced from 0.4 to 0.3 for easier triggering
         clearTimeout(t);
         tryOpen();
       }

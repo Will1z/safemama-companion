@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { RiskBanner } from '@/components/ui/RiskBanner';
 import BottomNav from '@/components/ui/BottomNav';
+import ElevenLabsGlobalWidget from '@/components/voice/ElevenLabsGlobalWidget';
 import { Send, ArrowLeft, Bot, User, FileText, Download, Share2, CheckCircle, Mic, MicOff, Square, Volume2, VolumeX } from 'lucide-react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
@@ -734,6 +735,12 @@ export default function ChatPage() {
       </div>
 
       <BottomNav />
+      
+      {/* ElevenLabs Widget - Only available in authenticated app areas */}
+      <ElevenLabsGlobalWidget 
+        height={560}
+        width="400px"
+      />
     </div>
   );
 }

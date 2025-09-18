@@ -41,7 +41,7 @@ export default function MarketingLayout({
               Testimonials
             </Link>
             <Button asChild className="btn-pastel">
-              <Link href="/chat">Open the App</Link>
+              <Link href="/auth/signin">Open the App</Link>
             </Button>
           </nav>
 
@@ -91,7 +91,7 @@ export default function MarketingLayout({
                 Testimonials
               </Link>
               <Button asChild className="btn-pastel w-full">
-                <Link href="/chat">Open the App</Link>
+                <Link href="/auth/signin">Open the App</Link>
               </Button>
             </div>
           </div>
@@ -166,7 +166,7 @@ export default function MarketingLayout({
                   Provider Console
                 </Link>
                 <Button asChild className="btn-pastel mt-4">
-                  <Link href="/chat">Open the App</Link>
+                  <Link href="/auth/signin">Open the App</Link>
                 </Button>
               </div>
             </div>

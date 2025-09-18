@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import BottomNav from '@/components/ui/BottomNav';
+import ElevenLabsGlobalWidget from '@/components/voice/ElevenLabsGlobalWidget';
 import { ArrowLeft, Activity, Heart, Thermometer, Weight } from 'lucide-react';
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
@@ -207,6 +208,12 @@ export default function VitalsPage() {
       </div>
 
       <BottomNav />
+      
+      {/* ElevenLabs Widget - Only available in authenticated app areas */}
+      <ElevenLabsGlobalWidget 
+        height={560}
+        width="400px"
+      />
     </div>
   );
 }

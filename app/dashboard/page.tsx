@@ -7,6 +7,7 @@ import Tile from '@/components/ui/Tile';
 import { RiskBanner } from '@/components/ui/RiskBanner';
 import { track } from '@/lib/analytics';
 import BottomNav from '@/components/ui/BottomNav';
+import ElevenLabsGlobalWidget from '@/components/voice/ElevenLabsGlobalWidget';
 import { 
   Heart, 
   MessageCircle, 
@@ -488,6 +489,12 @@ export default function DashboardPage() {
       </div>
 
       <BottomNav />
+      
+      {/* ElevenLabs Widget - Only available in authenticated app areas */}
+      <ElevenLabsGlobalWidget 
+        height={560}
+        width="400px"
+      />
     </div>
   );
 }
