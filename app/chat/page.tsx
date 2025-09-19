@@ -466,13 +466,13 @@ export default function ChatPage() {
                   size="sm"
                   onClick={generateConversationSummary}
                   disabled={isGeneratingSummary}
-                  className="text-white border-white/20 hover:bg-white/10"
+                  className="text-[#1C3D3A] bg-white border-[#1C3D3A]/20 hover:bg-[#EAF4F3]"
                 >
                   <FileText className="w-4 h-4 mr-1" />
                   {isGeneratingSummary ? 'Generating...' : 'Summary'}
                 </Button>
               )}
-              <Button variant="outline" size="sm" asChild className="text-white border-white/20 hover:bg-white/10">
+              <Button variant="outline" size="sm" asChild className="text-[#1C3D3A] bg-white border-[#1C3D3A]/20 hover:bg-[#EAF4F3]">
                 <Link href="/summary">
                   <Download className="w-4 h-4 mr-1" />
                   Health Summary
