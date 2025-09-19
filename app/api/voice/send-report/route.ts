@@ -172,21 +172,22 @@ export async function POST(req: NextRequest) {
     // Send email via Resend
     if (process.env.RESEND_API_KEY) {
       try {
-        // Render the React Email template
-        const html = await render(
-          ClinicianSummaryEmail({
-            patientName: finalPatientName || "Unknown",
-            reportDateISO,
-            trimester: trimester || "Unknown",
-            symptoms: Array.isArray(symptoms) ? symptoms : [],
-            aiSummary: summary || "",
-            recommendedAction: recommendedAction || "Please review at your earliest convenience.",
-            sessionId,
-            appUrl: process.env.NEXT_PUBLIC_APP_URL || "https://safemama.netlify.app",
-            urgency: urgency as "urgent" | "soon" | "routine",
-            logoUrl: `${process.env.NEXT_PUBLIC_APP_URL || "https://safemama.netlify.app"}/logo.png`,
-          })
-        );
+        // Simple HTML template for testing
+        const html = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+            <h2>SafeMama Symptom Report</h2>
+            <p><strong>Patient:</strong> ${finalPatientName || "Unknown"}</p>
+            <p><strong>Date:</strong> ${new Date(reportDateISO).toLocaleString()}</p>
+            <p><strong>Trimester:</strong> ${trimester || "Unknown"}</p>
+            <p><strong>Symptoms:</strong> ${Array.isArray(symptoms) ? symptoms.join(", ") : "Not specified"}</p>
+            <p><strong>Summary:</strong></p>
+            <p>${summary || ""}</p>
+            <p><strong>Urgency:</strong> ${urgency}</p>
+            ${recommendedAction ? `<p><strong>Recommended Action:</strong> ${recommendedAction}</p>` : ''}
+            <hr>
+            <p><small>Session ID: ${sessionId || "N/A"}</small></p>
+          </div>
+        `;
 
         // Generate subject with urgency emoji
         const subjectPrefix = urgency === "urgent" ? "🚨 " : urgency === "soon" ? "⏱ " : "ℹ️ ";
