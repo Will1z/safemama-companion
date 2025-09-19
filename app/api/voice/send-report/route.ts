@@ -130,7 +130,7 @@ export async function POST(req: NextRequest) {
     if (process.env.RESEND_API_KEY) {
       try {
         // Render the React Email template
-        const html = render(
+        const html = await render(
           ClinicianSummaryEmail({
             patientName: finalPatientName || "Unknown",
             reportDateISO,
