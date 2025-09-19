@@ -8,8 +8,7 @@ export async function POST(
 ) {
   try {
     // Check API key if present
-    const apiKey = request.headers.get('x-api-key');
-    if (apiKey && !checkApiKey(apiKey)) {
+    if (!checkApiKey(request)) {
       return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
     }
 
