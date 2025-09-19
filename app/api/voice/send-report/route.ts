@@ -8,17 +8,62 @@ import { getSupabaseAdmin } from '@/lib/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
+function log(event: string, extra: Record<string, any> = {}) {
+  console.info(JSON.stringify({ svc:'send-report', event, ts:new Date().toISOString(), ...extra }));
+}
+
 export async function POST(req: NextRequest) {
   try {
-    console.log('[send-report] API call started');
+    log('precheck', {
+      hasResendKey: !!process.env.RESEND_API_KEY,
+      hasFromEmail: !!process.env.FROM_EMAIL,
+      dryRun: process.env.SAFE_DRY_RUN === 'true',
+      hasApiKeyHeader: !!req.headers.get('x-api-key')
+    });
     
-    if (!checkApiKey(req)) {
-      console.log('[send-report] Unauthorized request - missing or invalid API key');
-      return NextResponse.json({ ok:false, error:"unauthorized" }, { status:401 });
+    // Check API key first
+    const apiKeyResult = checkApiKey(req);
+    if (!apiKeyResult.ok) {
+      const friendlyMessage = apiKeyResult.reason === 'missing_header'
+        ? 'Authorization header (x-api-key) is missing.'
+        : apiKeyResult.reason === 'bad_key'
+        ? 'The provided API key is invalid.'
+        : 'Server is not configured with an API key.';
+      
+      return NextResponse.json({
+        ok: false,
+        code: 'AUTH_FAILED',
+        reason: apiKeyResult.reason,
+        message: friendlyMessage,
+        friendly: 'I could not send the report because the connection was not authorized. Please try again, or ask me to "send to my doctor" once more.',
+      }, { status: apiKeyResult.status });
+    }
+
+    // Validate required environment variables
+    const missingEnv = ['RESEND_API_KEY', 'FROM_EMAIL'].filter(k => !process.env[k]);
+    if (missingEnv.length) {
+      return NextResponse.json({
+        ok: false,
+        code: 'SERVER_MISCONFIG',
+        missingEnv,
+        message: `Missing server configuration: ${missingEnv.join(', ')}`,
+        friendly: 'I could not send the report because email isn\'t configured on the server yet.',
+      }, { status: 500 });
     }
 
     const body = await req.json();
-    console.log('[send-report] Request body received:', {
+    
+    // Validate required payload fields
+    if (!body.recipientEmail || !body.summary) {
+      return NextResponse.json({
+        ok: false,
+        code: 'BAD_REQUEST',
+        message: 'recipientEmail and summary are required',
+        friendly: 'I need your doctor\'s email and a short summary to send this.'
+      }, { status: 400 });
+    }
+    
+    log('payload-validated', {
       recipientEmail: body.recipientEmail ? '***@***.***' : 'MISSING',
       summary: body.summary ? `${body.summary.length} chars` : 'MISSING',
       patientName: body.patientName || 'not provided',
@@ -177,9 +222,10 @@ export async function POST(req: NextRequest) {
           });
           results.push({ type: 'email', success: true, id: 'dry-run-email-id', dryRun: true });
         } else {
+          log('resend-send', { to: emailPayload.to, subject: emailPayload.subject });
           const resend = new Resend(process.env.RESEND_API_KEY);
           const emailResult = await resend.emails.send(emailPayload);
-          console.log('[send-report] Email sent successfully:', emailResult.data?.id);
+          log('resend-send', { success: true, id: emailResult.data?.id });
           results.push({ type: 'email', success: true, id: emailResult.data?.id });
         }
       } catch (error) {
@@ -243,6 +289,7 @@ export async function POST(req: NextRequest) {
       // Insert record into conversation_summaries table (always insert, even in dry run)
       try {
         const supabase = getSupabaseAdmin();
+        log('supabase-insert', { table: 'conversation_summaries', sessionId, userId });
         const { error: insertError } = await supabase
           .from('conversation_summaries')
           .insert({
@@ -256,10 +303,10 @@ export async function POST(req: NextRequest) {
           });
 
         if (insertError) {
-          console.error('[send-report] Error inserting conversation summary:', insertError);
+          log('supabase-insert', { error: insertError.message, table: 'conversation_summaries' });
           // Don't fail the request if summary insertion fails
         } else {
-          console.log('[send-report] Conversation summary inserted successfully');
+          log('supabase-insert', { success: true, table: 'conversation_summaries' });
         }
       } catch (error) {
         console.error('[send-report] Error inserting conversation summary:', error);
@@ -294,7 +341,7 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      console.log('[send-report] API call completed successfully:', { 
+      log('done', { 
         resultsCount: results.length, 
         dryRun: isDryRun,
         hasSuccess 
@@ -314,12 +361,12 @@ export async function POST(req: NextRequest) {
     }
 
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    const truncatedError = errorMessage.length > 200 ? errorMessage.substring(0, 200) + '...' : errorMessage;
-    console.error('[send-report] Unexpected error in API:', error);
-    return NextResponse.json(
-      { ok: false, error: 'Internal server error', details: truncatedError },
-      { status: 500 }
-    );
+    log('error', { error: error instanceof Error ? error.message : 'Unknown error' });
+    return NextResponse.json({
+      ok: false,
+      code: 'INTERNAL_ERROR',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      friendly: 'Something went wrong while sending the report. Please try again.'
+    }, { status: 500 });
   }
 }
