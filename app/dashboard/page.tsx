@@ -175,13 +175,14 @@ export default function DashboardPage() {
   const addMedication = () => {
     if (newMedication.name && newMedication.dosage && newMedication.frequency && newMedication.time) {
       const medication = {
-        id: Date.now(),
+        id: Date.now().toString(),
         name: newMedication.name,
         dosage: newMedication.dosage,
-        frequency: newMedication.frequency,
-        time: newMedication.time,
-        taken: false,
-        prescribedBy: newMedication.prescribedBy || 'Dr. Smith'
+        frequency_type: 'daily' as const,
+        timezone: 'Africa/Lagos',
+        dueNow: false,
+        nextDueAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        lastTakenAgo: null
       };
       
       setData(prev => ({
@@ -201,7 +202,7 @@ export default function DashboardPage() {
     }
   };
 
-  const removeMedication = (medicationId: number) => {
+  const removeMedication = (medicationId: string) => {
     setData(prev => ({
       ...prev,
       medications: prev.medications.filter(med => med.id !== medicationId)
@@ -375,7 +376,7 @@ export default function DashboardPage() {
             <CardContent>
               <div className="text-center py-4">
                 <div className="text-sm text-gray-600">
-                  {data.medications.length} medication{data.medications.length !== 1 ? 's' : ''} • {data.medications.filter(med => med.taken).length} taken today
+                  {data.medications.length} medication{data.medications.length !== 1 ? 's' : ''} • {data.medications.filter(med => med.dueNow).length} due now
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
                   Click to expand and manage medications
