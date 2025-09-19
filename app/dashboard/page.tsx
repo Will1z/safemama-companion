@@ -32,6 +32,7 @@ import { DailyTipCard } from '@/components/companion/DailyTipCard';
 import { MoodCheckin } from '@/components/companion/MoodCheckin';
 import { BreathingExercise } from '@/components/companion/BreathingExercise';
 import { PersonalizedPlan } from '@/components/companion/PersonalizedPlan';
+import { MedicationItem } from '@/components/medications/MedicationItem';
 
 // Mock data - replace with real data from Supabase
 const mockData = {
@@ -53,49 +54,35 @@ const mockData = {
   },
   medications: [
     {
-      id: 1,
+      id: '1',
       name: 'Folic Acid',
       dosage: '400mcg',
-      frequency: 'Once daily',
-      time: '8:00 AM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
+      frequency_type: 'daily' as const,
+      timezone: 'Africa/Lagos',
+      dueNow: false,
+      nextDueAt: '2024-01-16T00:00:00.000Z',
+      lastTakenAgo: '2h ago'
     },
     {
-      id: 2,
+      id: '2',
       name: 'Iron Supplement',
       dosage: '65mg',
-      frequency: 'Once daily',
-      time: '2:00 PM',
-      taken: true,
-      prescribedBy: 'Dr. Smith'
+      frequency_type: 'interval' as const,
+      interval_hours: 8,
+      timezone: 'Africa/Lagos',
+      dueNow: true,
+      nextDueAt: '2024-01-15T18:00:00.000Z',
+      lastTakenAgo: null
     },
     {
-      id: 3,
+      id: '3',
       name: 'Prenatal Vitamins',
       dosage: '1 tablet',
-      frequency: 'Once daily',
-      time: '9:00 AM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
-    },
-    {
-      id: 4,
-      name: 'Calcium',
-      dosage: '1000mg',
-      frequency: 'Twice daily',
-      time: '10:00 AM, 6:00 PM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
-    },
-    {
-      id: 5,
-      name: 'DHA Omega-3',
-      dosage: '200mg',
-      frequency: 'Once daily',
-      time: '7:00 PM',
-      taken: false,
-      prescribedBy: 'Dr. Smith'
+      frequency_type: 'daily' as const,
+      timezone: 'Africa/Lagos',
+      dueNow: true,
+      nextDueAt: '2024-01-15T18:00:00.000Z',
+      lastTakenAgo: null
     }
   ]
 };
@@ -119,14 +106,70 @@ export default function DashboardPage() {
     return "Third trimester - Your baby is preparing for birth";
   };
 
-  const toggleMedicationTaken = (medicationId: number) => {
-    setData(prev => ({
-      ...prev,
-      medications: prev.medications.map(med => 
-        med.id === medicationId ? { ...med, taken: !med.taken } : med
-      )
-    }));
-    track('medication_taken', { medicationId });
+  const markMedicationTaken = async (medicationId: string) => {
+    try {
+      // Call API to mark medication as taken
+      const response = await fetch(`/api/medications/${medicationId}/mark-taken`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': '6ddad0bbd654a6381346d7d33415eb262252a3e4f1979c85df51f41e873474b4'
+        },
+        body: JSON.stringify({
+          userId: 'demo-user',
+          tz: 'Africa/Lagos'
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        // Update local state with new medication status
+        setData(prev => ({
+          ...prev,
+          medications: prev.medications.map(med => 
+            med.id === medicationId ? result.medication : med
+          )
+        }));
+        track('medication_taken', { medicationId });
+      } else {
+        console.error('Failed to mark medication as taken');
+      }
+    } catch (error) {
+      console.error('Error marking medication as taken:', error);
+    }
+  };
+
+  const undoMedicationIntake = async (medicationId: string) => {
+    try {
+      // Call API to undo latest intake
+      const response = await fetch(`/api/medications/${medicationId}/undo`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-Key': '6ddad0bbd654a6381346d7d33415eb262252a3e4f1979c85df51f41e873474b4'
+        },
+        body: JSON.stringify({
+          userId: 'demo-user',
+          tz: 'Africa/Lagos'
+        })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        // Update local state with new medication status
+        setData(prev => ({
+          ...prev,
+          medications: prev.medications.map(med => 
+            med.id === medicationId ? result.medication : med
+          )
+        }));
+        track('medication_undo', { medicationId });
+      } else {
+        console.error('Failed to undo medication intake');
+      }
+    } catch (error) {
+      console.error('Error undoing medication intake:', error);
+    }
   };
 
   const addMedication = () => {
@@ -307,56 +350,25 @@ export default function DashboardPage() {
       )}
 
               {/* Medication List */}
-              {data.medications.map((medication) => (
-                <div 
-                  key={medication.id}
-                  className={`flex items-center justify-between p-3 rounded-lg ${
-                    medication.taken 
-                      ? 'bg-green-50 border border-green-200' 
-                      : 'bg-secondary/30'
-                  }`}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      medication.taken ? 'bg-green-500' : 'bg-primary'
-                    }`}>
-                      {medication.taken ? (
-                        <CheckCircle className="w-5 h-5 text-white" />
-                      ) : (
-                        <Pill className="w-5 h-5 text-white" />
-                      )}
+              <div className="space-y-3">
+                {data.medications.map((medication) => (
+                  <MedicationItem
+                    key={medication.id}
+                    id={medication.id}
+                    name={medication.name}
+                    dosage={medication.dosage}
+                    frequencyType={medication.frequency_type}
+                    intervalHours={medication.interval_hours}
+                    timezone={medication.timezone}
+                    dueNow={medication.dueNow}
+                    nextDueAt={medication.nextDueAt}
+                    lastTakenAgo={medication.lastTakenAgo}
+                    onMarkTaken={markMedicationTaken}
+                    onRemove={removeMedication}
+                    onUndo={undoMedicationIntake}
+                  />
+                ))}
               </div>
-                    <div>
-                      <div className="font-medium">{medication.name}</div>
-                      <div className="text-sm text-gray-600">
-                        {medication.dosage} • {medication.frequency}
-            </div>
-                      <div className="text-xs text-gray-500 flex items-center">
-                        <Clock className="w-3 h-3 mr-1" />
-                        {medication.time} • {medication.prescribedBy}
-              </div>
-            </div>
-          </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant={medication.taken ? "outline" : "secondary"}
-                      size="sm"
-                      onClick={() => toggleMedicationTaken(medication.id)}
-                      className="min-w-[80px] max-w-[120px] whitespace-nowrap text-center"
-                    >
-                      {medication.taken ? 'Taken' : 'Mark Taken'}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => removeMedication(medication.id)}
-                      className="text-red-500 hover:text-red-700"
-                    >
-                      <X className="w-4 h-4" />
-                    </Button>
-                  </div>
-        </div>
-              ))}
           </div>
             </CardContent>
           ) : (
