@@ -125,8 +125,6 @@ export async function POST(req: NextRequest) {
     const results = [];
 
     // Send email via Resend
-    console.log('[send-report] RESEND_API_KEY exists:', !!process.env.RESEND_API_KEY);
-    console.log('[send-report] RESEND_API_KEY length:', process.env.RESEND_API_KEY?.length || 0);
     if (process.env.RESEND_API_KEY) {
       try {
         // Render the React Email template
