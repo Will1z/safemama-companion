@@ -226,7 +226,17 @@ export async function POST(req: NextRequest) {
           log('resend-send', { to: emailPayload.to, subject: emailPayload.subject });
           const resend = new Resend(process.env.RESEND_API_KEY);
           const emailResult = await resend.emails.send(emailPayload);
-          log('resend-send', { success: true, id: emailResult.data?.id });
+          
+          // Enhanced logging to debug delivery issues
+          log('resend-send', { 
+            success: true, 
+            id: emailResult.data?.id,
+            from: emailPayload.from,
+            to: emailPayload.to,
+            subject: emailPayload.subject,
+            resendResponse: emailResult
+          });
+          
           results.push({ type: 'email', success: true, id: emailResult.data?.id });
         }
       } catch (error) {
