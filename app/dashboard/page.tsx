@@ -113,7 +113,7 @@ export default function DashboardPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': '6ddad0bbd654a6381346d7d33415eb262252a3e4f1979c85df51f41e873474b4'
+          'X-API-Key': process.env.NEXT_PUBLIC_API_KEY || ''
         },
         body: JSON.stringify({
           userId: 'demo-user',
@@ -146,7 +146,7 @@ export default function DashboardPage() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'X-API-Key': '6ddad0bbd654a6381346d7d33415eb262252a3e4f1979c85df51f41e873474b4'
+          'X-API-Key': process.env.NEXT_PUBLIC_API_KEY || ''
         },
         body: JSON.stringify({
           userId: 'demo-user',
