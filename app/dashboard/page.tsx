@@ -166,7 +166,7 @@ export default function DashboardPage() {
     track('medication_removed', { medicationId });
   };
 
-  return (
+    return (
     <div className="min-h-screen bg-background pb-20">
       {/* Header */}
       <header className="bg-primary text-white">
@@ -180,7 +180,7 @@ export default function DashboardPage() {
                 Week {currentWeek} • {getWeekMessage(currentWeek)}
               </p>
             </div>
-            <div className="text-center">
+        <div className="text-center">
               <div className="text-3xl font-bold">{currentWeek}</div>
               <div className="text-sm text-white/80">weeks</div>
             </div>
@@ -212,7 +212,7 @@ export default function DashboardPage() {
                 <div>
                   <div className="font-medium">Next ANC Visit</div>
                   <div className="text-sm text-gray-700 font-medium">{data.profile.nextAppointment}</div>
-                </div>
+      </div>
                 <Button variant="outline" size="sm">
                   <MapPin className="w-4 h-4 mr-1" />
                   Directions
@@ -294,17 +294,17 @@ export default function DashboardPage() {
                   <div className="flex space-x-2">
                     <Button onClick={addMedication} size="sm">
                       Add Medication
-                    </Button>
-                    <Button 
+                </Button>
+              <Button 
                       variant="outline" 
-                      size="sm"
+                size="sm" 
                       onClick={() => setShowAddMedication(false)}
                     >
                       Cancel
-                    </Button>
-                  </div>
-                </div>
-              )}
+              </Button>
+          </div>
+        </div>
+      )}
 
               {/* Medication List */}
               {data.medications.map((medication) => (
@@ -325,23 +325,24 @@ export default function DashboardPage() {
                       ) : (
                         <Pill className="w-5 h-5 text-white" />
                       )}
-                    </div>
+              </div>
                     <div>
                       <div className="font-medium">{medication.name}</div>
                       <div className="text-sm text-gray-600">
                         {medication.dosage} • {medication.frequency}
-                      </div>
+            </div>
                       <div className="text-xs text-gray-500 flex items-center">
                         <Clock className="w-3 h-3 mr-1" />
                         {medication.time} • {medication.prescribedBy}
-                      </div>
-                    </div>
-                  </div>
+              </div>
+            </div>
+          </div>
                   <div className="flex items-center space-x-2">
                     <Button
                       variant={medication.taken ? "outline" : "secondary"}
                       size="sm"
                       onClick={() => toggleMedicationTaken(medication.id)}
+                      className="min-w-[80px] max-w-[120px] whitespace-nowrap text-center"
                     >
                       {medication.taken ? 'Taken' : 'Mark Taken'}
                     </Button>
@@ -354,9 +355,9 @@ export default function DashboardPage() {
                       <X className="w-4 h-4" />
                     </Button>
                   </div>
-                </div>
+        </div>
               ))}
-            </div>
+          </div>
             </CardContent>
           ) : (
             <CardContent>
@@ -381,7 +382,7 @@ export default function DashboardPage() {
                 <Link href="/vitals" className="flex items-center">
                   <Plus className="w-4 h-4 mr-1" />
                   Add New
-                </Link>
+            </Link>
               </Button>
             </CardTitle>
           </CardHeader>
@@ -439,7 +440,7 @@ export default function DashboardPage() {
             
             <MoodCheckin userId="mock-user-id" />
           </div>
-          
+
           <BreathingExercise />
           
           <PersonalizedPlan 
@@ -453,8 +454,8 @@ export default function DashboardPage() {
               previous_complications: 'None'
             }}
           />
-        </div>
-
+            </div>
+            
         {/* Quick Actions */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <Tile
