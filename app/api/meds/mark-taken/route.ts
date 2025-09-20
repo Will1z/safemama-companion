@@ -54,12 +54,14 @@ export async function POST(req: NextRequest) {
       }
     } else {
       // Mark medication as taken
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('medication_intakes')
         .insert({
           medication_id: medicationId,
           taken_at: new Date().toISOString()
-        });
+        })
+        .select('id')
+        .single();
 
       if (error) {
         console.error('Error marking medication as taken:', error);
@@ -68,6 +70,13 @@ export async function POST(req: NextRequest) {
           error: 'Failed to mark medication as taken'
         }, { status: 500 });
       }
+
+      return NextResponse.json({
+        ok: true,
+        medicationId,
+        undo,
+        intakeId: data.id
+      });
     }
 
     return NextResponse.json({

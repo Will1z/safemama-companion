@@ -3,8 +3,8 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Clock, CheckCircle } from 'lucide-react';
-import { formatNextDueTime } from '@/lib/medication-schedule';
-import { useMarkMedication } from '@/hooks/useMarkMedication';
+import { parseSchedule, nextDue, isDueNow, recentlyTaken, formatNextDue, formatTimeAgo } from '@/lib/meds/schedule';
+import { useMedicationIntake } from '@/hooks/useMedicationIntake';
 
 interface MedicationItemProps {
   id: string;
@@ -31,32 +31,24 @@ export function MedicationItem({
   lastTakenAgo,
   onRemove
 }: MedicationItemProps) {
-  const { markTaken, undoTaken, isTaken, getLastTakenTime, formatTimeAgo, loading, loadingMedicationId } = useMarkMedication();
-  const [taken, setTaken] = useState(false);
-  const [takenTime, setTakenTime] = useState<string | null>(null);
-
-  // Initialize taken state from localStorage
-  useEffect(() => {
-    const takenState = isTaken(id);
-    const lastTaken = getLastTakenTime(id);
-    setTaken(takenState);
-    setTakenTime(lastTaken);
-  }, [id, isTaken, getLastTakenTime]);
+  // Parse the medication schedule
+  const sched = parseSchedule({ frequencyType, intervalHours, time: '09:00' });
+  
+  // Use the new intake hook
+  const { lastIntakeAt, loading, markTaken, undoLast } = useMedicationIntake(id, sched);
+  
+  // Calculate current state
+  const now = new Date();
+  const isDue = isDueNow(now, lastIntakeAt, sched);
+  const isRecent = recentlyTaken(now, lastIntakeAt);
+  const nextDueTime = nextDue(now, lastIntakeAt, sched);
 
   const handleMarkTaken = async () => {
-    const success = await markTaken(id);
-    if (success) {
-      setTaken(true);
-      setTakenTime(new Date().toISOString());
-    }
+    await markTaken();
   };
 
   const handleUndo = async () => {
-    const success = await undoTaken(id);
-    if (success) {
-      setTaken(false);
-      setTakenTime(null);
-    }
+    await undoLast();
   };
 
   const getFrequencyText = () => {
@@ -75,8 +67,7 @@ export function MedicationItem({
   };
 
   const getNextDueText = () => {
-    if (dueNow) return 'Due now';
-    return `Next: ${formatNextDueTime(nextDueAt, timezone)}`;
+    return `Next: ${formatNextDue(nextDueTime, now)}`;
   };
 
   return (
@@ -108,42 +99,46 @@ export function MedicationItem({
         </div>
       </div>
 
-      <div className="mt-3 text-sm text-muted-foreground">
-        <div className="flex items-center space-x-4 text-xs text-gray-500">
-          <div className="flex items-center space-x-1">
-            <Clock className="w-3 h-3" />
-            <span>{getNextDueText()}</span>
-          </div>
-          {lastTakenAgo && (
+        <div className="mt-3 text-sm text-muted-foreground">
+          <div className="flex items-center space-x-4 text-xs text-gray-500">
             <div className="flex items-center space-x-1">
-              <CheckCircle className="w-3 h-3 text-green-500" />
-              <span className="text-green-600">Taken {lastTakenAgo}</span>
+              <Clock className="w-3 h-3" />
+              <span>{getNextDueText()}</span>
             </div>
-          )}
+            {isDue && !isRecent && (
+              <div className="flex items-center space-x-1">
+                <span className="text-orange-600 font-medium">Due now</span>
+              </div>
+            )}
+            {isRecent && lastIntakeAt && (
+              <div className="flex items-center space-x-1">
+                <CheckCircle className="w-3 h-3 text-green-500" />
+                <span className="text-green-600">Taken {formatTimeAgo(lastIntakeAt, now)}</span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Bottom row: due label + CTA */}
-      <div className="mt-4 flex items-center justify-between gap-3">
-        <div className="text-xs text-muted-foreground">{getNextDueText()}</div>
-        {taken ? (
+      {/* Bottom row: CTA */}
+      <div className="mt-4 flex items-center justify-end gap-3">
+        {isRecent ? (
           <div className="flex flex-col items-end space-y-1">
             <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-              Taken {takenTime ? formatTimeAgo(takenTime) : 'recently'}
+              Taken {lastIntakeAt ? formatTimeAgo(lastIntakeAt, now) : 'recently'}
             </div>
             <button
               onClick={handleUndo}
-              disabled={loadingMedicationId === id}
+              disabled={loading}
               className="text-xs text-blue-600 hover:text-blue-800 underline disabled:opacity-50"
             >
-              {loadingMedicationId === id ? 'Saving…' : 'Undo'}
+              {loading ? 'Saving…' : 'Undo'}
             </button>
           </div>
-        ) : (
+        ) : isDue ? (
           <button
             type="button"
             onClick={handleMarkTaken}
-            disabled={loadingMedicationId === id}
+            disabled={loading}
             className="
               inline-flex items-center justify-center
               h-12 min-h-12 px-5
@@ -154,8 +149,12 @@ export function MedicationItem({
               shrink-0
             "
           >
-            {loadingMedicationId === id ? 'Saving…' : 'Mark Taken'}
+            {loading ? 'Saving…' : 'Mark Taken'}
           </button>
+        ) : (
+          <div className="text-xs text-gray-500">
+            Not due yet
+          </div>
         )}
       </div>
     </div>
