@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, Clock, CheckCircle } from 'lucide-react';
 import { formatNextDueTime } from '@/lib/medication-schedule';
+import { useMarkMedication } from '@/hooks/useMarkMedication';
 
 interface MedicationItemProps {
   id: string;
@@ -15,9 +16,7 @@ interface MedicationItemProps {
   dueNow: boolean;
   nextDueAt: string;
   lastTakenAgo: string | null;
-  onMarkTaken: (medicationId: string) => Promise<void>;
   onRemove: (medicationId: string) => void;
-  onUndo?: (medicationId: string) => Promise<void>;
 }
 
 export function MedicationItem({
@@ -30,32 +29,33 @@ export function MedicationItem({
   dueNow,
   nextDueAt,
   lastTakenAgo,
-  onMarkTaken,
-  onRemove,
-  onUndo
+  onRemove
 }: MedicationItemProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const { markTaken, undoTaken, isTaken, getLastTakenTime, formatTimeAgo, loading, loadingMedicationId } = useMarkMedication();
+  const [taken, setTaken] = useState(false);
+  const [takenTime, setTakenTime] = useState<string | null>(null);
+
+  // Initialize taken state from localStorage
+  useEffect(() => {
+    const takenState = isTaken(id);
+    const lastTaken = getLastTakenTime(id);
+    setTaken(takenState);
+    setTakenTime(lastTaken);
+  }, [id, isTaken, getLastTakenTime]);
 
   const handleMarkTaken = async () => {
-    setIsLoading(true);
-    try {
-      await onMarkTaken(id);
-    } catch (error) {
-      console.error('Error marking medication as taken:', error);
-    } finally {
-      setIsLoading(false);
+    const success = await markTaken(id);
+    if (success) {
+      setTaken(true);
+      setTakenTime(new Date().toISOString());
     }
   };
 
   const handleUndo = async () => {
-    if (!onUndo) return;
-    setIsLoading(true);
-    try {
-      await onUndo(id);
-    } catch (error) {
-      console.error('Error undoing medication intake:', error);
-    } finally {
-      setIsLoading(false);
+    const success = await undoTaken(id);
+    if (success) {
+      setTaken(false);
+      setTakenTime(null);
     }
   };
 
@@ -126,10 +126,24 @@ export function MedicationItem({
       {/* Bottom row: due label + CTA */}
       <div className="mt-4 flex items-center justify-between gap-3">
         <div className="text-xs text-muted-foreground">{getNextDueText()}</div>
-        {dueNow ? (
+        {taken ? (
+          <div className="flex flex-col items-end space-y-1">
+            <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+              Taken {takenTime ? formatTimeAgo(takenTime) : 'recently'}
+            </div>
+            <button
+              onClick={handleUndo}
+              disabled={loadingMedicationId === id}
+              className="text-xs text-blue-600 hover:text-blue-800 underline disabled:opacity-50"
+            >
+              {loadingMedicationId === id ? 'Saving…' : 'Undo'}
+            </button>
+          </div>
+        ) : (
           <button
+            type="button"
             onClick={handleMarkTaken}
-            disabled={isLoading}
+            disabled={loadingMedicationId === id}
             className="
               inline-flex items-center justify-center
               h-12 min-h-12 px-5
@@ -140,23 +154,8 @@ export function MedicationItem({
               shrink-0
             "
           >
-            {isLoading ? '...' : 'Mark Taken'}
+            {loadingMedicationId === id ? 'Saving…' : 'Mark Taken'}
           </button>
-        ) : (
-          <div className="flex flex-col items-end space-y-1">
-            <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
-              Taken {lastTakenAgo}
-            </div>
-            {onUndo && frequencyType === 'daily' && (
-              <button
-                onClick={handleUndo}
-                disabled={isLoading}
-                className="text-xs text-blue-600 hover:text-blue-800 underline"
-              >
-                {isLoading ? '...' : 'Undo'}
-              </button>
-            )}
-          </div>
         )}
       </div>
     </div>

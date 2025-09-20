@@ -106,71 +106,6 @@ export default function DashboardPage() {
     return "Third trimester - Your baby is preparing for birth";
   };
 
-  const markMedicationTaken = async (medicationId: string) => {
-    try {
-      // Call API to mark medication as taken
-      const response = await fetch(`/api/medications/${medicationId}/mark-taken`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': process.env.NEXT_PUBLIC_API_KEY || ''
-        },
-        body: JSON.stringify({
-          userId: 'demo-user',
-          tz: 'Africa/Lagos'
-        })
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        // Update local state with new medication status
-        setData(prev => ({
-          ...prev,
-          medications: prev.medications.map(med => 
-            med.id === medicationId ? result.medication : med
-          )
-        }));
-        track('medication_taken', { medicationId });
-      } else {
-        console.error('Failed to mark medication as taken');
-      }
-    } catch (error) {
-      console.error('Error marking medication as taken:', error);
-    }
-  };
-
-  const undoMedicationIntake = async (medicationId: string) => {
-    try {
-      // Call API to undo latest intake
-      const response = await fetch(`/api/medications/${medicationId}/undo`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-Key': process.env.NEXT_PUBLIC_API_KEY || ''
-        },
-        body: JSON.stringify({
-          userId: 'demo-user',
-          tz: 'Africa/Lagos'
-        })
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        // Update local state with new medication status
-        setData(prev => ({
-          ...prev,
-          medications: prev.medications.map(med => 
-            med.id === medicationId ? result.medication : med
-          )
-        }));
-        track('medication_undo', { medicationId });
-      } else {
-        console.error('Failed to undo medication intake');
-      }
-    } catch (error) {
-      console.error('Error undoing medication intake:', error);
-    }
-  };
 
   const addMedication = () => {
     if (newMedication.name && newMedication.dosage && newMedication.frequency && newMedication.time) {
@@ -269,13 +204,15 @@ export default function DashboardPage() {
         {/* Medications - New Priority */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between gap-3">
+            <CardTitle className="flex flex-wrap items-center justify-between gap-3">
               <button
                 onClick={() => setIsMedicationsExpanded(!isMedicationsExpanded)}
                 className="flex items-center space-x-2 hover:opacity-80 transition-opacity flex-1 min-w-0"
               >
                 <Pill className="w-5 h-5 text-primary shrink-0" />
-                <span className="truncate">My Medications</span>
+                <span className="text-3xl font-playfair font-bold leading-tight whitespace-normal break-words">
+                  My Medications
+                </span>
                 {isMedicationsExpanded ? (
                   <ChevronUp className="w-4 h-4 text-gray-500 shrink-0" />
                 ) : (
@@ -287,7 +224,7 @@ export default function DashboardPage() {
                   variant="outline" 
                   size="sm"
                   onClick={() => setShowAddMedication(!showAddMedication)}
-                  className="whitespace-nowrap"
+                  className="whitespace-nowrap shrink-0 rounded-full px-4 py-2 border"
                 >
                   <Plus className="w-4 h-4 mr-1" />
                   Add Medication
@@ -367,9 +304,7 @@ export default function DashboardPage() {
                     dueNow={medication.dueNow}
                     nextDueAt={medication.nextDueAt}
                     lastTakenAgo={medication.lastTakenAgo}
-                    onMarkTaken={markMedicationTaken}
                     onRemove={removeMedication}
-                    onUndo={undoMedicationIntake}
                   />
                 ))}
               </div>
