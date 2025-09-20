@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import DraggableFabMic from "@/components/ui/DraggableFabMic";
 
 type Props = {
   agentId?: string;
@@ -61,24 +62,6 @@ export default function ElevenLabsGlobalWidget({
     setIsOpen(false);
   };
 
-  // Floating button style
-  const floatingButtonStyle = {
-    position: "fixed" as const,
-    bottom: "20px",
-    right: "20px",
-    width: "60px",
-    height: "60px",
-    borderRadius: "50%",
-    background: "rgb(194, 227, 226)",
-    border: "none",
-    cursor: "pointer",
-    zIndex: 1000,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.3)",
-    transition: "all 0.3s ease",
-  };
 
   // Widget modal style
   const widgetModalStyle = {
@@ -131,25 +114,8 @@ export default function ElevenLabsGlobalWidget({
 
   return (
     <>
-      {/* Floating Button */}
-      <button
-        onClick={toggleOpen}
-        style={floatingButtonStyle}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = "rgb(181, 229, 247)";
-          e.currentTarget.style.transform = "scale(1.1)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = "rgb(194, 227, 226)";
-          e.currentTarget.style.transform = "scale(1)";
-        }}
-        title="Voice Assistant"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
-          <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
-          <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
-        </svg>
-      </button>
+      {/* Draggable Floating Button */}
+      <DraggableFabMic onClick={toggleOpen} />
 
       {/* Backdrop */}
       <div style={backdropStyle} onClick={closeWidget} />
