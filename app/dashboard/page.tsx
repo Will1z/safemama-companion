@@ -211,7 +211,7 @@ export default function DashboardPage() {
   };
 
     return (
-    <div className="min-h-screen bg-background pb-20">
+    <div className="min-h-screen bg-background pb-20 scroll-safe">
       {/* Header */}
       <header className="bg-primary text-white">
         <div className="container mx-auto px-4 py-6">
@@ -269,27 +269,30 @@ export default function DashboardPage() {
         {/* Medications - New Priority */}
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center justify-between">
+            <CardTitle className="flex items-center justify-between gap-3">
               <button
                 onClick={() => setIsMedicationsExpanded(!isMedicationsExpanded)}
-                className="flex items-center space-x-2 hover:opacity-80 transition-opacity"
+                className="flex items-center space-x-2 hover:opacity-80 transition-opacity flex-1 min-w-0"
               >
-                <Pill className="w-5 h-5 text-primary" />
-                <span>My Medications</span>
+                <Pill className="w-5 h-5 text-primary shrink-0" />
+                <span className="truncate">My Medications</span>
                 {isMedicationsExpanded ? (
-                  <ChevronUp className="w-4 h-4 text-gray-500" />
+                  <ChevronUp className="w-4 h-4 text-gray-500 shrink-0" />
                 ) : (
-                  <ChevronDown className="w-4 h-4 text-gray-500" />
+                  <ChevronDown className="w-4 h-4 text-gray-500 shrink-0" />
                 )}
               </button>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => setShowAddMedication(!showAddMedication)}
-              >
-                <Plus className="w-4 h-4 mr-1" />
-                Add Medication
-              </Button>
+              <div className="shrink-0">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setShowAddMedication(!showAddMedication)}
+                  className="whitespace-nowrap"
+                >
+                  <Plus className="w-4 h-4 mr-1" />
+                  Add Medication
+                </Button>
+              </div>
             </CardTitle>
           </CardHeader>
           {isMedicationsExpanded ? (

@@ -16,7 +16,7 @@ export default function HelpFab() {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-5 right-5 z-50 rounded-full bg-[rgb(var(--destructive))] text-[rgb(var(--destructive-foreground))] px-5 py-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]"
+        className="fixed fab-safe right-5 z-50 rounded-full bg-[rgb(var(--destructive))] text-[rgb(var(--destructive-foreground))] px-5 py-3 shadow-lg focus:outline-none focus:ring-2 focus:ring-[rgb(var(--accent))]"
         aria-haspopup="dialog"
         aria-label="I need help"
       >

@@ -80,17 +80,35 @@ export function MedicationItem({
   };
 
   return (
-    <div className="flex items-center justify-between p-4 bg-white rounded-lg border border-gray-200 shadow-sm">
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center space-x-2 mb-1">
-          <h3 className="font-semibold text-gray-900 truncate">{name}</h3>
-          <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+    <div className="rounded-2xl border p-4 bg-white shadow-sm">
+      {/* Top row: Title + chips + actions */}
+      <div className="flex items-center justify-between gap-3">
+        {/* Title block can truncate on small screens */}
+        <div className="flex-1 min-w-0">
+          <h3 className="truncate text-2xl font-bold leading-tight">
+            {name}
+          </h3>
+          <p className="text-sm text-muted-foreground truncate">
+            {dosage}
+          </p>
+        </div>
+
+        {/* Chips / delete kept from shrinking the button */}
+        <div className="shrink-0 flex items-center gap-2">
+          <span className="rounded-full border px-2 py-1 text-xs whitespace-nowrap">
             {getFrequencyText()}
           </span>
+          <button
+            aria-label="Delete medication"
+            onClick={() => onRemove(id)}
+            className="rounded-full border px-2 py-1 text-xs hover:bg-red-50"
+          >
+            ×
+          </button>
         </div>
-        <div className="text-sm text-gray-600 mb-2">
-          {dosage}
-        </div>
+      </div>
+
+      <div className="mt-3 text-sm text-muted-foreground">
         <div className="flex items-center space-x-4 text-xs text-gray-500">
           <div className="flex items-center space-x-1">
             <Clock className="w-3 h-3" />
@@ -104,16 +122,26 @@ export function MedicationItem({
           )}
         </div>
       </div>
-      
-      <div className="flex items-center space-x-2 ml-4">
+
+      {/* Bottom row: due label + CTA */}
+      <div className="mt-4 flex items-center justify-between gap-3">
+        <div className="text-xs text-muted-foreground">{getNextDueText()}</div>
         {dueNow ? (
-          <Button
+          <button
             onClick={handleMarkTaken}
             disabled={isLoading}
-            className="min-w-[108px] h-10 px-4 whitespace-nowrap text-center flex items-center justify-center rounded-full bg-green-600 hover:bg-green-700 text-white"
+            className="
+              inline-flex items-center justify-center
+              h-12 min-h-12 px-5
+              rounded-xl font-semibold text-base
+              whitespace-nowrap
+              bg-emerald-600 text-white hover:brightness-95
+              disabled:opacity-50 disabled:cursor-not-allowed
+              shrink-0
+            "
           >
             {isLoading ? '...' : 'Mark Taken'}
-          </Button>
+          </button>
         ) : (
           <div className="flex flex-col items-end space-y-1">
             <div className="text-xs text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
@@ -130,15 +158,6 @@ export function MedicationItem({
             )}
           </div>
         )}
-        
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onRemove(id)}
-          className="text-red-500 hover:text-red-700 p-2"
-        >
-          <X className="w-4 h-4" />
-        </Button>
       </div>
     </div>
   );

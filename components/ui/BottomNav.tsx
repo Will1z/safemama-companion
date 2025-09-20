@@ -45,7 +45,7 @@ const items = [
 export default function BottomNav() {
   const path = usePathname();
   return (
-    <nav className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t shadow-md">
+    <nav className="fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 border-t border-slate-200 shadow-md pb-[max(8px,env(safe-area-inset-bottom))]">
       <ul className="mx-auto max-w-4xl grid grid-cols-4">
         {items.map((it) => {
           const active = path.startsWith(it.href);
