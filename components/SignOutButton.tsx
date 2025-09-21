@@ -8,7 +8,7 @@ import { LogOut } from 'lucide-react';
 
 interface SignOutButtonProps {
   className?: string;
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  variant?: 'primary' | 'secondary' | 'danger' | 'outline' | 'ghost' | 'accent';
   size?: 'default' | 'sm' | 'lg' | 'icon';
 }
 
