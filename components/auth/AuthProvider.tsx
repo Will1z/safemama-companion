@@ -4,7 +4,7 @@ import * as React from "react";
 type AuthState = { 
   authed: boolean; 
   isDemo: boolean; 
-  user: { email: string; role: "demo" | "user" } | null 
+  user: { email: string; name?: string; role: "demo" | "user" } | null 
 };
 
 const AuthCtx = React.createContext<AuthState>({ 

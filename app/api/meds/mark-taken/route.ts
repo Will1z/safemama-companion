@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getSupabaseAdmin } from '@/lib/supabase/server';
 import { checkApiKey } from '@/lib/auth';
 
+export const runtime = 'nodejs';
+
 export async function POST(req: NextRequest) {
   try {
     // Check API key for authentication

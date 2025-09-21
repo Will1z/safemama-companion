@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getMedicationsWithStatus } from '@/lib/medications';
 import { checkApiKey } from '@/lib/auth';
 
+export const runtime = 'nodejs';
+
 export async function GET(request: NextRequest) {
   try {
     // Check API key if present
