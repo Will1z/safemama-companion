@@ -37,7 +37,7 @@ import { MedicationItem } from '@/components/medications/MedicationItem';
 // Mock data - replace with real data from Supabase
 const mockData = {
   profile: {
-    displayName: 'Sarah Johnson',
+    displayName: 'Chioma Ajibade',
     weeks: 24,
     nextAppointment: '2024-01-15'
   },

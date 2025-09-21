@@ -9,7 +9,7 @@ export function getServerAuth() {
   if (isDemoFromCookies()) {
     return { 
       authed: true, 
-      user: { email: "mama@mama.com", role: "demo" as const }, 
+      user: { email: "chioma.ajibade@example.com", name: "Chioma Ajibade", role: "demo" as const }, 
       source: "demo" as const 
     };
   }

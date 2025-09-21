@@ -61,7 +61,8 @@ export async function checkAuthStatus(): Promise<AuthStatus> {
           isLoading: false,
           user: { 
             id: 'demo-user', 
-            email: 'mama@mama.com',
+            email: 'chioma.ajibade@example.com',
+            name: 'Chioma Ajibade',
             isDemo: isDemoUser 
           }
         };
@@ -106,7 +107,8 @@ export function checkAuthStatusSync(): AuthStatus {
       isLoading: false,
       user: { 
         id: 'demo-user', 
-        email: 'mama@mama.com',
+        email: 'chioma.ajibade@example.com',
+        name: 'Chioma Ajibade',
         isDemo: isDemoUser 
       }
     };

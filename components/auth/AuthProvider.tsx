@@ -29,7 +29,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setState({ 
           authed: true, 
           isDemo: true, 
-          user: { email: "mama@mama.com", role: "demo" } 
+          user: { email: "chioma.ajibade@example.com", name: "Chioma Ajibade", role: "demo" } 
         });
         return;
       }
@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           setState({ 
             authed: true, 
             isDemo: true, 
-            user: { email: "mama@mama.com", role: "demo" } 
+            user: { email: "chioma.ajibade@example.com", name: "Chioma Ajibade", role: "demo" } 
           });
         });
         return;

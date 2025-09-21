@@ -19,7 +19,7 @@ async function getUser() {
   // For now, return a demo user. In production, get from auth context
   return { 
     id: "demo-user-" + Date.now(), 
-    name: "Sarah Johnson", 
+    name: "Chioma Ajibade", 
     weeks: 24, 
     phone: "+1-555-0123" 
   };
