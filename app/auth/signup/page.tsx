@@ -57,10 +57,45 @@ export default function SignUpPage() {
     }
 
     try {
-      // Regular signup logic would go here
-      // For now, just redirect to dashboard
-      router.push('/dashboard');
+      const { createClient } = await import('@/lib/supabase/client');
+      const supabase = createClient();
+      
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        options: {
+          data: {
+            display_name: `${formData.firstName} ${formData.lastName}`,
+            first_name: formData.firstName,
+            last_name: formData.lastName
+          }
+        }
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      if (data.user && !data.session) {
+        // Email confirmation required
+        setError('');
+        // Show success message instead of error
+        setError(''); // Clear any existing error
+        // You could show a success state here instead
+        alert('Please check your email to verify your account before signing in.');
+        router.push('/auth/signin');
+        return;
+      }
+
+      if (data.session) {
+        // User is immediately signed in (email confirmation disabled)
+        router.push('/dashboard');
+        return;
+      }
+
     } catch (error) {
+      console.error('Signup error:', error);
       setError('Failed to create account. Please try again.');
     } finally {
       setIsLoading(false);

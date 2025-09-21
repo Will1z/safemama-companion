@@ -1,9 +1,44 @@
 import { createClient } from '@/lib/supabase/client';
+import { createServerClient } from '@/lib/supabase/server';
 
 export interface AuthStatus {
   isAuthenticated: boolean;
   isLoading: boolean;
   user: any | null;
+}
+
+// Server-side demo check
+export function isDemo(req: Request): boolean {
+  const cookieHeader = req.headers.get('cookie');
+  return cookieHeader?.includes('sm_demo=1') || false;
+}
+
+// Server-side user profile ensure function
+export async function ensureProfile(userId: string, displayName?: string) {
+  const supabase = createServerClient();
+  
+  // Check if profile exists
+  const { data: existingProfile } = await supabase
+    .from('user_profiles')
+    .select('id')
+    .eq('user_id', userId)
+    .single();
+
+  if (!existingProfile) {
+    // Create profile
+    const { error } = await supabase
+      .from('user_profiles')
+      .insert({
+        user_id: userId,
+        display_name: displayName || 'User',
+        role: 'patient'
+      });
+
+    if (error) {
+      console.error('Error creating user profile:', error);
+      throw new Error('Failed to create user profile');
+    }
+  }
 }
 
 export async function checkAuthStatus(): Promise<AuthStatus> {

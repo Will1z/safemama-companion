@@ -36,7 +36,10 @@ export function getSupabaseAdmin(): SupabaseClient {
   return _adminClient;
 }
 
-export const createClient = () => {
+export const createServerClient = () => {
   const cookieStore = cookies();
   return createServerComponentClient<Database>({ cookies: () => cookieStore });
 };
+
+// Legacy export for backward compatibility
+export const createClient = createServerClient;

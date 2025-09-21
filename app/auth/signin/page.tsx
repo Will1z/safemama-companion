@@ -46,10 +46,27 @@ export default function SignInPage() {
     setError('');
 
     try {
-      // Regular login logic would go here
-      // For now, just redirect to dashboard
-      router.push('/dashboard');
+      const { createClient } = await import('@/lib/supabase/client');
+      const supabase = createClient();
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      if (data.session) {
+        // Successfully signed in
+        router.push('/dashboard');
+        return;
+      }
+
     } catch (error) {
+      console.error('Signin error:', error);
       setError('Invalid email or password');
     } finally {
       setIsLoading(false);
