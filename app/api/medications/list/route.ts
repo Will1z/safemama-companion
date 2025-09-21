@@ -17,6 +17,15 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'userId required' }, { status: 400 });
     }
 
+    // For demo mode (no session), return empty medications list
+    if (!request.headers.get('authorization')) {
+      return NextResponse.json({
+        success: true,
+        medications: [],
+        demo: true
+      });
+    }
+
     // Get user timezone from query params
     const userTimezone = request.nextUrl.searchParams.get('tz');
 

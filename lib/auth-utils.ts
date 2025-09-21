@@ -7,13 +7,18 @@ export interface AuthStatus {
   user: any | null;
 }
 
+// Feature flag for real authentication
+export function isRealAuthEnabled(): boolean {
+  return process.env.ENABLE_REAL_AUTH === 'true';
+}
+
 // Server-side demo check
 export function isDemo(req: Request): boolean {
   const cookieHeader = req.headers.get('cookie');
   return cookieHeader?.includes('sm_demo=1') || false;
 }
 
-// Server-side user profile ensure function
+// Server-side user profile ensure function (idempotent)
 export async function ensureProfile(userId: string, displayName?: string) {
   const supabase = createServerClient();
   
@@ -21,17 +26,19 @@ export async function ensureProfile(userId: string, displayName?: string) {
   const { data: existingProfile } = await supabase
     .from('user_profiles')
     .select('id')
-    .eq('user_id', userId)
+    .eq('id', userId)
     .single();
 
   if (!existingProfile) {
-    // Create profile
+    // Create profile (upsert style - idempotent)
     const { error } = await supabase
       .from('user_profiles')
-      .insert({
-        user_id: userId,
+      .upsert({
+        id: userId,
         display_name: displayName || 'User',
         role: 'patient'
+      }, {
+        onConflict: 'id'
       });
 
     if (error) {

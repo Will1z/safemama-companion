@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Heart, Eye, EyeOff } from 'lucide-react';
 
 export default function SignUpPage() {
@@ -22,6 +23,11 @@ export default function SignUpPage() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showEmailConfirmation, setShowEmailConfirmation] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  
+  // Check if real auth is enabled
+  const isRealAuthEnabled = process.env.NEXT_PUBLIC_ENABLE_REAL_AUTH === 'true';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -73,23 +79,36 @@ export default function SignUpPage() {
       });
 
       if (error) {
-        setError(error.message);
+        console.info('Signup failed:', { email: formData.email, error: error.message });
+        
+        // Provide user-friendly error messages
+        let userMessage = error.message;
+        if (error.message.includes('User already registered')) {
+          userMessage = 'An account with this email already exists. Please sign in instead.';
+        } else if (error.message.includes('Password should be at least')) {
+          userMessage = 'Password must be at least 6 characters long.';
+        } else if (error.message.includes('Invalid email')) {
+          userMessage = 'Please enter a valid email address.';
+        } else if (error.message.includes('Signup is disabled')) {
+          userMessage = 'Account creation is currently disabled. Please contact support.';
+        }
+        
+        setError(userMessage);
         return;
       }
 
       if (data.user && !data.session) {
         // Email confirmation required
+        console.info('Signup success - email confirmation required:', { email: formData.email });
         setError('');
-        // Show success message instead of error
-        setError(''); // Clear any existing error
-        // You could show a success state here instead
-        alert('Please check your email to verify your account before signing in.');
-        router.push('/auth/signin');
+        setUserEmail(formData.email);
+        setShowEmailConfirmation(true);
         return;
       }
 
       if (data.session) {
         // User is immediately signed in (email confirmation disabled)
+        console.info('Signup success - immediate signin:', { email: formData.email, userId: data.user.id });
         router.push('/dashboard');
         return;
       }
@@ -116,6 +135,32 @@ export default function SignUpPage() {
         </CardHeader>
         
         <CardContent className="space-y-6">
+          {/* Email Confirmation Success */}
+          {showEmailConfirmation && (
+            <Alert className="border-green-200 bg-green-50">
+              <AlertDescription className="text-green-800">
+                <div className="text-center">
+                  <div className="font-semibold mb-2">Check your email!</div>
+                  <div className="text-sm">
+                    We've sent a verification link to <strong>{userEmail}</strong>
+                  </div>
+                  <div className="text-sm mt-2">
+                    Please click the link to verify your account before signing in.
+                  </div>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+          
+          {/* Real Auth Disabled Banner */}
+          {!isRealAuthEnabled && (
+            <Alert>
+              <AlertDescription>
+                Real accounts disabled. Use Demo.
+              </AlertDescription>
+            </Alert>
+          )}
+          
           {/* Demo Login Button */}
           <Button 
             onClick={handleDemoLogin}

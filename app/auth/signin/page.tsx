@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Heart, Eye, EyeOff } from 'lucide-react';
 
 export default function SignInPage() {
@@ -18,6 +19,9 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  // Check if real auth is enabled
+  const isRealAuthEnabled = process.env.NEXT_PUBLIC_ENABLE_REAL_AUTH === 'true';
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,12 +59,25 @@ export default function SignInPage() {
       });
 
       if (error) {
-        setError(error.message);
+        console.info('Signin failed:', { email: formData.email, error: error.message });
+        
+        // Provide user-friendly error messages
+        let userMessage = error.message;
+        if (error.message.includes('Invalid login credentials')) {
+          userMessage = 'Invalid email or password. Please check your credentials and try again.';
+        } else if (error.message.includes('Email not confirmed')) {
+          userMessage = 'Please check your email and click the verification link before signing in.';
+        } else if (error.message.includes('Too many requests')) {
+          userMessage = 'Too many sign-in attempts. Please wait a moment and try again.';
+        }
+        
+        setError(userMessage);
         return;
       }
 
       if (data.session) {
         // Successfully signed in
+        console.info('Signin success:', { email: formData.email, userId: data.user.id });
         router.push('/dashboard');
         return;
       }
@@ -87,6 +104,15 @@ export default function SignInPage() {
         </CardHeader>
         
         <CardContent className="space-y-6">
+          {/* Real Auth Disabled Banner */}
+          {!isRealAuthEnabled && (
+            <Alert>
+              <AlertDescription>
+                Real accounts disabled. Use Demo.
+              </AlertDescription>
+            </Alert>
+          )}
+          
           {/* Demo Login Button */}
           <Button 
             onClick={handleDemoLogin}
@@ -174,7 +200,7 @@ export default function SignInPage() {
           </div>
 
           <div className="text-center text-sm">
-            <Link href="/auth/forgot-password" className="text-primary hover:underline">
+            <Link href="/auth/reset-password" className="text-primary hover:underline">
               Forgot your password?
             </Link>
           </div>
