@@ -28,7 +28,7 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
     if (!pos) {
       setPos({ 
         x: Math.max(16, window.innerWidth - 84), 
-        y: Math.max(16, window.innerHeight - 140) 
+        y: Math.max(16, window.innerHeight - 140 - 88) // account for composer height
       });
     }
   }, [pos]);
@@ -45,7 +45,7 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
       setPos(p => {
         if (!p) return p;
         const x = Math.min(Math.max(16, p.x), window.innerWidth - 72);
-        const y = Math.min(Math.max(16, p.y), window.innerHeight - 72 - 34); // keep above iOS bar
+        const y = Math.min(Math.max(16, p.y), window.innerHeight - 72 - 34 - 88); // keep above iOS bar and composer
         return { x, y };
       });
     }

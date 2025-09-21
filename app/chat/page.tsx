@@ -11,6 +11,7 @@ import { Send, ArrowLeft, Bot, User, FileText, Download, Share2, CheckCircle, Mi
 import Link from 'next/link';
 import { track } from '@/lib/analytics';
 import BackToHomeButton from '@/components/ui/BackToHomeButton';
+import { ChatHeader } from '@/components/chat/ChatHeader';
 
 interface Message {
   id: string;
@@ -420,68 +421,15 @@ export default function ChatPage() {
   return (
     <div className="min-h-screen bg-background flex flex-col pb-20">
       {/* Header */}
-      <header className="bg-primary text-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <Button variant="ghost" size="icon" asChild className="text-white hover:bg-white/10">
-                <Link href="/dashboard">
-                  <ArrowLeft className="w-5 h-5" />
-                </Link>
-              </Button>
-              <div className="flex items-center space-x-2">
-                <div className={`w-8 h-8 bg-accent rounded-full flex items-center justify-center ${
-                  isAISpeaking ? 'animate-pulse' : ''
-                }`}>
-                  <Bot className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h1 className="font-semibold">Health Assistant</h1>
-                  <p className="text-xs text-white/80">
-                    {isAISpeaking ? "AI is speaking..." : "AI-powered symptom monitoring"}
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center space-x-2">
-              <BackToHomeButton />
-              {/* Voice Response Toggle */}
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setVoiceResponsesEnabled(!voiceResponsesEnabled)}
-                className="text-white hover:bg-white/10"
-                title={voiceResponsesEnabled ? "Disable voice responses" : "Enable voice responses"}
-              >
-                {voiceResponsesEnabled ? (
-                  <Volume2 className="w-5 h-5" />
-                ) : (
-                  <VolumeX className="w-5 h-5" />
-                )}
-              </Button>
-              
-              {messages.length > 1 && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={generateConversationSummary}
-                  disabled={isGeneratingSummary}
-                  className="text-[#1C3D3A] bg-white border-[#1C3D3A]/20 hover:bg-[#EAF4F3]"
-                >
-                  <FileText className="w-4 h-4 mr-1" />
-                  {isGeneratingSummary ? 'Generating...' : 'Summary'}
-                </Button>
-              )}
-              <Button variant="outline" size="sm" asChild className="text-[#1C3D3A] bg-white border-[#1C3D3A]/20 hover:bg-[#EAF4F3]">
-                <Link href="/summary">
-                  <Download className="w-4 h-4 mr-1" />
-                  Health Summary
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </header>
+      <ChatHeader
+        isAISpeaking={isAISpeaking}
+        voiceResponsesEnabled={voiceResponsesEnabled}
+        onToggleAudio={() => setVoiceResponsesEnabled(!voiceResponsesEnabled)}
+        onOpenSummary={() => {/* TODO: implement summary modal */}}
+        onGenerateSummary={generateConversationSummary}
+        isGeneratingSummary={isGeneratingSummary}
+        messageCount={messages.length}
+      />
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto">
@@ -661,7 +609,7 @@ export default function ChatPage() {
       )}
 
       {/* Input */}
-      <div className="border-t bg-background/95 backdrop-blur p-4">
+      <div className="sticky bottom-[var(--safe-bottom,0px)] z-30 border-t bg-background/95 backdrop-blur p-4">
         <form onSubmit={handleSubmit} className="container mx-auto">
           <div className="flex items-end space-x-2">
             <div className="flex-1">
