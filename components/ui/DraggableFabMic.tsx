@@ -9,6 +9,8 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
   const [drag, setDrag] = useState(false);
   const [dragStart, setDragStart] = useState<{x:number;y:number} | null>(null);
   const [clicked, setClicked] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const dragThreshold = 8; // Increased threshold for better mobile experience
 
   // Load saved position
   useEffect(() => {
@@ -51,6 +53,13 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
+  // Cleanup effect to ensure scrolling is re-enabled
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, []);
+
   // Improved drag handling
   const startDrag = useCallback((e: React.PointerEvent) => {
     e.preventDefault();
@@ -61,7 +70,8 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
     
     setDrag(true);
     setDragStart({ x: e.clientX, y: e.clientY });
-    setClicked(false);
+    setClicked(true); // Start as potential click
+    setIsDragging(false);
   }, []);
 
   const move = useCallback((e: React.PointerEvent) => {
@@ -72,10 +82,12 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
     
     const deltaX = e.clientX - dragStart.x;
     const deltaY = e.clientY - dragStart.y;
+    const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
     
-    // Only start dragging after a small movement to distinguish from click
-    if (Math.abs(deltaX) > 5 || Math.abs(deltaY) > 5) {
-      setClicked(false);
+    // Start dragging after threshold movement
+    if (distance > dragThreshold) {
+      setIsDragging(true);
+      setClicked(false); // It's definitely a drag
       
       if (pos) {
         const newX = Math.min(Math.max(16, pos.x + deltaX), window.innerWidth - 72);
@@ -83,9 +95,10 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
         setPos({ x: newX, y: newY });
       }
       
+      // Update drag start for continuous movement
       setDragStart({ x: e.clientX, y: e.clientY });
     }
-  }, [drag, dragStart, pos]);
+  }, [drag, dragStart, pos, dragThreshold]);
 
   const endDrag = useCallback((e: React.PointerEvent) => {
     e.preventDefault();
@@ -94,26 +107,30 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
     const button = e.currentTarget as HTMLElement;
     button.releasePointerCapture(e.pointerId);
     
+    // Small delay to prevent click if we were dragging
+    setTimeout(() => {
+      if (!isDragging && clicked && onClick) {
+        onClick();
+      }
+    }, 50);
+    
     setDrag(false);
     setDragStart(null);
-    
-    // If it was a click (no significant movement), trigger onClick
-    if (clicked && onClick) {
-      onClick();
-    }
-  }, [clicked, onClick]);
+    setIsDragging(false);
+    setClicked(false);
+  }, [isDragging, clicked, onClick]);
 
   const handleClick = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
-    if (!drag) {
-      setClicked(true);
+    // Only trigger onClick if it wasn't a drag
+    if (!drag && !isDragging) {
       if (onClick) {
         onClick();
       }
     }
-  }, [drag, onClick]);
+  }, [drag, isDragging, onClick]);
 
   return (
     <button
@@ -125,19 +142,31 @@ export default function DraggableFabMic({ onClick }: { onClick?: () => void }) {
       onPointerMove={move}
       onPointerUp={endDrag}
       onPointerCancel={endDrag}
-      onTouchStart={(e) => e.preventDefault()} // Prevent default touch behavior
+      onTouchStart={(e) => {
+        e.preventDefault();
+        // Prevent scrolling while dragging
+        document.body.style.overflow = 'hidden';
+      }}
+      onTouchEnd={(e) => {
+        e.preventDefault();
+        // Re-enable scrolling
+        document.body.style.overflow = '';
+      }}
+      onTouchMove={(e) => {
+        e.preventDefault();
+      }}
       className={clsx(
         'fixed z-50 h-14 w-14 rounded-full shadow-xl bg-primary text-white flex items-center justify-center',
         'touch-manipulation select-none cursor-grab active:cursor-grabbing',
-        'transition-transform duration-150 ease-out',
-        drag && 'scale-105 shadow-2xl',
+        'transition-all duration-200 ease-out',
+        (drag || isDragging) && 'scale-110 shadow-2xl ring-4 ring-primary/20',
         'hover:scale-105 hover:shadow-2xl'
       )}
       style={pos ? { 
         left: pos.x, 
         top: pos.y,
-        transform: drag ? 'scale(1.05)' : 'scale(1)',
-        transition: drag ? 'none' : 'transform 0.15s ease-out'
+        transform: (drag || isDragging) ? 'scale(1.1)' : 'scale(1)',
+        transition: (drag || isDragging) ? 'none' : 'transform 0.2s ease-out'
       } : undefined}
     >
       {/* mic icon svg */}
