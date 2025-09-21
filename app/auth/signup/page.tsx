@@ -108,7 +108,7 @@ export default function SignUpPage() {
 
       if (data.session) {
         // User is immediately signed in (email confirmation disabled)
-        console.info('Signup success - immediate signin:', { email: formData.email, userId: data.user.id });
+        console.info('Signup success - immediate signin:', { email: formData.email, userId: data.user?.id });
         router.push('/dashboard');
         return;
       }

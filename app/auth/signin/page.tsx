@@ -77,7 +77,7 @@ export default function SignInPage() {
 
       if (data.session) {
         // Successfully signed in
-        console.info('Signin success:', { email: formData.email, userId: data.user.id });
+        console.info('Signin success:', { email: formData.email, userId: data.user?.id });
         router.push('/dashboard');
         return;
       }
